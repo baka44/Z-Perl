@@ -9,8 +9,8 @@
 		</Size>
 
 		<Scripts>
-			<OnEnter function="XPerl_Unit_OnEnter"/>
-			<OnLeave function="XPerl_Unit_OnLeave"/>
+			<OnEnter function="ZPerl_Unit_OnEnter"/>
+			<OnLeave function="ZPerl_Unit_OnLeave"/>
 			<OnEvent function="XPerl_Target_OnEvent"/>
 			<OnUpdate function="XPerl_Target_OnUpdate"/>
 			<OnShow function="XPerl_Unit_UpdatePortrait"/>
@@ -39,8 +39,8 @@
 						self:RegisterForClicks("AnyUp")
 						self:RegisterForDrag("LeftButton")
 						XPerl_RegisterUnitText(_G[self:GetName().."text"])
-						self:SetScript("OnEnter", function(self) XPerl_Unit_OnEnter(self:GetParent()) end)
-						self:SetScript("OnLeave", function(self) XPerl_Unit_OnLeave(self:GetParent()) end)
+						self:SetScript("OnEnter", function(self) ZPerl_Unit_OnEnter(self:GetParent()) end)
+						self:SetScript("OnLeave", function(self) ZPerl_Unit_OnLeave(self:GetParent()) end)
 					</OnLoad>
 					<OnDragStart>
 						if (XPerlLocked == 0) then

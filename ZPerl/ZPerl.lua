@@ -6,8 +6,8 @@ local conf
 local percD	= "%d"..PERCENT_SYMBOL
 local perc1F = "%.1f"..PERCENT_SYMBOL
 
-XPerl_RequestConfig(function(New) conf = New end, "$Revision: 880 $")
-XPerl_SetModuleRevision("$Revision: 880 $")
+XPerl_RequestConfig(function(New) conf = New end, "$Revision: 881 $")
+XPerl_SetModuleRevision("$Revision: 881 $")
 
 --Some local copies for speed
 local strsub = strsub
@@ -3298,8 +3298,8 @@ function XPerl_Unit_GetHealth(self)
 	return hp or 0, hpMax or 1, (hpMax == 100)
 end
 
--- XPerl_Unit_OnEnter
-function XPerl_Unit_OnEnter(self)
+-- ZPerl_Unit_OnEnter
+function ZPerl_Unit_OnEnter(self)
 	XPerl_PlayerTip(self)
 	if (self.highlight) then
 		self.highlight:Select()
@@ -3320,8 +3320,8 @@ function XPerl_Unit_OnEnter(self)
 	end
 end
 
--- XPerl_Unit_OnLeave
-function XPerl_Unit_OnLeave(self)
+-- ZPerl_Unit_OnLeave
+function ZPerl_Unit_OnLeave(self)
 	XPerl_PlayerTipHide()
 	if (self.highlight) then
 		self.highlight:Deselect()

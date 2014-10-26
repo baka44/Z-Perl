@@ -2,7 +2,7 @@
 
 	<Script file="ZPerl_TargetTarget.lua"/>
 
-	<Button name="XPerl_TargetTarget_Template" inherits="SecureUnitButtonTemplate" clampedToScreen="true" frameStrata="LOW" virtual="true" movable="true" parent="UIParent" hidden="true">
+	<Button name="ZPerl_TargetTarget_Template" inherits="SecureUnitButtonTemplate" clampedToScreen="true" frameStrata="LOW" virtual="true" movable="true" parent="UIParent" hidden="true">
 		<Size>
 			<!-- The size of this frame determines what can be clicked for the menu and moving, hence it is the same size as the name frame. -->
 			<AbsDimension x="160" y="60"/>
@@ -11,9 +11,9 @@
 		<!-- Script Events -->
 
 		<Scripts>
-			<OnLoad function="XPerl_TargetTarget_OnLoad"/>
-			<OnEnter function="XPerl_Unit_OnEnter"/>
-			<OnLeave function="XPerl_Unit_OnLeave"/>
+			<OnLoad function="ZPerl_TargetTarget_OnLoad"/>
+			<OnEnter function="ZPerl_Unit_OnEnter"/>
+			<OnLeave function="ZPerl_Unit_OnLeave"/>
 			<OnDragStart>
 				if (XPerlLocked == 0) then
 					self:StartMoving()
@@ -31,7 +31,7 @@
 				self.highlight:Deselect()
 				XPerl_PlayerTipHide()
 			</OnLeave>
-			<OnEvent function="XPerl_TargetTarget_OnEvent"/>
+			<OnEvent function="ZPerl_TargetTarget_OnEvent"/>
 		</Scripts>
 
 		<Frames>
@@ -43,8 +43,8 @@
 						self:RegisterForClicks("AnyUp")
 						self:RegisterForDrag("LeftButton")
 						XPerl_RegisterUnitText(_G[self:GetName().."text"])
-						self:SetScript("OnEnter", function(self) XPerl_Unit_OnEnter(self:GetParent()) end)
-						self:SetScript("OnLeave", function(self) XPerl_Unit_OnLeave(self:GetParent()) end)
+						self:SetScript("OnEnter", function(self) ZPerl_Unit_OnEnter(self:GetParent()) end)
+						self:SetScript("OnLeave", function(self) ZPerl_Unit_OnLeave(self:GetParent()) end)
 					</OnLoad>
 					<OnDragStart>
 						if (XPerlLocked == 0) then
@@ -219,7 +219,7 @@
 		</Frames>
 	</Button>
 
-	<Button name="XPerl_TargetTarget" inherits="XPerl_TargetTarget_Template" movable="true" parent="UIParent" hidden="true">
+	<Button name="XPerl_TargetTarget" inherits="ZPerl_TargetTarget_Template" movable="true" parent="UIParent" hidden="true">
 		<Anchors>
 			<Anchor point="TOPLEFT">
 				<Offset>

@@ -133,8 +133,8 @@
 				self:RegisterForClicks("AnyUp")
 				self:RegisterForDrag("LeftButton")
 				XPerl_Player_OnLoad(self)
-				self:SetScript("OnEnter", XPerl_Unit_OnEnter)
-				self:SetScript("OnLeave", XPerl_Unit_OnLeave)
+				self:SetScript("OnEnter", ZPerl_Unit_OnEnter)
+				self:SetScript("OnLeave", ZPerl_Unit_OnLeave)
 			</OnLoad>
 			<OnDragStart>
 				if (XPerlLocked == 0) then
@@ -166,8 +166,8 @@
 						self:RegisterForDrag("LeftButton")
 						XPerl_RegisterUnitText(getglobal(self:GetName().."text"))
 						XPerl_RegisterUnitText(getglobal(self:GetName().."group"))
-						self:SetScript("OnEnter", function(self) XPerl_Unit_OnEnter(self:GetParent()) end)
-						self:SetScript("OnLeave", function(self) XPerl_Unit_OnLeave(self:GetParent()) end)
+						self:SetScript("OnEnter", function(self) ZPerl_Unit_OnEnter(self:GetParent()) end)
+						self:SetScript("OnLeave", function(self) ZPerl_Unit_OnLeave(self:GetParent()) end)
 					</OnLoad>
 					<OnDragStart>
 						if (XPerlLocked == 0) then

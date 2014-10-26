@@ -11,8 +11,8 @@
 			<OnLoad>
 				self:RegisterForClicks("AnyUp")
 				XPerl_Party_Pet_OnLoad(self)
-				self:SetScript("OnEnter", XPerl_Unit_OnEnter)
-				self:SetScript("OnLeave", XPerl_Unit_OnLeave)
+				self:SetScript("OnEnter", ZPerl_Unit_OnEnter)
+				self:SetScript("OnLeave", ZPerl_Unit_OnLeave)
 			</OnLoad>
 		</Scripts>
 
@@ -23,8 +23,8 @@
 						self:RegisterForClicks("AnyUp")
 						XPerl_RegisterUnitText(_G[self:GetName().."text"])
 						XPerl_RegisterUnitText(_G[self:GetName().."level"])
-						self:SetScript("OnEnter", function(self) XPerl_Unit_OnEnter(self:GetParent()) end)
-						self:SetScript("OnLeave", function(self) XPerl_Unit_OnLeave(self:GetParent()) end)
+						self:SetScript("OnEnter", function(self) ZPerl_Unit_OnEnter(self:GetParent()) end)
+						self:SetScript("OnLeave", function(self) ZPerl_Unit_OnLeave(self:GetParent()) end)
 					</OnLoad>
 				</Scripts>
 				<Size>

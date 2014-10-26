@@ -6,18 +6,18 @@ XPerl_ProductName		= "|cFFD00000Z-Perl|r UnitFrames"
 XPerl_ShortProductName	= "|cFFD00000Z-Perl|r"
 XPerl_Author			= "|cFFFF8080Resike|r"
 XPerl_Description		= XPerl_ProductName.." by "..XPerl_Author
-XPerl_VersionNumber 	= "3.7.5"
+XPerl_VersionNumber 	= "4.0.0"
 XPerl_Version			= XPerl_Description.." - "..XPerl_VersionNumber
 XPerl_LongDescription	= "UnitFrame replacement for new look Player, Pet, Party, Target, Target's Target, Focus, Raid"
 XPerl_ModMenuIcon		= "Interface\\Icons\\INV_Misc_Gem_Pearl_02"
 
-XPERL_COMMS_PREFIX		= "X-Perl"
+XPERL_COMMS_PREFIX		= "Z-Perl"
 XPERL_MINIMAP_HELP1		= "|c00FFFFFFLeft click|r for Options (and to |c0000FF00unlock frames|r)"
 XPERL_MINIMAP_HELP2		= "|c00FFFFFFRight click|r to drag this icon"
 XPERL_MINIMAP_HELP3		= "\rReal Raid Members: |c00FFFF80%d|r\rReal Party Members: |c00FFFF80%d|r"
 XPERL_MINIMAP_HELP4		= "\rYou are leader of the real party/raid"
-XPERL_MINIMAP_HELP5		= "|c00FFFFFFAlt|r for X-Perl memory usage"
-XPERL_MINIMAP_HELP6		= "|c00FFFFFF+Shift|r for X-Perl memory usage since startup"
+XPERL_MINIMAP_HELP5		= "|c00FFFFFFAlt|r for Z-Perl memory usage"
+XPERL_MINIMAP_HELP6		= "|c00FFFFFF+Shift|r for Z-Perl memory usage since startup"
 
 XPERL_MINIMENU_OPTIONS	= "Options"
 XPERL_MINIMENU_ASSIST	= "Show Assists Frame"

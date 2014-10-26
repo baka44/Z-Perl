@@ -13,32 +13,6 @@ local xperlBlocked = 0
 local lastConfigMode
 local maxRevision
 
-do
-	if not IsAddOnLoaded("XPerl") and (not ZPerlConfig and not ZPerlConfig_Global and not ZPerlConfigNew and not ZPerlConfigSavePerCharacter) then
-		EnableAddOn("XPerl")
-	end
-	if IsAddOnLoaded("XPerl") then
-		if (XPerlConfig) then
-			ZPerlConfig = XPerlConfig
-			XPerlConfig = nil
-		end
-		if (XPerlConfig_Global) then
-			ZPerlConfig_Global = XPerlConfig_Global
-			XPerlConfig_Global = nil
-		end
-		if (XPerlConfigNew) then
-			ZPerlConfigNew = XPerlConfigNew
-			XPerlConfigNew = nil
-		end
-		if (XPerlConfigSavePerCharacter) then
-			ZPerlConfigSavePerCharacter = XPerlConfigSavePerCharacter
-			XPerlConfigSavePerCharacter = nil
-		end
-		DisableAddOn("XPerl")
-		print("Z-Pearl: Importing done, please reload you UI for the process to complete.")
-	end
-end
-
 function XPerl_GetRevision()
 	return (maxRevision and "r"..maxRevision) or ""
 end
@@ -445,7 +419,7 @@ function ZPerl_ForceImportAll()
 			--XPerlConfigSavePerCharacter = nil
 		end
 		DisableAddOn("XPerl")
-		print("Z-Pearl: Importing done, please reload you UI for the process to complete.")
+		print("Z-Pearl: Profile importing done, please reload you UI for the process to complete.")
 	else
 		print("X-Perl is not loaded. You must load it first, to access it's variables for the import.")
 	end
@@ -454,6 +428,33 @@ end
 -- XPerl_Globals_OnEvent
 function XPerl_Globals_OnEvent(self, event, arg1, ...)
 	if (event == "ADDON_LOADED" and arg1 == "ZPerl") then
+		if not IsAddOnLoaded("XPerl") and (not ZPerlConfig and not ZPerlConfig_Global and not ZPerlConfigNew and not ZPerlConfigSavePerCharacter) then
+			EnableAddOn("XPerl")
+		end
+		if IsAddOnLoaded("XPerl") and not ZPerlImportDone then
+			if (XPerlConfig) then
+				ZPerlConfig = XPerlConfig
+				--XPerlConfig = nil
+			end
+			if (XPerlConfig_Global) then
+				ZPerlConfig_Global = XPerlConfig_Global
+				--XPerlConfig_Global = nil
+			end
+			if (XPerlConfigNew) then
+				ZPerlConfigNew = XPerlConfigNew
+				--XPerlConfigNew = nil
+			end
+			if (XPerlConfigSavePerCharacter) then
+				ZPerlConfigSavePerCharacter = XPerlConfigSavePerCharacter
+				--XPerlConfigSavePerCharacter = nil
+			end
+			DisableAddOn("XPerl")
+			ZPerlImportDone = true
+			print("Z-Pearl: Profile importing done, please reload you UI for the process to complete.")
+		end
+		if IsAddOnLoaded("XPerl") then
+			DisableAddOn("XPerl")
+		end
 		self:UnregisterEvent(event)
 		settingspart1(self,event)
 		-- Tell DHUD to hide Blizzard default Player and Target frames

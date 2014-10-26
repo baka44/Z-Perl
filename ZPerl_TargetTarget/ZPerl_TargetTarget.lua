@@ -1,6 +1,6 @@
--- X-Perl UnitFrames
--- Author: Zek <Boodhoof-EU>
--- License: GNU GPL v3, 29 June 2007 (see LICENSE.txt)
+-- Z-Perl UnitFrames
+-- Author: Resike
+-- License: GNU GPL v3, 18 October 2014 (see LICENSE.txt)
 
 local conf
 XPerl_RequestConfig(function(new)
@@ -24,8 +24,8 @@ local GetDifficultyColor = GetDifficultyColor or GetQuestDifficultyColor
 
 local buffSetup
 
--- XPerl_TargetTarget_OnLoad
-function XPerl_TargetTarget_OnLoad(self)
+-- ZPerl_TargetTarget_OnLoad
+function ZPerl_TargetTarget_OnLoad(self)
 	self:RegisterForClicks("AnyUp")
 	self:RegisterForDrag("LeftButton")
 	XPerl_SetChildMembers(self)
@@ -119,7 +119,7 @@ function XPerl_TargetTarget_OnLoad(self)
 	end
 
 	if (XPerl_TargetTarget and XPerl_FocusTarget and XPerl_PetTarget and XPerl_TargetTargetTarget) then
-		XPerl_TargetTarget_OnLoad = nil
+		ZPerl_TargetTarget_OnLoad = nil
 	end
 end
 
@@ -330,7 +330,7 @@ end
 -------------------
 -- Event Handler --
 -------------------
-function XPerl_TargetTarget_OnEvent(self, event, unitID, ...)
+function ZPerl_TargetTarget_OnEvent(self, event, unitID, ...)
 
 	if (event == "RAID_TARGET_UPDATE") then
 		XPerl_TargetTarget_RaidIconUpdate(self)
@@ -472,7 +472,7 @@ function XPerl_TargetTarget_Set_Bits()
 
 	if (conf.targettargettarget.enable) then
 		if (not XPerl_TargetTargetTarget) then
-			local ttt = CreateFrame("Button", "XPerl_TargetTargetTarget", UIParent, "XPerl_TargetTarget_Template")
+			local ttt = CreateFrame("Button", "XPerl_TargetTargetTarget", UIParent, "ZPerl_TargetTarget_Template")
 
 			ttt:SetPoint("TOPLEFT", XPerl_TargetTarget.statsFrame, "TOPRIGHT", 5, 0)
 		end
@@ -480,7 +480,7 @@ function XPerl_TargetTarget_Set_Bits()
 
 	if (conf.focustarget.enable) then
 		if (not XPerl_FocusTarget) then
-			local ttt = CreateFrame("Button", "XPerl_FocusTarget", UIParent, "XPerl_TargetTarget_Template")
+			local ttt = CreateFrame("Button", "XPerl_FocusTarget", UIParent, "ZPerl_TargetTarget_Template")
 
 			ttt:SetPoint("TOPLEFT", XPerl_Focus.levelFrame, "TOPRIGHT", 5, 0)
 		end
@@ -488,7 +488,7 @@ function XPerl_TargetTarget_Set_Bits()
 
 	if (conf.pettarget.enable and XPerl_Player_Pet) then
 		if (not XPerl_PetTarget) then
-			local pt = CreateFrame("Button", "XPerl_PetTarget", XPerl_Player_Pet, "XPerl_TargetTarget_Template")
+			local pt = CreateFrame("Button", "XPerl_PetTarget", XPerl_Player_Pet, "ZPerl_TargetTarget_Template")
 
 			pt:SetPoint("BOTTOMLEFT", XPerl_Player_Pet.statsFrame, "BOTTOMRIGHT", 5, 0)
 		end
