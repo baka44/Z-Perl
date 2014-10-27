@@ -1,13 +1,13 @@
--- X-Perl UnitFrames
--- Author: Zek <Boodhoof-EU>
--- License: GNU GPL v3, 29 June 2007 (see LICENSE.txt)
+-- Z-Perl UnitFrames
+-- Author: Resike
+-- License: GNU GPL v3, 18 October 2014
 
 local conf
 local percD	= "%d"..PERCENT_SYMBOL
 local perc1F = "%.1f"..PERCENT_SYMBOL
 
-XPerl_RequestConfig(function(New) conf = New end, "$Revision: 885 $")
-XPerl_SetModuleRevision("$Revision: 885 $")
+XPerl_RequestConfig(function(New) conf = New end, "$Revision: 886 $")
+XPerl_SetModuleRevision("$Revision: 886 $")
 
 --Some local copies for speed
 local strsub = strsub
@@ -1205,7 +1205,7 @@ function XPerl_MinimapButton_Details(tt, ldb)
 		end
 
 		if (totalCPU > 0) then
-			tt:AddDoubleLine(" XPerl CPU Usage Comparison", format("%.2f%%", 100 * (totalCPU / allAddonsCPU)), 0.5, 0.5, 1, 0.5, 0.5, 1)
+			tt:AddDoubleLine(" ZPerl CPU Usage Comparison", format("%.2f%%", 100 * (totalCPU / allAddonsCPU)), 0.5, 0.5, 1, 0.5, 0.5, 1)
 		end
 	end
 

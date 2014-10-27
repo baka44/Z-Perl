@@ -1,15 +1,48 @@
 -- Z-Perl UnitFrames
 -- Author: Resike
--- License: GNU GPL v3, 18 October 2014 (see LICENSE.txt)
+-- License: GNU GPL v3, 18 October 2014
+
+local max = max
+local pairs = pairs
+local strfind = strfind
+local tonumber = tonumber
+
+local CreateFrame = CreateFrame
+local GetTime = GetTime
+local RegisterUnitWatch = RegisterUnitWatch
+local UnitAffectingCombat = UnitAffectingCombat
+local UnitBuff = UnitBuff
+local UnitClassification = UnitClassification
+local UnitExists = UnitExists
+local UnitFactionGroup = UnitFactionGroup
+local UnitGUID = UnitGUID
+local UnitIsAFK = UnitIsAFK
+local UnitIsCharmed = UnitIsCharmed
+local UnitIsFriend = UnitIsFriend
+local UnitIsPVP = UnitIsPVP
+local UnitIsPVPFreeForAll = UnitIsPVPFreeForAll
+local UnitIsVisible = UnitIsVisible
+local UnitLevel = UnitLevel
+local UnregisterUnitWatch = UnregisterUnitWatch
+
+local UIParent = UIParent
 
 local conf
 XPerl_RequestConfig(function(new)
-				conf = new
-				if (XPerl_TargetTarget) then XPerl_TargetTarget.conf = conf.targettarget end
-				if (XPerl_TargetTargetTarget) then XPerl_TargetTargetTarget.conf = conf.targettargettarget end
-				if (XPerl_FocusTarget) then XPerl_FocusTarget.conf = conf.focustarget end
-				if (XPerl_PetTarget) then XPerl_PetTarget.conf = conf.pettarget end
-			end, "$Revision: 860 $")
+	conf = new
+	if XPerl_TargetTarget then
+		XPerl_TargetTarget.conf = conf.targettarget
+	end
+	if XPerl_TargetTargetTarget then
+		XPerl_TargetTargetTarget.conf = conf.targettargettarget
+	end
+	if XPerl_FocusTarget then
+		XPerl_FocusTarget.conf = conf.focustarget
+	end
+	if XPerl_PetTarget then
+		XPerl_PetTarget.conf = conf.pettarget
+	end
+end, "$Revision: 860 $")
 
 local UnitName = UnitName
 local UnitHealth = UnitHealth
@@ -32,7 +65,7 @@ function ZPerl_TargetTarget_OnLoad(self)
 
 	self.tutorialPage = 9
 	
-	events = {"UNIT_HEALTH","UNIT_POWER","UNIT_AURA"};
+	local events = {"UNIT_HEALTH", "UNIT_POWER", "UNIT_AURA"};
 	self.guid = 0;
 	-- Events
 	self:RegisterEvent("RAID_TARGET_UPDATE")
@@ -77,7 +110,7 @@ function ZPerl_TargetTarget_OnLoad(self)
 	BuffUpdateTooltip = XPerl_Unit_SetBuffTooltip
 	DebuffUpdateTooltip = XPerl_Unit_SetDeBuffTooltip
 
-	if (buffSetup) then
+	if buffSetup then
 		self.buffSetup = buffSetup
 	else
 		self.buffSetup = {
@@ -95,7 +128,9 @@ function ZPerl_TargetTarget_OnLoad(self)
 			updateTooltipDebuff = DebuffUpdateTooltip,
 			debuffParent = true,
 			debuffSizeMod = 0.2,
-			debuffAnchor1 = function(self, b) b:SetPoint("TOPLEFT", 0, 0) end,
+			debuffAnchor1 = function(self, b)
+				b:SetPoint("TOPLEFT", 0, 0)
+			end,
 		}
 		self.buffSetup.buffAnchor1 = self.buffSetup.debuffAnchor1
 		buffSetup = self.buffSetup
@@ -108,24 +143,24 @@ function ZPerl_TargetTarget_OnLoad(self)
 	XPerl_RegisterHighlight(self.highlight, 2)
 	XPerl_RegisterPerlFrames(self, {self.nameFrame, self.statsFrame, self.levelFrame})
 
-	if (XPerlDB) then
+	if XPerlDB then
 		self.conf = XPerlDB[self.partyid]
 	end
 
 	XPerl_Highlight:Register(XPerl_TargetTarget_HighlightCallback, self)
 
-	if (self == XPerl_TargetTarget) then
+	if self == XPerl_TargetTarget then
 		XPerl_RegisterOptionChanger(XPerl_TargetTarget_Set_Bits, "TargetTarget")
 	end
 
-	if (XPerl_TargetTarget and XPerl_FocusTarget and XPerl_PetTarget and XPerl_TargetTargetTarget) then
+	if XPerl_TargetTarget and XPerl_FocusTarget and XPerl_PetTarget and XPerl_TargetTargetTarget then
 		ZPerl_TargetTarget_OnLoad = nil
 	end
 end
 
 -- XPerl_TargetTarget_HighlightCallback
 function XPerl_TargetTarget_HighlightCallback(self, updateGUID)
-	if (UnitGUID(self.partyid) == updateGUID and UnitIsFriend("player", self.partyid)) then
+	if UnitGUID(self.partyid) == updateGUID and UnitIsFriend("player", self.partyid) then
 		XPerl_Highlight:SetHighlight(self, updateGUID)
 	end
 end
@@ -135,7 +170,7 @@ end
 -------------------------
 function XPerl_TargetTarget_UpdatePVP(self)
 	local pvp = self.conf.pvpIcon and ((UnitIsPVPFreeForAll(self.partyid) and "FFA") or (UnitIsPVP(self.partyid) and (UnitFactionGroup(self.partyid) ~= "Neutral") and UnitFactionGroup(self.partyid)))
-	if (pvp) then
+	if pvp then
 		self.nameFrame.pvpIcon:SetTexture("Interface\\TargetingFrame\\UI-PVP-"..pvp)
 		self.nameFrame.pvpIcon:Show()
 	else
@@ -145,7 +180,7 @@ end
 
 -- XPerl_TargetTarget_Buff_UpdateAll
 local function XPerl_TargetTarget_Buff_UpdateAll(self)
-	if (self.conf.buffs.enable or self.conf.debuffs.enable) then
+	if self.conf.buffs.enable or self.conf.debuffs.enable then
 		self.buffFrame:Show()
 		XPerl_Targets_BuffUpdate(self)
 	else
@@ -161,7 +196,7 @@ local function XPerl_TargetTarget_RaidIconUpdate(self)
 	XPerl_Update_RaidIcon(frameRaidIcon, self.partyid)
 
 	frameRaidIcon:ClearAllPoints()
-	if (conf.target.raidIconAlternate) then
+	if conf.target.raidIconAlternate then
 		frameRaidIcon:SetHeight(16)
 		frameRaidIcon:SetWidth(16)
 		frameRaidIcon:SetPoint("CENTER", frameNameFrame, "TOPRIGHT", -5, -4)
@@ -173,14 +208,14 @@ local function XPerl_TargetTarget_RaidIconUpdate(self)
 end
 
 -- XPerl_TargetTarget_UpdateDisplay
-function XPerl_TargetTarget_UpdateDisplay(self,force)
+function XPerl_TargetTarget_UpdateDisplay(self, force)
 
 	local partyid = self.partyid
-	if (self.conf.enable and UnitExists(self.parentid) and UnitIsConnected(partyid)) then
+	if self.conf.enable and UnitExists(self.parentid) and UnitIsConnected(partyid) then
 		self.targetname = UnitName(partyid)
-		if (self.targetname ~= nil) then
+		if self.targetname ~= nil then
 			local t = GetTime()
-			if (not force and t < self.lastUpdate + 0.3) then
+			if not force and t < (self.lastUpdate + 0.3) then
 				return
 			end
 			XPerl_Highlight:RemoveHighlight(self)
@@ -196,29 +231,29 @@ function XPerl_TargetTarget_UpdateDisplay(self,force)
 
 			XPerl_SetUnitNameColor(self.nameFrame.text, partyid)
 
-			if (self.conf.level) then
-				local TargetTargetlevel = UnitLevel(partyid)
-				local color = GetDifficultyColor(TargetTargetlevel)
+			if self.conf.level then
+				local TargetTargetLevel = UnitLevel(partyid)
+				local color = GetDifficultyColor(TargetTargetLevel)
 
 				self.levelFrame.text:Show()
 				self.levelFrame.skull:Hide()
-				if (TargetTargetLevel == -1) then
-					if (UnitClassification(partyid) == "worldboss") then
+				if TargetTargetLevel == -1 then
+					if UnitClassification(partyid) == "worldboss" then
 						TargetTargetLevel = "Boss"
 					else
 						self.levelFrame.text:Hide()
 						self.levelFrame.skull:Show()
 					end
 				elseif (strfind(UnitClassification(partyid) or "", "elite")) then
-					TargetTargetlevel = TargetTargetlevel.."+"
+					TargetTargetLevel = TargetTargetLevel.."+"
 					self.levelFrame:SetWidth(33)
 				else
 					self.levelFrame:SetWidth(27)
 				end
 
-				self.levelFrame.text:SetText(TargetTargetlevel)
+				self.levelFrame.text:SetText(TargetTargetLevel)
 
-				if (TargetTargetLevel == "Boss") then
+				if TargetTargetLevel == "Boss" then
 					self.levelFrame:SetWidth(self.levelFrame.text:GetStringWidth() + 6)
 					color = {r = 1, g = 0, b = 0}
 				end
@@ -234,7 +269,7 @@ function XPerl_TargetTarget_UpdateDisplay(self,force)
 			XPerl_Target_SetHealth(self)
 
 			-- Set mana
-			if (not self.statsFrame.greyMana) then
+			if not self.statsFrame.greyMana then
 				XPerl_Target_SetManaType(self)
 			end
 			XPerl_Target_SetMana(self)
@@ -256,7 +291,7 @@ end
 
 -- XPerl_TargetTarget_Update_Control
 local function XPerl_TargetTarget_Update_Control(self)
-	if (UnitIsVisible(self.partyid) and UnitIsCharmed(self.partyid)) then
+	if UnitIsVisible(self.partyid) and UnitIsCharmed(self.partyid) then
 		self.nameFrame.warningIcon:Show()
 	else
 		self.nameFrame.warningIcon:Hide()
@@ -265,16 +300,11 @@ end
 
 -- XPerl_TargetTarget_Update_Combat
 local function XPerl_TargetTarget_Update_Combat(self)
-	if (UnitAffectingCombat(self.partyid)) then
+	if UnitAffectingCombat(self.partyid) then
 		self.nameFrame.combatIcon:Show()
 	else
 		self.nameFrame.combatIcon:Hide()
 	end
-end
-
--- SmallUpdate
-local function SmallUpdate(self)
-
 end
 
 -- XPerl_TargetTarget_OnUpdate
@@ -284,15 +314,13 @@ function XPerl_TargetTarget_OnUpdate(self, elapsed)
 	local newHP = UnitHealth(partyid)
 	local newMana = UnitPower(partyid)
 	local newAFK = UnitIsAFK(partyid)
-local newGuid = UnitGUID(partyid);
-	
-	
-	--if () then
+	local newGuid = UnitGUID(partyid);
+
 	if ((newGuid ~= self.guid) or (newHP ~= self.targethp) or (newMana ~= self.targetmana) or (newAFK ~= self.afk)) then
 		XPerl_TargetTarget_UpdateDisplay(self)
 	else
 		self.time = elapsed + self.time
-       	if (self.time >= 0.2) then
+		if self.time >= 0.2 then
 			XPerl_TargetTarget_Update_Combat(self)
 			XPerl_TargetTarget_Update_Control(self)
 			XPerl_TargetTarget_UpdatePVP(self)
@@ -311,15 +339,15 @@ function XPerl_TargetTargetTarget_OnUpdate(self, elapsed)
 	local newName = UnitName(self.partyid)
 	local newGuid = UnitGUID(self.partyid);
 	
-	if (not newName) then
+	if not newName then
 		newName = ""
-		newHP = 0
-		newMana = 0
+		--newHP = 0
+		--newMana = 0
 	end
 
-	if (self == XPerl_TargetTargetTarget and newGuid ~= self.guid) then
+	if self == XPerl_TargetTargetTarget and newGuid ~= self.guid then
 		XPerl_NoFadeBars(true)
-		XPerl_TargetTarget_UpdateDisplay(self,true)
+		XPerl_TargetTarget_UpdateDisplay(self, true)
 		XPerl_NoFadeBars()
 		return
 	end
@@ -332,22 +360,22 @@ end
 -------------------
 function ZPerl_TargetTarget_OnEvent(self, event, unitID, ...)
 
-	if (event == "RAID_TARGET_UPDATE") then
+	if event == "RAID_TARGET_UPDATE" then
 		XPerl_TargetTarget_RaidIconUpdate(self)
 
-	elseif (event == "PLAYER_TARGET_CHANGED") then
+	elseif event == "PLAYER_TARGET_CHANGED" then
 		XPerl_TargetTarget_UpdateDisplay(self, true)
 
-	elseif (strfind(event, "^UNIT_")) then--(event == "UNIT_TARGET") then
-		if ((unitID == "target" or unitID == "player") and (self == XPerl_TargetTarget or self == XPerl_TargetTargetTarget)) then
+	elseif strfind(event, "^UNIT_") then--(event == "UNIT_TARGET") then
+		if (unitID == "target" or unitID == "player") and (self == XPerl_TargetTarget or self == XPerl_TargetTargetTarget) then
 			XPerl_NoFadeBars(true)
 			XPerl_TargetTarget_UpdateDisplay(self, true)
 			XPerl_NoFadeBars()
-		elseif (unitID == "focus" and self == XPerl_FocusTarget) then
+		elseif unitID == "focus" and self == XPerl_FocusTarget then
 			XPerl_NoFadeBars(true)
 			XPerl_TargetTarget_UpdateDisplay(self, true)
 			XPerl_NoFadeBars()
-		elseif (unitID == "pet" and self == XPerl_PetTarget) then
+		elseif unitID == "pet" and self == XPerl_PetTarget then
 			XPerl_NoFadeBars(true)
 			XPerl_TargetTarget_UpdateDisplay(self, true)
 			XPerl_NoFadeBars()
@@ -356,20 +384,20 @@ function ZPerl_TargetTarget_OnEvent(self, event, unitID, ...)
 end
 
 -- XPerl_TargetTarget_Update
-function XPerl_TargetTarget_Update()
+function XPerl_TargetTarget_Update(self)
 	local offset = -3
-	if (self.conf.buffs.enable) then
-		if (UnitExists("targettarget")) then
-			if (XPerl_UnitBuff("targettarget", 1)) then
+	if self.conf.buffs.enable then
+		if UnitExists("targettarget") then
+			if XPerl_UnitBuff("targettarget", 1) then
 				if (offset == -3) then
 					offset = 0
 				end
 				offset = offset + 20
-				if (UnitBuff("targettarget", 9)) then
+				if UnitBuff("targettarget", 9) then
 					offset = offset + 20
 				end
 			end
-			if (XPerl_UnitDebuff("targettarget", 1)) then
+			if XPerl_UnitDebuff("targettarget", 1) then
 				if (offset == -3) then
 					offset = 0
 				end
@@ -381,8 +409,8 @@ end
 
 -- EnableDisable
 local function EnableDisable(self)
-	if (self.conf.enable) then
-		if (not self.virtual) then
+	if self.conf.enable then
+		if not self.virtual then
 			RegisterUnitWatch(self)
 		end
 	else
@@ -397,7 +425,7 @@ function XPerl_TargetTarget_SetWidth(self)
 	self.conf.size.width = max(0, self.conf.size.width or 0)
 	local bonus = self.conf.size.width
 
-	if (self.conf.percent) then
+	if self.conf.percent then
 		self:SetWidth(160 + bonus)
 		self.nameFrame:SetWidth(160 + bonus)
 		self.statsFrame:SetWidth(160 + bonus)
@@ -421,14 +449,14 @@ end
 
 -- Set
 local function Set(self)
-	if (self.conf.level) then
+	if self.conf.level then
 		self.levelFrame:Show()
 		self.levelFrame:SetWidth(27)
 	else
 		self.levelFrame:Hide()
 	end
 
-	if (self.conf.mana) then
+	if self.conf.mana then
 		self.statsFrame.manaBar:Show()
 		self.statsFrame:SetHeight(40)
 	else
@@ -436,7 +464,7 @@ local function Set(self)
 		self.statsFrame:SetHeight(30)
 	end
 
-	if (self.conf.values) then
+	if self.conf.values then
 		self.statsFrame.healthBar.text:Show()
 		self.statsFrame.manaBar.text:Show()
 	else
@@ -445,7 +473,7 @@ local function Set(self)
 	end
 
 	self.buffFrame:ClearAllPoints()
-	if (self.conf.buffs.above) then
+	if self.conf.buffs.above then
 		self.buffFrame:SetPoint("BOTTOMLEFT", self, "TOPLEFT", 2, 0)
 	else
 		self.buffFrame:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 2, 0)
@@ -459,35 +487,35 @@ local function Set(self)
 
 	XPerl_ProtectedCall(EnableDisable, self)
 
-	if (self:IsShown()) then
+	if self:IsShown() then
 		XPerl_TargetTarget_UpdateDisplay(self, true)
 	end
 end
 
 -- XPerl_TargetTarget_Set_Bits
 function XPerl_TargetTarget_Set_Bits()
-	if (not XPerl_TargetTarget) then
+	if not XPerl_TargetTarget then
 		return
 	end
 
-	if (conf.targettargettarget.enable) then
-		if (not XPerl_TargetTargetTarget) then
+	if conf.targettargettarget.enable then
+		if not XPerl_TargetTargetTarget then
 			local ttt = CreateFrame("Button", "XPerl_TargetTargetTarget", UIParent, "ZPerl_TargetTarget_Template")
 
 			ttt:SetPoint("TOPLEFT", XPerl_TargetTarget.statsFrame, "TOPRIGHT", 5, 0)
 		end
 	end
 
-	if (conf.focustarget.enable) then
-		if (not XPerl_FocusTarget) then
+	if conf.focustarget.enable then
+		if not XPerl_FocusTarget then
 			local ttt = CreateFrame("Button", "XPerl_FocusTarget", UIParent, "ZPerl_TargetTarget_Template")
 
 			ttt:SetPoint("TOPLEFT", XPerl_Focus.levelFrame, "TOPRIGHT", 5, 0)
 		end
 	end
 
-	if (conf.pettarget.enable and XPerl_Player_Pet) then
-		if (not XPerl_PetTarget) then
+	if conf.pettarget.enable and XPerl_Player_Pet then
+		if not XPerl_PetTarget then
 			local pt = CreateFrame("Button", "XPerl_PetTarget", XPerl_Player_Pet, "ZPerl_TargetTarget_Template")
 
 			pt:SetPoint("BOTTOMLEFT", XPerl_Player_Pet.statsFrame, "BOTTOMRIGHT", 5, 0)
@@ -495,13 +523,13 @@ function XPerl_TargetTarget_Set_Bits()
 	end
 
 	Set(XPerl_TargetTarget)
-	if (XPerl_TargetTargetTarget) then
+	if XPerl_TargetTargetTarget then
 		Set(XPerl_TargetTargetTarget)
 	end
-	if (XPerl_FocusTarget) then
+	if XPerl_FocusTarget then
 		Set(XPerl_FocusTarget)
 	end
-	if (XPerl_PetTarget) then
+	if XPerl_PetTarget then
 		Set(XPerl_PetTarget)
 	end
 end
