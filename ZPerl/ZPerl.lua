@@ -6,8 +6,8 @@ local conf
 local percD	= "%d"..PERCENT_SYMBOL
 local perc1F = "%.1f"..PERCENT_SYMBOL
 
-XPerl_RequestConfig(function(New) conf = New end, "$Revision: 881 $")
-XPerl_SetModuleRevision("$Revision: 881 $")
+XPerl_RequestConfig(function(New) conf = New end, "$Revision: 883 $")
+XPerl_SetModuleRevision("$Revision: 883 $")
 
 --Some local copies for speed
 local strsub = strsub
@@ -168,11 +168,11 @@ function XPerl_ShowMessage(cMsg)
 	if (not cf:IsVisible()) then
 		cf = DEFAULT_CHAT_FRAME
 	end
-	if (self and self.GetName and self:GetName()) then
+	--[[if (self and self.GetName and self:GetName()) then
 		cf:AddMessage("|c00007F7F"..self:GetName().."|r - "..str)
-	else
+	else]]
 		cf:AddMessage(str)
-	end
+	--end
 end
 
 XPerl_AnchorList = {"TOP", "LEFT", "BOTTOM", "RIGHT"}

@@ -171,6 +171,10 @@ local matches = {
 	}
 
 local checkExpiring
+local lastNamesList
+local lastName
+local lastWith
+local lastNamesCount
 local function GetNamesWithoutBuff(spellName, with, filter)
 	if (spellName == lastName and with == lastWith and lastNamesList) then
 		return lastNamesList, lastNamesCount
