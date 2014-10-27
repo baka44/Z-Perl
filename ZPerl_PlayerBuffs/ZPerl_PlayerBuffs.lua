@@ -281,7 +281,7 @@ function XPerl_PlayerBuffs_Update(self)
 	local slot = self:GetAttribute("target-slot")
 	if (slot) then
 		-- Weapon Enchant
-		local hasMainHandEnchant, mainHandExpiration, mainHandCharges, hasOffHandEnchant, offHandExpiration, offHandCharges = GetWeaponEnchantInfo();
+		local hasMainHandEnchant, mainHandExpiration, mainHandCharges, hasOffHandEnchant, offHandExpiration, offHandCharges = GetWeaponEnchantInfo()
 		if (slot == 16) then
 			DoEnchant(self, 16, hasMainHandEnchant, mainHandExpiration, mainHandCharges)
 		else

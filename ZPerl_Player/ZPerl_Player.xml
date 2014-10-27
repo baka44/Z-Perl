@@ -13,7 +13,7 @@
 				<Anchors>
 					<Anchor point="TOPLEFT">
 						<Offset>
-							<AbsDimension x="0" y="0"/>
+							<AbsDimension x="0" y="1"/>
 						</Offset>
 					</Anchor>
 					<Anchor point="BOTTOMRIGHT">
@@ -40,7 +40,7 @@
 			</Frame>
 			<Frame frameStrata="HIGH" setAllPoints="true">
 				<Layers>
-					<Layer level="OVERLAY" textureSublevel = "-1">
+					<Layer level="OVERLAY" textureSublevel="-1">
 						<Texture name="$parentRuneWhiteGlow" file="Interface\PlayerFrame\Deathknight-Energize-White" alpha="0">
 							<Size x="8" y="8"/>
 							<Anchors>

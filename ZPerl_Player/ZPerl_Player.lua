@@ -1072,6 +1072,9 @@ function XPerl_Player_Events:RUNE_POWER_UPDATE(event, runeIndex, isEnergize)
 		local runeButton = _G['XPerl_RuneButtonIndividual' .. runeIndex];
 		if (runeButton) then
 			local cooldown = _G['XPerl_RuneButtonIndividual' .. runeIndex .. 'Cooldown'];
+			cooldown:SetSwipeTexture("Interface/CHARACTERFRAME/TempPortraitAlphaMaskSmall")
+    		cooldown:SetSwipeColor(0, 0, 0, 0.7)
+    		cooldown:SetHideCountdownNumbers(true)
 			local start, duration, isReady = GetRuneCooldown(runeIndex);
 			if not isReady then
 				if start and cooldown then
