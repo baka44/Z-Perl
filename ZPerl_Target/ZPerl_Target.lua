@@ -1048,7 +1048,7 @@ function XPerl_Target_OnEvent(self, event, ...)
 	if (func) then
 		func(self, ...)
 	else
-XPerl_ShowMessage("EXTRA EVENT")
+		XPerl_ShowMessage("EXTRA EVENT")
 	end]]--
 	
 	

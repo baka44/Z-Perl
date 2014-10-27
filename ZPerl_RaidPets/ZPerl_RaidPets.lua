@@ -24,7 +24,7 @@ local function XPerl_RaidPets_OnEvent(self, event, unit, ...)
 			func(self, unit, ...)
 		end
 	else
-XPerl_ShowMessage("EXTRA EVENT")
+	--XPerl_ShowMessage("EXTRA EVENT")
 	end
 end
 

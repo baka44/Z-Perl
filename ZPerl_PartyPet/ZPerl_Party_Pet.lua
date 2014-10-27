@@ -406,7 +406,7 @@ function XPerl_Party_Pet_OnEvent(self, event, unit, ...)
 			func(unit, ...)
 		end
 	else
-XPerl_ShowMessage("EXTRA EVENT")
+	--XPerl_ShowMessage("EXTRA EVENT")
 	end
 end
 

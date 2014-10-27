@@ -6,8 +6,8 @@ local conf
 local percD	= "%d"..PERCENT_SYMBOL
 local perc1F = "%.1f"..PERCENT_SYMBOL
 
-XPerl_RequestConfig(function(New) conf = New end, "$Revision: 884 $")
-XPerl_SetModuleRevision("$Revision: 884 $")
+XPerl_RequestConfig(function(New) conf = New end, "$Revision: 885 $")
+XPerl_SetModuleRevision("$Revision: 885 $")
 
 --Some local copies for speed
 local strsub = strsub
@@ -131,7 +131,7 @@ XPerlColourTable = setmetatable({},{
 
 -- XPerl_ShowMessage
 -- debug function
-function XPerl_ShowMessage(cMsg)
+--[[function XPerl_ShowMessage(cMsg)
 	local str = "|c00FF7F00"..event.."|r"
 	local theEnd
 	if (arg1 and (arg1 == "player" or arg1 == "pet" or arg1 == "target" or arg1 =="focus" or strfind(arg1, "^raid") or strfind(arg1, "^party"))) then
@@ -173,7 +173,7 @@ function XPerl_ShowMessage(cMsg)
 	else
 		cf:AddMessage(str)
 	end
-end
+end]]
 
 XPerl_AnchorList = {"TOP", "LEFT", "BOTTOM", "RIGHT"}
 
@@ -2378,11 +2378,11 @@ function XPerl_ShowGenericMenu(self, unit, button, actionType)
 
 		XPerl_DropDown.initialize = XPerl_GenericDropDown_Initialize
 
-		if (not anchor) then
+		if (not self.anchor) then
 			if (self.statsFrame) then
-				anchor = self.statsFrame:GetName()
+				self.anchor = self.statsFrame:GetName()
 			elseif (self:GetParent().statsFrame) then
-				anchor = self:GetParent().statsFrame:GetName()
+				self.anchor = self:GetParent().statsFrame:GetName()
 			end
 		end
 

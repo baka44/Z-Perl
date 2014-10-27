@@ -503,10 +503,6 @@ function ZPerl_Init()
 
 	XPerl_RegisterSMBarTextures()
 
-	--if (not strfind("Zek Zali Hek Zeks Zekked Zekstuff Pooksie Wazek", UnitName("player")) or GetRealmName() ~= "Bloodhoof") then
-	--	XPerl_ShowMessage = function() end
-	--end
-
 	XPerl_pcall(ZPerl_DebufHighlightInit)
 
 	ZPerl_Init = nil
