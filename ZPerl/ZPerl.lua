@@ -6,8 +6,8 @@ local conf
 local percD	= "%d"..PERCENT_SYMBOL
 local perc1F = "%.1f"..PERCENT_SYMBOL
 
-XPerl_RequestConfig(function(New) conf = New end, "$Revision: 887 $")
-XPerl_SetModuleRevision("$Revision: 887 $")
+XPerl_RequestConfig(function(New) conf = New end, "$Revision: 888 $")
+XPerl_SetModuleRevision("$Revision: 888 $")
 
 --Some local copies for speed
 local strsub = strsub

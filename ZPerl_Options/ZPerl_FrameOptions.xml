@@ -613,41 +613,41 @@
 			<OnEnter function="XPerl_Options_CheckButton_OnEnter"/>
 			<OnLeave>
 				_G[self:GetName().."Text"]:SetTextColor(NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b)
-				if (self.flashFrame and not InCombatLockdown()) then
+				if self.flashFrame and not InCombatLockdown() then
 					local array
-					if (table.getn(self.flashFrame) == 0) then
+					if table.getn(self.flashFrame) == 0 then
 						array = {self.flashFrame}
 					else
 						array = self.flashFrame
 					end
-					for i,f in pairs(array) do
-						if (f and XPerl_FrameIsFlashing(f)) then
+					for i, f in pairs(array) do
+						if f and XPerl_FrameIsFlashing(f) then
 							XPerl_FrameFlashStop(f)
 							f:Show()
 						end
 					end
-					if (self.configClick) then
+					if self.configClick then
 						self.configClick()
 					end
 				end
 				GameTooltip:Hide()
 			</OnLeave>
 			<OnClick>
-				if (self.configBase) then
+				if self.configBase then
 					if self:GetChecked() then
 						XPerl_Options_SetIndex(self, 1)
 					else
 						XPerl_Options_SetIndex(self, nil)
 					end
 
-				elseif (type(self.configSelection) == "table") then
-					if (self.configIndex == nil) then
+				elseif type(self.configSelection) == "table" then
+					if self.configIndex == nil then
 						error("No index for configSelection in "..self:GetName())
 					end
 
 					for k,v in pairs(self.configSelection) do
 						local table
-						if (type(v) == "table") then
+						if type(v) == "table" then
 							table = v
 						else
 							RunScript("XPerlTemp = "..v)
@@ -655,7 +655,7 @@
 							XPerlTemp = nil
 						end
 
-						if (type(table) == "table") then
+						if type(table) == "table" then
 							if self:GetChecked() then
 								table[self.configIndex] = 1
 							else
@@ -663,10 +663,10 @@
 							end
 						end
 					end
-				elseif (self.XconfigVar) then
-					if (self.XconfigVars) then
+				elseif self.XconfigVar then
+					if self.XconfigVars then
 						local sets = _G[self.XconfigVars]
-						if (sets) then
+						if sets then
 							sets[self.XconfigVar] = XPerl_GetCheck(self)
 						end
 					else
@@ -677,33 +677,40 @@
 				local tex = self:GetCheckedTexture()
 				tex:SetVertexColor(1, 1, 1)
 
-				if (self.configClick) then
+				if self.configClick then
 					self.configClick(self)
 				end
-				if (self.Validate) then
+				if self.Validate then
 					self.Validate()
 				end
 			</OnClick>
 			<OnShow>
-				if (self.configBase) then
+				if self.configBase then
 					self:SetChecked(XPerl_Options_GetIndex(self))
-
-				elseif (self.XconfigVar) then
-					if (self.XconfigVars) then
+				elseif self.XconfigVar then
+					if self.XconfigVars then
 						local sets = _G[self.XconfigVars]
-						if (sets) then
-							self:SetChecked(sets[self.XconfigVar])
+						if sets then
+							if sets[self.XconfigVar] == 1 then
+								self:SetChecked(true)
+							else
+								self:SetChecked(false)
+							end
 						end
 					else
-						self:SetChecked(ZPerlConfigHelper[self.XconfigVar])
+						if ZPerlConfigHelper[self.XconfigVar] == 1 then
+							self:SetChecked(true)
+						else
+							self:SetChecked(false)
+						end
 					end
-				elseif (self.configSelection) then
+				elseif self.configSelection then
 					local vars, ticked = 0, 0
 					for i,var in pairs(self.configSelection) do
 						vars = vars + 1
 
 						local table
-						if (type(var) == "table") then
+						if type(var) == "table" then
 							table = var
 						else
 							RunScript("XPerlTemp = "..var)
@@ -711,7 +718,7 @@
 							XPerlTemp = nil
 						end
 
-						if (type(table) == "table" and table[self.configIndex]) then
+						if type(table) == "table" and table[self.configIndex] then
 							ticked = ticked + 1
 						end
 					end
@@ -719,9 +726,9 @@
 					local tex = self:GetCheckedTexture()
 					tex:SetVertexColor(1, 1, 1)
 
-					if (ticked == 0) then
+					if ticked == 0 then
 						self:SetChecked(false)
-					elseif (ticked == vars) then
+					elseif ticked == vars then
 						self:SetChecked(true)
 					else
 						self:SetChecked(true)
@@ -13280,12 +13287,12 @@
 										end
 										self.XconfigVar = "TargetCounters"
 										self.configClick = function()
-													if (ZPerlConfigHelper.TargetCounters == 1) then
-														XPerl_AssistsView_Open()
-													else
-														XPerl_AssistsView_Close()
-													end
-												   end
+											if (ZPerlConfigHelper.TargetCounters == 1) then
+												XPerl_AssistsView_Open()
+											else
+												XPerl_AssistsView_Close()
+											end
+										end
 									</OnLoad>
 								</Scripts>
 							</CheckButton>

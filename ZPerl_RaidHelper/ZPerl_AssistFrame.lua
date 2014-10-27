@@ -544,10 +544,10 @@ function XPerl_UpdateAssists()
 		end
 	end
 
-	if (GetNumGroupMembers() == 0) then
+	--[[if (GetNumGroupMembers() == 0) then
 		-- Don't show it if we're on our own... we know we have aggro..
 		playerAggro, petAggro = false, false
-	end
+	end]]
 
 	if (playerAggro or petAggro) then
 		XPerl_Aggro:Show()
