@@ -1685,7 +1685,7 @@ function xpHigh:GROUP_ROSTER_UPDATE()
 	self:SetScript("OnUpdate", self.OnUpdate)
 end
 
-xpHigh.GROUP_ROSTER_UPDATE= xpHigh.GROUP_ROSTER_UPDATE
+xpHigh.GROUP_ROSTER_UPDATE = xpHigh.GROUP_ROSTER_UPDATE
 
 -- PLAYER_TARGET_CHANGED
 function xpHigh:PLAYER_TARGET_CHANGED()

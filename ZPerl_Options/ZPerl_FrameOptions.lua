@@ -2605,7 +2605,13 @@ function XPerl_Options_Custom_FillList(self)
 			if (not list) then
 				list = {}
 			end
-			tinsert(list, name)
+			if (typ == "debuff") then
+				if GetSpellInfo(name) then
+					tinsert(list, name)
+				end
+			else
+				tinsert(list, name)
+			end
 		end
 		if (list) then
 			if (typ == "zone") then

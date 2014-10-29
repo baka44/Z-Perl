@@ -50,7 +50,7 @@ local XPERL_LOC_ZONE_HEART_OF_FEAR = EJ_GetInstanceInfo(1009)
 -- DefaultZoneData
 function ch:DefaultZoneData()
 	return {
---[[		[XPERL_LOC_ZONE_SERPENTSHRINE_CAVERN] =
+		[XPERL_LOC_ZONE_SERPENTSHRINE_CAVERN] =
 			{
 				[38132] = true								-- Paralyze - Picked up Tainted Core
 			},
@@ -217,7 +217,7 @@ function ch:DefaultZoneData()
 
 				[74792] = true,								-- Shadow Consumption (Halion)
 				[74562] = true,								-- Fiery Combustion (Halion)
-			},--]]
+			},
 		[XPERL_LOC_ZONE_BARADIN_HOLD] =
 			{
 				[88954] = true,								-- Consuming Darkness (Argaloth)

@@ -3555,15 +3555,15 @@
 									local _, class = UnitClass("player")
 									if (class ~= "DRUID" and class ~= "PRIEST" and class ~= "SHAMAN" and class ~= "MONK" and class ~= "PALADIN") then
 										--XPerlDB.highlight.HOT = nil
-										XPerl_Options_EnableCheck(XPerl_Options_GetSibling("HighlightHoTs",self), false)
+										--XPerl_Options_EnableCheck(XPerl_Options_GetSibling("HighlightHoTs",self), false)
 									end
 									if (class ~= "PRIEST" and class ~= "SHAMAN" and class ~= "MAGE" and class ~= "PALADIN") then
 										--XPerlDB.highlight.SHIELD = nil
-										XPerl_Options_EnableCheck(XPerl_Options_GetSibling("HighlightShields",self), false)
+										--XPerl_Options_EnableCheck(XPerl_Options_GetSibling("HighlightShields",self), false)
 									end
 									if (class ~= "PRIEST") then
 										--XPerlDB.highlight.POM = nil
-										XPerl_Options_EnableCheck(XPerl_Options_GetSibling("HighlightMending",self), false)
+										--XPerl_Options_EnableCheck(XPerl_Options_GetSibling("HighlightMending",self), false)
 									end
 								end
 							</OnLoad>

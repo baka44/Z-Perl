@@ -1,8 +1,8 @@
--- X-Perl UnitFrames
--- Author: Zek <Boodhoof-EU>
--- License: GNU GPL v3, 29 June 2007 (see LICENSE.txt)
+-- Z-Perl UnitFrames
+-- Author: Resike
+-- License: GNU GPL v3, 18 October 2014
 
-XPerl_SetModuleRevision("$Revision: 176 $")
+XPerl_SetModuleRevision("$Revision: 889 $")
 
 -- XPerl_SlashHandler
 local function XPerl_SlashHandler(msg)
@@ -11,7 +11,7 @@ local function XPerl_SlashHandler(msg)
 	for value in string.gmatch(msg, "[^ ]+") do
 		tinsert(args, string.lower(value))
 	end
-	if (args[1]=="") then
+	if (args[1] == "") then
 		XPerl_OptionsMenu_Frame:Show()
 		return
 	end
@@ -89,5 +89,6 @@ local function XPerl_SlashHandler(msg)
 	end
 end
 
-SlashCmdList["ZPERL"] = XPerl_SlashHandler
-SLASH_XPERL1 = "/zperl"
+SlashCmdList["ZPerl"] = XPerl_SlashHandler
+SLASH_ZPerl1 = "/zperl"
+SLASH_ZPerl2 = "/zp"
