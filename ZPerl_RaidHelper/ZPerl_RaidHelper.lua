@@ -962,12 +962,12 @@ function XPerl_SetTitle()
 	end
 end
 
-local bEdge = {	bgFile = "Interface\\AddOns\\XPerl_RaidHelper\\images\\XPerl_FrameBack",
+local bEdge = {	bgFile = "Interface\\AddOns\\ZPerl_RaidHelper\\Images\\XPerl_FrameBack",
 		edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
 		tile = true, tileSize = 16, edgeSize = 9,
 		insets = { left = 3, right = 3, top = 3, bottom = 3 }
 	}
-local bNoEdge = {bgFile = "Interface\\AddOns\\XPerl_RaidHelper\\images\\XPerl_FrameBack",
+local bNoEdge = {bgFile = "Interface\\AddOns\\ZPerl_RaidHelper\\Images\\XPerl_FrameBack",
 		edgeFile = "", tile = true, tileSize = 16, edgeSize = 9,
 		insets = { left = 3, right = 3, top = 3, bottom = 3 }
 	}

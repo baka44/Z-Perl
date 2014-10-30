@@ -1124,7 +1124,7 @@ function XPerl_Check_UpdatePlayerList()
 							resFrameEquiped:SetTexture("Interface\\CharacterFrame\\Disconnect-Icon")
 							resFrameEquiped:SetTexCoord(0.2, 0.8, 0.2, 0.8)
 						elseif (z.notequipped) then
-							resFrameEquiped:SetTexture("Interface\\Addons\\XPerl_RaidAdmin\\Images\\XPerl_Check")
+							resFrameEquiped:SetTexture("Interface\\Addons\\ZPerl_RaidAdmin\\Images\\XPerl_Check")
 							if (z.changed) then
 								resFrameEquiped:SetTexCoord(0.75, 0.875, 0.25, 0.5)
 							else

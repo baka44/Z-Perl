@@ -145,7 +145,7 @@
 			</OnDragStop>
 		</Scripts>
 
-		<Backdrop bgFile="Interface\Addons\XPerl_Options\Images\XPerl_FancyBack" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
+		<Backdrop bgFile="Interface\Addons\ZPerl_Options\Images\XPerl_FancyBack" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
 			<EdgeSize>
 				<AbsValue val="16"/>
 			</EdgeSize>
