@@ -6,8 +6,8 @@ local conf
 local percD	= "%d"..PERCENT_SYMBOL
 local perc1F = "%.1f"..PERCENT_SYMBOL
 
-XPerl_RequestConfig(function(New) conf = New end, "$Revision: 890 $")
-XPerl_SetModuleRevision("$Revision: 890 $")
+XPerl_RequestConfig(function(New) conf = New end, "$Revision: 891 $")
+XPerl_SetModuleRevision("$Revision: 891 $")
 
 --Some local copies for speed
 local strsub = strsub
@@ -969,7 +969,7 @@ function XPerl_MinimapMenu_Initialize(self, level)
 		UIDropDownMenu_AddButton(info)
 	end
 
-	if (IsAddOnLoaded("XPerl_RaidHelper")) then
+	if (IsAddOnLoaded("ZPerl_RaidHelper")) then
 		if (XPerl_Assists_Frame and not XPerl_Assists_Frame:IsShown()) then
 			info = UIDropDownMenu_CreateInfo()
 			info.notCheckable = 1
@@ -983,7 +983,7 @@ function XPerl_MinimapMenu_Initialize(self, level)
 		end
 	end
 
-	if (IsAddOnLoaded("XPerl_RaidMonitor")) then
+	if (IsAddOnLoaded("ZPerl_RaidMonitor")) then
 		if (XPerl_RaidMonitor_Frame and not XPerl_RaidMonitor_Frame:IsShown()) then
 			info = UIDropDownMenu_CreateInfo()
 			info.notCheckable = 1
@@ -996,7 +996,7 @@ function XPerl_MinimapMenu_Initialize(self, level)
 		end
 	end
 
-	if (IsAddOnLoaded("XPerl_RaidAdmin")) then
+	if (IsAddOnLoaded("ZPerl_RaidAdmin")) then
 		if (XPerl_AdminFrame and not XPerl_AdminFrame:IsShown()) then
 			info = UIDropDownMenu_CreateInfo()
 			info.notCheckable = 1

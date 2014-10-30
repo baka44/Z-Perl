@@ -2087,7 +2087,7 @@
 				</Anchors>
 				<Scripts>
 					<OnShow>
-						if (not IsAddOnLoaded("XPerl_PartyPet")) then
+						if (not IsAddOnLoaded("ZPerl_PartyPet")) then
 							_G[self:GetName().."_ScalePets"]:Hide()
 						end
 					</OnShow>
@@ -5766,7 +5766,7 @@
 								self:SetScale(0.9)
 							</OnLoad>
 							<OnShow>
-								if (not IsAddOnLoaded("XPerl_TargetTarget")) then
+								if (not IsAddOnLoaded("ZPerl_TargetTarget")) then
 									self:Hide()
 								end
 							</OnShow>
@@ -6028,7 +6028,9 @@
 									<OnLoad>
 										self.configBase = "XPerlDB.pettarget"
 										self.configIndex = "scale"
-										self.configClick = function() XPerl_TargetTarget_SetWidth(XPerl_PetTarget) end
+										self.configClick = function()
+											XPerl_TargetTarget_SetWidth(XPerl_PetTarget)
+										end
 										XPerl_OptionsSetMyText(self, "XPERL_CONF_PETTARGET_SCALE")
 										XPerl_Options_RegisterScalingSlider(self, 40)
 									</OnLoad>
@@ -6076,14 +6078,14 @@
 									<OnLoad>
 										self.getEnable = function() return XPerlDB.pettarget.healerMode.enable end
 										self.setEnable = function(n)
-													XPerlDB.pettarget.healerMode.enable = n
-													XPerl_TargetTarget_Reset()
-												end
+											XPerlDB.pettarget.healerMode.enable = n
+											XPerl_TargetTarget_Reset()
+										end
 										self.getType = function() return XPerlDB.pettarget.healerMode.type end
 										self.setType = function(n)
-													XPerlDB.pettarget.healerMode.type = n
-													XPerl_TargetTarget_Reset()
-												end
+											XPerlDB.pettarget.healerMode.type = n
+											XPerl_TargetTarget_Reset()
+										end
 									</OnLoad>
 								</Scripts>
 							</Frame>
@@ -9808,7 +9810,7 @@
 								self:SetScale(0.9)
 							</OnLoad>
 							<OnShow>
-								if (not IsAddOnLoaded("XPerl_PartyPet")) then
+								if (not IsAddOnLoaded("ZPerl_PartyPet")) then
 									self:Hide()
 								end
 							</OnShow>
@@ -10146,7 +10148,7 @@
 						</Anchors>
 						<Scripts>
 							<OnShow>
-								if (IsAddOnLoaded("XPerl_RaidPets")) then
+								if (IsAddOnLoaded("ZPerl_RaidPets")) then
 									XPerl_Options_GetSibling("RaidPets",self):Show()
 									XPerl_Options_GetSibling("AlignToRaid",self):Show()
 									self:SetPoint("TOP", XPerl_Options_GetSibling("AlignToRaid",self), "BOTTOMLEFT", 0, 6)
@@ -11403,7 +11405,7 @@
 										end
 									</OnLoad>
 									<OnShow>
-										self:SetChecked(IsAddOnLoaded("XPerl_Player"))
+										self:SetChecked(IsAddOnLoaded("ZPerl_Player"))
 									</OnShow>
 									<OnClick>
 										if (self:GetChecked()) then
@@ -11450,7 +11452,7 @@
 										XPerl_OptionsSetMyText(self, "XPERL_CONF_ADDON_PET")
 									</OnLoad>
 									<OnShow>
-										self:SetChecked(IsAddOnLoaded("XPerl_PlayerPet"))
+										self:SetChecked(IsAddOnLoaded("ZPerl_PlayerPet"))
 									</OnShow>
 									<OnClick>
 										if (self:GetChecked()) then
@@ -11500,7 +11502,7 @@
 										XPerl_OptionsSetMyText(self, "XPERL_CONF_ADDON_TARGETTARGET")
 									</OnLoad>
 									<OnShow>
-										self:SetChecked(IsAddOnLoaded("XPerl_TargetTarget"))
+										self:SetChecked(IsAddOnLoaded("ZPerl_TargetTarget"))
 									</OnShow>
 									<OnClick>
 										if (self:GetChecked()) then
@@ -11526,7 +11528,7 @@
 										end
 									</OnLoad>
 									<OnShow>
-										self:SetChecked(IsAddOnLoaded("XPerl_Party"))
+										self:SetChecked(IsAddOnLoaded("ZPerl_Party"))
 									</OnShow>
 									<OnClick>
 										if (self:GetChecked()) then
@@ -11550,7 +11552,7 @@
 										XPerl_OptionsSetMyText(self, "XPERL_CONF_ADDON_PARTYPET")
 									</OnLoad>
 									<OnShow>
-										self:SetChecked(IsAddOnLoaded("XPerl_PartyPet"))
+										self:SetChecked(IsAddOnLoaded("ZPerl_PartyPet"))
 									</OnShow>
 									<OnClick>
 										if (self:GetChecked()) then
@@ -11599,7 +11601,7 @@
 										end
 									</OnLoad>
 									<OnShow>
-										self:SetChecked(IsAddOnLoaded("XPerl_RaidFrames"))
+										self:SetChecked(IsAddOnLoaded("ZPerl_RaidFrames"))
 									</OnShow>
 									<OnClick>
 										if (self:GetChecked()) then
@@ -11623,7 +11625,7 @@
 										XPerl_OptionsSetMyText(self, "XPERL_CONF_ADDON_RAIDPETS")
 									</OnLoad>
 									<OnShow>
-										self:SetChecked(IsAddOnLoaded("XPerl_RaidPets"))
+										self:SetChecked(IsAddOnLoaded("ZPerl_RaidPets"))
 									</OnShow>
 									<OnClick>
 										if (self:GetChecked()) then
@@ -11646,7 +11648,7 @@
 										XPerl_OptionsSetMyText(self, "XPERL_CONF_ADDON_RAIDHELP")
 									</OnLoad>
 									<OnShow>
-										self:SetChecked(IsAddOnLoaded("XPerl_RaidHelper"))
+										self:SetChecked(IsAddOnLoaded("ZPerl_RaidHelper"))
 									</OnShow>
 									<OnClick>
 										if (self:GetChecked()) then
@@ -11669,7 +11671,7 @@
 										XPerl_OptionsSetMyText(self, "XPERL_CONF_ADDON_RAIDMONITOR")
 									</OnLoad>
 									<OnShow>
-										self:SetChecked(IsAddOnLoaded("XPerl_RaidMonitor"))
+										self:SetChecked(IsAddOnLoaded("ZPerl_RaidMonitor"))
 									</OnShow>
 									<OnClick>
 										if (self:GetChecked()) then
@@ -11692,7 +11694,7 @@
 										XPerl_OptionsSetMyText(self, "XPERL_CONF_ADDON_RAIDADMIN")
 									</OnLoad>
 									<OnShow>
-										self:SetChecked(IsAddOnLoaded("XPerl_RaidAdmin"))
+										self:SetChecked(IsAddOnLoaded("ZPerl_RaidAdmin"))
 									</OnShow>
 									<OnClick>
 										if (self:GetChecked()) then
@@ -11723,7 +11725,7 @@
 
 											local enable
 											for i,name in pairs(list) do
-												if (XPerl_Options_GetSiblingChecked(name,self) ~= IsAddOnLoaded("XPerl_"..name)) then
+												if (XPerl_Options_GetSiblingChecked(name,self) ~= IsAddOnLoaded("ZPerl_"..name)) then
 													enable = true
 													break;
 												end

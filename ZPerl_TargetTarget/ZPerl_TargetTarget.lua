@@ -520,6 +520,7 @@ function XPerl_TargetTarget_Set_Bits()
 
 			pt:SetPoint("BOTTOMLEFT", XPerl_Player_Pet.statsFrame, "BOTTOMRIGHT", 5, 0)
 		end
+		XPerl_PetTarget:Show()
 	end
 
 	Set(XPerl_TargetTarget)
