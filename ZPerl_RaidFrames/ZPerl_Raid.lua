@@ -119,7 +119,7 @@ function XPerl_Raid_OnLoad(self)
 	
 	if (rconf.enable and CompactUnitFrameProfiles) then
 		--CompactRaidFrameManager:SetParent(self)
-		CompactUnitFrameProfiles:UnregisterAllEvents()--This disables the creation of the blizzard raid frames
+		CompactUnitFrameProfiles:UnregisterAllEvents() -- This disables the creation of the blizzard raid frames
 	end
 	
 	XPerl_RegisterOptionChanger(function()
@@ -563,7 +563,6 @@ end
 -- onAttrChanged
 local function onAttrChanged(self, name, value)
 	if (name == "unit") then
-		--print(debugstack())
 		if (value) then
 			SetFrameArray(self, value)
 			if (self.lastID ~= value or self.lastName ~= UnitName(value)) then
@@ -585,7 +584,7 @@ local function taintable(self)
 	
 	--self.menu = XPerl_Raid_ShowPopup -- Wtf, doesnt seem todo anything....
 	
-	if(not self or self == 1) then
+	if(not self or type(self) == "number") then
 		return
 	end
 	
@@ -595,8 +594,8 @@ local function taintable(self)
 	--self.nameFrame:SetAttribute("*type1", "target")
 	--self.nameFrame:SetAttribute("type2", "menu")
 	--self.nameFrame.menu = XPerl_Raid_ShowPopup --Again, doesnt seem todo anything...
-	XPerl_SecureUnitButton_OnLoad(self.nameFrame, partyid, nil, TargetFrameDropDown, XPerl_ShowGenericMenu, 1)
-	XPerl_SecureUnitButton_OnLoad(self, partyid, nil, TargetFrameDropDown, XPerl_ShowGenericMenu, 1)
+	XPerl_SecureUnitButton_OnLoad(self.nameFrame, self.partyid, nil, TargetFrameDropDown, XPerl_ShowGenericMenu, true)
+	XPerl_SecureUnitButton_OnLoad(self, self.partyid, nil, TargetFrameDropDown, XPerl_ShowGenericMenu, true)
 end
 
 -- XPerl_Raid_Single_OnLoad
@@ -621,7 +620,7 @@ function XPerl_Raid_Single_OnLoad(self)
 	Setup1RaidFrame(self)
 
 	if (InCombatLockdown()) then
-		tinsert(taintFrames,self);
+		tinsert(taintFrames, self);
 		return
 	else
 		taintable(self)
@@ -1168,10 +1167,6 @@ end
 
 -- XPerl_Raid_OnEvent
 function XPerl_Raid_OnEvent(self, event,unit, ...)
---print(event);
---print(dump({...}));
-
-
 	local func = XPerl_Raid_Events[event]
 	if (func) then
 		if (strfind(event, "^UNIT_")) then
@@ -1231,10 +1226,10 @@ end
 
 function XPerl_Raid_Events:PLAYER_REGEN_ENABLED()
 --Update all raid frame that would have tained
-		for frame,arg in pairs(taintFrames) do
-			taintable(frame)
-			taintFrames[frame] = nil
-		end
+	for frame, arg in pairs(taintFrames) do
+		taintable(frame)
+		taintFrames[frame] = nil
+	end
 end
 
 
@@ -1886,7 +1881,6 @@ end
 ------- XPerl_ToggleRaidBuffs -------
 -- Raid Buff Key Binding function --
 function XPerl_ToggleRaidBuffs(castable)
-print("hi, got toggled");
 	if (castable) then
 		if (rconf.buffs.castable == 1) then
 			rconf.buffs.castable = 0
@@ -2195,6 +2189,7 @@ function XPerl_Raid_ChangeAttributes()
 				f = tostring(n)
 			end
 
+			local invalid
 			for i = 1,WoWclassCount do
 				if (not rconf.class[i]) then
 					invalid = true

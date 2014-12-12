@@ -1394,7 +1394,7 @@ end
 -- COMBATLOG:SPELL_DAMAGE
 function xpHigh.clEvents:SPELL_DAMAGE(timestamp, event, srcGUID, srcName, srcFlags, dstGUID, dstName, dstFlags, spellID, spellName, spellSchool, amount, ...)
 	if (self:checkEventFlags(dstFlags)) then
-		local overkill, school, resisted, blocked, absorbed, critical, glancing, crushing = ...
+		local overkill, school, resisted, blocked, absorbed, critical, glancing, crushing, isOffHand, multistrike = ...
 		if (absorbed) then
 			self:Damage(dstGUID, absorbed)
 		end
@@ -1416,7 +1416,7 @@ xpHigh.clEvents.SPELL_PERIODIC_MISSED = xpHigh.clEvents.SPELL_MISSED
 -- COMBATLOG:SWING_DAMAGE
 function xpHigh.clEvents:SWING_DAMAGE(timestamp, event, srcGUID, srcName, srcFlags, dstGUID, dstName, dstFlags, amount, ...)
 	if (self:checkEventFlags(dstFlags)) then
-		local overkill, school, resisted, blocked, absorbed, critical, glancing, crushing = ...
+		local overkill, school, resisted, blocked, absorbed, critical, glancing, crushing, isOffHand, multistrike = ...
 		if (absorbed) then
 			self:Damage(dstGUID, absorbed)
 		end

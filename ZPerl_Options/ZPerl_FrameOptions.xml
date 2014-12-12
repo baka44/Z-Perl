@@ -3199,6 +3199,7 @@
 								_G[self:GetName().."High"]:SetText("2.0")
 								self:SetMinMaxValues(2, 20)
 								self:SetValueStep(1)
+								self:SetObeyStepOnDrag(true)
 							</OnLoad>
 							<OnShow>
 								self:SetValue(floor((XPerlDB.bar.fadeTime + 0.05) * 10))
@@ -3512,6 +3513,7 @@
 								self:SetScale(0.8)
 								self:SetMinMaxValues(1, 60)
 								self:SetValueStep(1)
+								self:SetObeyStepOnDrag(true)
 								XPerl_SliderSetup(self)
 								XPerl_OptionsSetMyText(self, "XPERL_CONF_BUFFCOUNTDOWNSTART")
 							</OnLoad>
@@ -3908,6 +3910,7 @@
 										_G[self:GetName().."High"]:SetText(" ")
 										self:SetMinMaxValues(0.1, 0.8)
 										self:SetValueStep(0.1)
+										self:SetObeyStepOnDrag(true)
 									</OnLoad>
 									<OnShow>
 										self:SetValue(XPerlDB.rangeFinder[XPerl_Options.optRange].FadeAmount)
@@ -4169,6 +4172,7 @@
 									<OnLoad>
 										self:SetMinMaxValues(10, 95)
 										self:SetValueStep(5)
+										self:SetObeyStepOnDrag(true)
 										XPerl_SliderSetup(self, true)
 										XPerl_OptionsSetMyText(self, "XPERL_CONF_RANGEHEALTH_LOWPOINT")
 									</OnLoad>
@@ -4320,6 +4324,7 @@
 								self:SetScale(0.8)
 								self:SetMinMaxValues(1, 75)
 								self:SetValueStep(1)
+								self:SetObeyStepOnDrag(true)
 								XPerl_SliderSetup(self)
 								XPerl_OptionsSetMyText(self, "XPERL_CONF_PARTY_FULLSCREENWARN")
 							</OnLoad>
@@ -4352,6 +4357,7 @@
 							<OnLoad>
 								self:SetScale(0.8)
 								self:SetValueStep(1)
+								self:SetObeyStepOnDrag(true)
 								XPerl_SliderSetup(self)
 								XPerl_OptionsSetMyText(self, "XPERL_CONF_PARTY_FULLSCREENOK")
 							</OnLoad>
@@ -5035,6 +5041,7 @@
 							<OnLoad>
 								self:SetMinMaxValues(0, 100)
 								self:SetValueStep(1)
+								self:SetObeyStepOnDrag(true)
 								XPerl_SliderSetup(self)
 								XPerl_OptionsSetMyText(self, "XPERL_CONF_PLAYER_WIDTHBONUS")
 								XPerl_Options_RegisterProtected(self)
@@ -5244,6 +5251,7 @@
 									<OnLoad>
 										self:SetMinMaxValues(4, 40)
 										self:SetValueStep(1)
+										self:SetObeyStepOnDrag(true)
 										XPerl_SliderSetup(self)
 										XPerl_OptionsSetMyText(self, "XPERL_CONF_PLAYER_MAXBUFFS")
 										XPerl_Options_RegisterProtected(self)
@@ -5274,6 +5282,7 @@
 									<OnLoad>
 										self:SetMinMaxValues(7, 38)
 										self:SetValueStep(1)
+										self:SetObeyStepOnDrag(true)
 										XPerl_SliderSetup(self)
 										XPerl_OptionsSetMyText(self, "XPERL_CONF_PLAYER_BUFFSIZE")
 										XPerl_Options_RegisterProtected(self)
@@ -5304,6 +5313,7 @@
 									<OnLoad>
 										self:SetMinMaxValues(7, 45)
 										self:SetValueStep(1)
+										self:SetObeyStepOnDrag(true)
 										XPerl_SliderSetup(self)
 										XPerl_OptionsSetMyText(self, "XPERL_CONF_PLAYER_DEBUFFSIZE")
 										XPerl_Options_RegisterProtected(self)
@@ -5447,6 +5457,7 @@
 										XPerl_Options_RegisterProtected(self)
 										self:SetMinMaxValues(-1100, 1100)
 										self:SetValueStep(1)
+										self:SetObeyStepOnDrag(true)
 										XPerl_SliderSetup(self)
 										XPerl_OptionsSetMyText(self, "XPERL_CONF_PLAYER_TOTEM_OFFSETX")
 									</OnLoad>
@@ -5476,6 +5487,7 @@
 										XPerl_Options_RegisterProtected(self)
 										self:SetMinMaxValues(-800, 800)
 										self:SetValueStep(1)
+										self:SetObeyStepOnDrag(true)
 										XPerl_SliderSetup(self)
 										XPerl_OptionsSetMyText(self, "XPERL_CONF_PLAYER_TOTEM_OFFSETY")
 									</OnLoad>
@@ -5743,6 +5755,7 @@
 							<OnLoad>
 								self:SetMinMaxValues(0, 100)
 								self:SetValueStep(1)
+								self:SetObeyStepOnDrag(true)
 								XPerl_SliderSetup(self)
 								XPerl_OptionsSetMyText(self, "XPERL_CONF_PLAYER_PET_WIDTHBONUS")
 								XPerl_Options_RegisterProtected(self)
@@ -6050,6 +6063,7 @@
 									<OnLoad>
 										self:SetMinMaxValues(0, 100)
 										self:SetValueStep(1)
+										self:SetObeyStepOnDrag(true)
 										XPerl_SliderSetup(self)
 										XPerl_OptionsSetMyText(self, "XPERL_CONF_PETTARGET_WIDTHBONUS")
 										XPerl_Options_RegisterProtected(self)
@@ -6266,6 +6280,7 @@
 								self:SetScale(0.8)
 								self:SetMinMaxValues(1, 10)
 								self:SetValueStep(1)
+								self:SetObeyStepOnDrag(true)
 
 								local t = XPerl_Options_GetSibling("BuffWrap",self)
 								local t2 = _G[t:GetName().."Text"]
@@ -6301,6 +6316,7 @@
 							<OnLoad>
 								self:SetMinMaxValues(7, 38)
 								self:SetValueStep(1)
+								self:SetObeyStepOnDrag(true)
 								XPerl_SliderSetup(self)
 								XPerl_OptionsSetMyText(self, "XPERL_CONF_PLAYER_PET_BUFF_SIZE")
 							</OnLoad>
@@ -6328,6 +6344,7 @@
 							<OnLoad>
 								self:SetMinMaxValues(7, 38)
 								self:SetValueStep(1)
+								self:SetObeyStepOnDrag(true)
 								XPerl_SliderSetup(self)
 								XPerl_OptionsSetMyText(self, "XPERL_CONF_PLAYER_PET_DEBUFF_SIZE")
 							</OnLoad>
@@ -6977,6 +6994,7 @@
 							<OnLoad>
 								self:SetMinMaxValues(0, 100)
 								self:SetValueStep(1)
+								self:SetObeyStepOnDrag(true)
 								XPerl_SliderSetup(self)
 								XPerl_OptionsSetMyText(self, "XPERL_CONF_TARGET_WIDTHBONUS")
 								XPerl_Options_RegisterProtected(self)
@@ -7371,6 +7389,7 @@
 									<OnLoad>
 										self:SetMinMaxValues(0, 100)
 										self:SetValueStep(1)
+										self:SetObeyStepOnDrag(true)
 										XPerl_SliderSetup(self)
 										XPerl_OptionsSetMyText(self, "XPERL_CONF_TARGETTARGET_WIDTHBONUS")
 										XPerl_Options_RegisterProtected(self)
@@ -7644,6 +7663,7 @@
 							<OnLoad>
 								self:SetMinMaxValues(7, 38)
 								self:SetValueStep(1)
+								self:SetObeyStepOnDrag(true)
 								XPerl_SliderSetup(self)
 								XPerl_OptionsSetMyText(self, "XPERL_CONF_TARGET_BUFF_SIZE")
 							</OnLoad>
@@ -7678,6 +7698,7 @@
 							<OnLoad>
 								self:SetMinMaxValues(7, 45)
 								self:SetValueStep(1)
+								self:SetObeyStepOnDrag(true)
 								XPerl_SliderSetup(self)
 								XPerl_OptionsSetMyText(self, "XPERL_CONF_TARGET_DEBUFF_SIZE")
 							</OnLoad>
@@ -7710,12 +7731,12 @@
 								self.configBase = "XPerlDB.target.buffs"
 								self.configIndex = "wrap"
 								self.configClick = function()
-											XPerlDB.targettarget.buffs.wrap = XPerlDB.target.buffs.wrap
-											XPerlDB.targettargettarget.buffs.wrap = XPerlDB.target.buffs.wrap
-											XPerlDB.pettarget.buffs.wrap = XPerlDB.target.buffs.wrap
-											XPerl_Target_Reset()
-											XPerl_TargetTarget_Reset()
-										end
+									XPerlDB.targettarget.buffs.wrap = XPerlDB.target.buffs.wrap
+									XPerlDB.targettargettarget.buffs.wrap = XPerlDB.target.buffs.wrap
+									XPerlDB.pettarget.buffs.wrap = XPerlDB.target.buffs.wrap
+									XPerl_Target_Reset()
+									XPerl_TargetTarget_Reset()
+								end
 								self.Validate = function()
 									XPerl_Options_EnableSibling(self, "MaxRows")
 								end
@@ -7737,6 +7758,7 @@
 								self:SetScale(0.8)
 								self:SetMinMaxValues(1, 10)
 								self:SetValueStep(1)
+								self:SetObeyStepOnDrag(true)
 
 								local t = XPerl_Options_GetSibling("BuffWrap",self)
 								local t2 = _G[t:GetName().."Text"]
@@ -8329,6 +8351,7 @@
 							<OnLoad>
 								self:SetMinMaxValues(0, 100)
 								self:SetValueStep(1)
+								self:SetObeyStepOnDrag(true)
 								XPerl_SliderSetup(self)
 								XPerl_OptionsSetMyText(self, "XPERL_CONF_FOCUS_WIDTHBONUS")
 								XPerl_Options_RegisterProtected(self)
@@ -8635,6 +8658,7 @@
 									<OnLoad>
 										self:SetMinMaxValues(0, 100)
 										self:SetValueStep(1)
+										self:SetObeyStepOnDrag(true)
 										XPerl_SliderSetup(self)
 										XPerl_OptionsSetMyText(self, "XPERL_CONF_FOCUSTARGET_WIDTHBONUS")
 										XPerl_Options_RegisterProtected(self)
@@ -8868,6 +8892,7 @@
 							<OnLoad>
 								self:SetMinMaxValues(7, 38)
 								self:SetValueStep(1)
+								self:SetObeyStepOnDrag(true)
 								XPerl_SliderSetup(self)
 								XPerl_OptionsSetMyText(self, "XPERL_CONF_FOCUS_BUFF_SIZE")
 							</OnLoad>
@@ -8901,6 +8926,7 @@
 							<OnLoad>
 								self:SetMinMaxValues(7, 45)
 								self:SetValueStep(1)
+								self:SetObeyStepOnDrag(true)
 								XPerl_SliderSetup(self)
 								XPerl_OptionsSetMyText(self, "XPERL_CONF_FOCUS_DEBUFF_SIZE")
 							</OnLoad>
@@ -8957,6 +8983,7 @@
 								self:SetScale(0.8)
 								self:SetMinMaxValues(1, 10)
 								self:SetValueStep(1)
+								self:SetObeyStepOnDrag(true)
 
 								local t = XPerl_Options_GetSibling("BuffWrap",self)
 								local t2 = _G[t:GetName().."Text"]
@@ -9318,6 +9345,7 @@
 								self:SetScale(0.8)
 								self:SetMinMaxValues(66, 200)
 								self:SetValueStep(1)
+								self:SetObeyStepOnDrag(true)
 
 								local t = XPerl_Options_GetSibling("Target",self)
 								local t2 = _G[t:GetName().."Text"]
@@ -9494,6 +9522,7 @@
 							<OnLoad>
 								self:SetMinMaxValues(0, 100)
 								self:SetValueStep(1)
+								self:SetObeyStepOnDrag(true)
 								XPerl_SliderSetup(self)
 								XPerl_OptionsSetMyText(self, "XPERL_CONF_PARTY_WIDTHBONUS")
 								XPerl_Options_RegisterProtected(self)
@@ -9668,6 +9697,7 @@
 							<OnLoad>
 								self:SetMinMaxValues(7, 38)
 								self:SetValueStep(1)
+								self:SetObeyStepOnDrag(true)
 								XPerl_SliderSetup(self)
 								XPerl_OptionsSetMyText(self, "XPERL_CONF_PARTY_BUFF_SIZE")
 							</OnLoad>
@@ -9695,6 +9725,7 @@
 							<OnLoad>
 								self:SetMinMaxValues(7, 45)
 								self:SetValueStep(1)
+								self:SetObeyStepOnDrag(true)
 								XPerl_SliderSetup(self)
 								XPerl_OptionsSetMyText(self, "XPERL_CONF_PARTY_DEBUFF_SIZE")
 							</OnLoad>
@@ -9745,6 +9776,7 @@
 								self:SetScale(0.8)
 								self:SetMinMaxValues(1, 10)
 								self:SetValueStep(1)
+								self:SetObeyStepOnDrag(true)
 
 								local t = XPerl_Options_GetSibling("BuffWrap",self)
 								local t2 = _G[t:GetName().."Text"]
@@ -9972,6 +10004,7 @@
 									<OnLoad>
 										self:SetMinMaxValues(5, 20)
 										self:SetValueStep(1)
+										self:SetObeyStepOnDrag(true)
 										XPerl_SliderSetup(self)
 										XPerl_OptionsSetMyText(self, "XPERL_CONF_PARTY_PETBUFF_SIZE")
 									</OnLoad>
@@ -10000,6 +10033,7 @@
 									<OnLoad>
 										self:SetMinMaxValues(5, 20)
 										self:SetValueStep(1)
+										self:SetObeyStepOnDrag(true)
 										XPerl_SliderSetup(self)
 										XPerl_OptionsSetMyText(self, "XPERL_CONF_PARTY_PETDEBUFF_SIZE")
 									</OnLoad>
@@ -10964,6 +10998,7 @@
 									<OnLoad>
 										self:SetMinMaxValues(-5, 20)
 										self:SetValueStep(1)
+										self:SetObeyStepOnDrag(true)
 										XPerl_SliderSetup(self)
 										XPerl_OptionsSetMyText(self, "XPERL_CONF_RAID_SPACING")
 										XPerl_Options_RegisterProtected(self)
@@ -11061,6 +11096,7 @@
 										XPerl_OptionsSetMyText(self, "XPERL_CONF_RAID_CUSTOM_ALPHA")
 										self:SetMinMaxValues(0, 1)
 										self:SetValueStep(0.05)
+										self:SetObeyStepOnDrag(true)
 										_G[self:GetName().."Low"]:SetText("0%")
 										_G[self:GetName().."High"]:SetText("100%")
 									</OnLoad>
@@ -11309,6 +11345,7 @@
 							<OnLoad>
 								self:SetMinMaxValues(0, 100)
 								self:SetValueStep(1)
+								self:SetObeyStepOnDrag(true)
 								XPerl_SliderSetup(self)
 								XPerl_OptionsSetMyText(self, "XPERL_CONF_ALL_WIDTHBONUS")
 								XPerl_Options_RegisterProtected(self)
@@ -11878,6 +11915,7 @@
 										_G[self:GetName().."High"]:SetText("2")
 										self:SetMinMaxValues(5, 200)
 										self:SetValueStep(1)
+										self:SetObeyStepOnDrag(true)
 									</OnLoad>
 									<OnShow>
 										self:SetValue(floor(((XPerlDB.colour.classbarBright or 1) + 0.005) * 100))
@@ -12518,6 +12556,7 @@
 									<OnLoad>
 										self:SetMinMaxValues(0,100)
 										self:SetValueStep(1)
+										self:SetObeyStepOnDrag(true)
 										XPerl_SliderSetup(self, true)
 										XPerl_OptionsSetMyText(self, "XPERL_CONF_FRAME_TRANSPARENCY")
 									</OnLoad>
@@ -12544,6 +12583,7 @@
 									<OnLoad>
 										self:SetMinMaxValues(0,100)
 										self:SetValueStep(1)
+										self:SetObeyStepOnDrag(true)
 										XPerl_SliderSetup(self, true)
 										XPerl_OptionsSetMyText(self, "XPERL_CONF_TEXT_TRANSPARENCY")
 									</OnLoad>
@@ -12572,6 +12612,7 @@
 									<OnLoad>
 										self:SetMinMaxValues(100, 400)
 										self:SetValueStep(25)
+										self:SetObeyStepOnDrag(true)
 										XPerl_SliderSetup(self, true)
 										XPerl_OptionsSetMyText(self, "XPERL_CONF_MAXIMUM_SCALE")
 									</OnLoad>
@@ -12994,6 +13035,7 @@
 							<OnLoad>
 								self:SetMinMaxValues(1, 10)
 								self:SetValueStep(1)
+								self:SetObeyStepOnDrag(true)
 								XPerl_Options_RegisterProtected(self)
 								XPerl_OptionsSetMyText(self, "XPERL_CONF_RAIDHELP_MAXTANKS")
 							</OnLoad>
@@ -13030,6 +13072,7 @@
 									self:SetMinMaxValues(50, 125)
 								end
 								self:SetValueStep(5)
+								self:SetObeyStepOnDrag(true)
 								XPerl_Options_RegisterProtected(self)
 								XPerl_OptionsSetMyText(self, "XPERL_CONF_RAIDHELP_UNITWIDTH")
 							</OnLoad>
@@ -13066,6 +13109,7 @@
 									self:SetMinMaxValues(17, 30)
 								end
 								self:SetValueStep(1)
+								self:SetObeyStepOnDrag(true)
 								XPerl_Options_RegisterProtected(self)
 								XPerl_OptionsSetMyText(self, "XPERL_CONF_RAIDHELP_UNITHEIGHT")
 							</OnLoad>
@@ -13096,6 +13140,7 @@
 							<OnLoad>
 								self:SetMinMaxValues(0, 100)
 								self:SetValueStep(1)
+								self:SetObeyStepOnDrag(true)
 								XPerl_SliderSetup(self, true)
 								XPerl_OptionsSetMyText(self, "XPERL_CONF_RAIDHELP_ALPHA")
 							</OnLoad>
@@ -13127,6 +13172,7 @@
 							<OnLoad>
 								self:SetMinMaxValues(0, 100)
 								self:SetValueStep(1)
+								self:SetObeyStepOnDrag(true)
 								XPerl_SliderSetup(self, true)
 								XPerl_OptionsSetMyText(self, "XPERL_CONF_RAIDHELP_BACKALPHA")
 							</OnLoad>
@@ -13383,6 +13429,7 @@
 									<OnLoad>
 										self:SetMinMaxValues(0, 100)
 										self:SetValueStep(1)
+										self:SetObeyStepOnDrag(true)
 										XPerl_SliderSetup(self, true)
 										XPerl_OptionsSetMyText(self, "XPERL_CONF_ASSIST_ALPHA")
 									</OnLoad>
@@ -13414,6 +13461,7 @@
 									<OnLoad>
 										self:SetMinMaxValues(0, 100)
 										self:SetValueStep(1)
+										self:SetObeyStepOnDrag(true)
 										XPerl_SliderSetup(self, true)
 										XPerl_OptionsSetMyText(self, "XPERL_CONF_ASSIST_BACKALPHA")
 									</OnLoad>
@@ -13726,6 +13774,7 @@
 							<OnLoad>
 								self:SetMinMaxValues(0, 100)
 								self:SetValueStep(5)
+								self:SetObeyStepOnDrag(true)
 								XPerl_Options_RegisterProtected(self)
 								XPerl_OptionsSetMyText(self, "XPERL_CONF_MONITOR_LOWMANA")
 							</OnLoad>
@@ -13754,6 +13803,7 @@
 							<OnLoad>
 								self:SetMinMaxValues(0, 100)
 								self:SetValueStep(5)
+								self:SetObeyStepOnDrag(true)
 								XPerl_Options_RegisterProtected(self)
 								XPerl_OptionsSetMyText(self, "XPERL_CONF_MONITOR_HIGHMANA")
 							</OnLoad>
@@ -13784,6 +13834,7 @@
 							<OnLoad>
 								self:SetMinMaxValues(XPERL_RAIDMON_UNIT_WIDTH_MIN or 50, XPERL_RAIDMON_UNIT_WIDTH_MAX or 150)
 								self:SetValueStep(5)
+								self:SetObeyStepOnDrag(true)
 								XPerl_Options_RegisterProtected(self)
 								XPerl_OptionsSetMyText(self, "XPERL_CONF_MONITOR_UNITWIDTH")
 							</OnLoad>
@@ -13814,6 +13865,7 @@
 							<OnLoad>
 								self:SetMinMaxValues(XPERL_RAIDMON_UNIT_HEIGHT_MIN or 9, XPERL_RAIDMON_UNIT_HEIGHT_MAX or 20)
 								self:SetValueStep(1)
+								self:SetObeyStepOnDrag(true)
 								XPerl_Options_RegisterProtected(self)
 								XPerl_OptionsSetMyText(self, "XPERL_CONF_MONITOR_UNITHEIGHT")
 							</OnLoad>
@@ -13844,6 +13896,7 @@
 							<OnLoad>
 								self:SetMinMaxValues(XPERL_RAIDMON_TARGET_WIDTH_MIN or 50, XPERL_RAIDMON_TARGET_WIDTH_MAX or 150)
 								self:SetValueStep(5)
+								self:SetObeyStepOnDrag(true)
 								XPerl_Options_RegisterProtected(self)
 								XPerl_OptionsSetMyText(self, "XPERL_CONF_MONITOR_TARGETWIDTH")
 							</OnLoad>
@@ -13910,6 +13963,7 @@
 							<OnLoad>
 								self:SetMinMaxValues(0,100)
 								self:SetValueStep(1)
+								self:SetObeyStepOnDrag(true)
 								XPerl_OptionsSetMyText(self, "XPERL_CONF_MONITOR_ALPHA")
 								XPerl_SliderSetup(self)
 							</OnLoad>
@@ -13939,6 +13993,7 @@
 							<OnLoad>
 								self:SetMinMaxValues(0,100)
 								self:SetValueStep(1)
+								self:SetObeyStepOnDrag(true)
 								XPerl_OptionsSetMyText(self, "XPERL_CONF_MONITOR_BGALPHA")
 								XPerl_SliderSetup(self)
 							</OnLoad>
@@ -13993,6 +14048,7 @@
 							<OnLoad>
 								self:SetMinMaxValues(0, 100)
 								self:SetValueStep(1)
+								self:SetObeyStepOnDrag(true)
 								XPerl_SliderSetup(self)
 								XPerl_OptionsSetMyText(self, "XPERL_CONF_ADMIN_ALPHA")
 							</OnLoad>

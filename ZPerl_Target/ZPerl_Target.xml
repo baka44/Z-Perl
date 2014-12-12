@@ -32,7 +32,6 @@
 
 		<Frames>
 			<!-- Target Name -->
-
 			<Button name="$parentnameFrame" inherits="SecureUnitButtonTemplate">
 				<Scripts>
 					<OnLoad>
@@ -66,7 +65,7 @@
 						<AbsValue val="32"/>
 					</TileSize>
 					<BackgroundInsets>
-						<AbsInset left="4" right="4" top="4" bottom="4"/>
+						<AbsInset left="3" right="3" top="3" bottom="3"/>
 					</BackgroundInsets>
 				</Backdrop>
 				<Frames>
@@ -208,6 +207,17 @@
 						</Offset>
 					</Anchor>
 				</Anchors>
+				<Backdrop bgFile="Interface\Addons\ZPerl\Images\XPerl_FrameBack" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
+				<EdgeSize>
+					<AbsValue val="16"/>
+				</EdgeSize>
+				<TileSize>
+					<AbsValue val="32"/>
+				</TileSize>
+				<BackgroundInsets>
+					<AbsInset left="3" right="3" top="3" bottom="3"/>
+				</BackgroundInsets>
+			</Backdrop>
 			</Frame>
 
 			<!--Level Frame-->
@@ -235,6 +245,17 @@
 						</Texture>
 					</Layer>
 				</Layers>
+				<Backdrop bgFile="Interface\Addons\ZPerl\Images\XPerl_FrameBack" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
+					<EdgeSize>
+						<AbsValue val="16"/>
+					</EdgeSize>
+					<TileSize>
+						<AbsValue val="32"/>
+					</TileSize>
+					<BackgroundInsets>
+						<AbsInset left="3" right="3" top="3" bottom="3"/>
+					</BackgroundInsets>
+				</Backdrop>
 				<Scripts>
 					<OnLoad>
 						XPerl_RegisterUnitText(_G[self:GetName().."text"])
@@ -277,7 +298,19 @@
 						<Texture name="$parentclassTexture" file="Interface\Glues\CharacterCreate\UI-CharacterCreate-Classes" setAllPoints="true"/>
 					</Layer>
 				</Layers>
+				<Backdrop bgFile="" edgeFile="" tile="true">
+					<EdgeSize>
+						<AbsValue val="16"/>
+					</EdgeSize>
+					<TileSize>
+						<AbsValue val="32"/>
+					</TileSize>
+					<BackgroundInsets>
+						<AbsInset left="3" right="4" top="3" bottom="3"/>
+					</BackgroundInsets>
+				</Backdrop>
 			</Frame>
+
 			<Frame name="$parentbossFrame" inherits="XPerl_BorderStyleTemplate">
 				<Size>
 					<AbsDimension x="38" y="20"/>
@@ -338,6 +371,17 @@
 						</Texture>
 					</Layer>
 				</Layers>
+				<Backdrop bgFile="Interface\Addons\ZPerl\Images\XPerl_FrameBack" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
+					<EdgeSize>
+						<AbsValue val="16"/>
+					</EdgeSize>
+					<TileSize>
+						<AbsValue val="32"/>
+					</TileSize>
+					<BackgroundInsets>
+						<AbsInset left="4" right="3" top="3" bottom="3"/>
+					</BackgroundInsets>
+				</Backdrop>
 			</Frame>
 
 			<Frame name="$parenteliteFrame" hidden="true">

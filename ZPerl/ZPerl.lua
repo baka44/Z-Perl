@@ -7,7 +7,7 @@ local percD	= "%d"..PERCENT_SYMBOL
 local perc1F = "%.1f"..PERCENT_SYMBOL
 
 XPerl_RequestConfig(function(New) conf = New end, "$Revision: 891 $")
-XPerl_SetModuleRevision("$Revision: 891 $")
+XPerl_SetModuleRevision("$Revision: 892 $")
 
 --Some local copies for speed
 local strsub = strsub
@@ -1677,10 +1677,10 @@ function XPerl_CheckDebuffs(self, unit, resetBorders)
 
 		bgDef.edgeFile = self.edgeFile or normalEdge
 		bgDef.edgeSize = self.edgeSize or 16
-		bgDef.insets.left = self.edgeInsets or 5
-		bgDef.insets.top = self.edgeInsets or 5
-		bgDef.insets.right = self.edgeInsets or 5
-		bgDef.insets.bottom = self.edgeInsets or 5
+		bgDef.insets.left = self.edgeInsets or 3
+		bgDef.insets.top = self.edgeInsets or 3
+		bgDef.insets.right = self.edgeInsets or 4
+		bgDef.insets.bottom = self.edgeInsets or 4
 	end
 
 	for i, f in pairs(self.FlashFrames) do

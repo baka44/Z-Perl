@@ -234,7 +234,7 @@
 				<AbsValue val="32"/>
 			</TileSize>
 			<BackgroundInsets>
-				<AbsInset left="5" right="5" top="5" bottom="5"/>
+				<AbsInset left="3" right="4" top="3" bottom="3"/>
 			</BackgroundInsets>
 		</Backdrop>
 		<Scripts>
@@ -296,7 +296,7 @@
 				<AbsValue val="32"/>
 			</TileSize>
 			<BackgroundInsets>
-				<AbsInset left="5" right="5" top="5" bottom="5"/>
+				<AbsInset left="3" right="3" top="3" bottom="3"/>
 			</BackgroundInsets>
 		</Backdrop>
 		<Scripts>

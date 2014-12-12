@@ -1146,7 +1146,7 @@ local function DoEvent(self, timestamp, event, srcGUID, srcName, srcFlags, dstGU
 	local b = 1
 
 	if (event == "SWING_DAMAGE" or event == "RANGE_DAMAGE" or event == "SPELL_DAMAGE" or event == "DAMAGE_SHIELD" or event == "ENVIRONMENTAL_DAMAGE" or event == "SPELL_PERIODIC_DAMAGE") then
-		local amount, overkill, school, resisted, blocked, absorbed, critical, glancing, crushing = select(amountIndex[event], ...)
+		local amount, overkill, school, resisted, blocked, absorbed, critical, glancing, crushing, isOffHand, multistrike = select(amountIndex[event], ...)
 		if (amount and amount ~= 0) then
 			if (critical or crushing) then
 				fontHeight = fontHeight * 1.5
@@ -1325,6 +1325,31 @@ function XPerl_Target_Events:UNIT_AURA()
 	--elseif (XPerl_UnitDebuff(self.partyid, self.perlDebuffs + 1, self.conf.debuffs.curable)) then
 	--	XPerl_Targets_BuffPositions(self)
 	--end
+
+	if (XPerl_Target) then
+		XPerl_Target_Set_Bits(XPerl_Target)
+		XPerl_Target_UpdateDisplay(XPerl_Target)
+	end
+
+	if (XPerl_Focus) then
+		XPerl_Target_Set_Bits(XPerl_Focus)
+		XPerl_Target_UpdateDisplay(XPerl_Focus)
+	end
+
+	if (XPerl_TargetTarget_Set_Bits) then
+		XPerl_TargetTarget_Set_Bits()
+
+		XPerl_TargetTarget_UpdateDisplay(XPerl_TargetTarget)
+		if (XPerl_TargetTargetTarget) then
+			XPerl_TargetTarget_UpdateDisplay(XPerl_TargetTargetTarget)
+		end
+		if (XPerl_FocusTarget) then
+			XPerl_TargetTarget_UpdateDisplay(XPerl_FocusTarget)
+		end
+		if (XPerl_PetTarget) then
+			XPerl_TargetTarget_UpdateDisplay(XPerl_PetTarget)
+		end
+	end
 
 	XPerl_Targets_BuffUpdate(self)
 	XPerl_Target_DebuffUpdate(self)

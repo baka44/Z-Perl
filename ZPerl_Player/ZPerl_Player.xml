@@ -157,6 +157,17 @@
 						</Offset>
 					</Anchor>
 				</Anchors>
+				<Backdrop bgFile="Interface\Addons\ZPerl\Images\XPerl_FrameBack" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
+					<EdgeSize>
+						<AbsValue val="16"/>
+					</EdgeSize>
+					<TileSize>
+						<AbsValue val="32"/>
+					</TileSize>
+					<BackgroundInsets>
+						<AbsInset left="3" right="4" top="3" bottom="4"/>
+					</BackgroundInsets>
+				</Backdrop>
 			</Frame>
 
 			<Button name="$parentnameFrame" inherits="SecureUnitButtonTemplate">
@@ -198,7 +209,7 @@
 						<AbsValue val="32"/>
 					</TileSize>
 					<BackgroundInsets>
-						<AbsInset left="4" right="4" top="4" bottom="4"/>
+						<AbsInset left="3" right="4" top="3" bottom="3"/>
 					</BackgroundInsets>
 				</Backdrop>
 				<Frames>
@@ -356,12 +367,23 @@
 					</Anchor>
 				</Anchors>
 				<Layers>
-					<Layer level="BACKGROUND">
-						<FontString name="$parenttext" inherits="GameFontNormalSmall" text="Error!" setAllPoints="true">
+					<Layer level="OVERLAY">
+						<FontString name="$parenttext" inherits="GameFontNormalSmall" text="0" setAllPoints="true">
 							<Color r="1.0" g="1.0" b="0"/>
 						</FontString>
 					</Layer>
 				</Layers>
+				<Backdrop bgFile="Interface\Addons\ZPerl\Images\XPerl_FrameBack" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
+					<EdgeSize>
+						<AbsValue val="16"/>
+					</EdgeSize>
+					<TileSize>
+						<AbsValue val="32"/>
+					</TileSize>
+					<BackgroundInsets>
+						<AbsInset left="3" right="4" top="3" bottom="3"/>
+					</BackgroundInsets>
+				</Backdrop>
 				<Scripts>
 					<OnLoad>
 						XPerl_RegisterUnitText(getglobal(self:GetName().."text"))
@@ -382,20 +404,24 @@
 				</Anchors>
 				<Layers>
 					<Layer level="OVERLAY">
-						<Texture name="$parenttex" file="Interface\Glues\CharacterCreate\UI-CharacterCreate-Classes">
-							<Size>
-								<AbsDimension x="20" y="20"/>
-							</Size>
-							<Anchors>
-								<Anchor point="BOTTOMRIGHT"/>
-							</Anchors>
-						</Texture>
+						<Texture name="$parenttex" file="Interface\Glues\CharacterCreate\UI-CharacterCreate-Classes" setAllPoints="true"/>
 					</Layer>
 				</Layers>
+				<Backdrop bgFile="" edgeFile="" tile="true">
+					<EdgeSize>
+						<AbsValue val="16"/>
+					</EdgeSize>
+					<TileSize>
+						<AbsValue val="32"/>
+					</TileSize>
+					<BackgroundInsets>
+						<AbsInset left="3" right="4" top="3" bottom="3"/>
+					</BackgroundInsets>
+				</Backdrop>
 			</Frame>
 
 			<!-- Player Stats -->
-			<Frame name="$parentstatsFrame" inherits="XPerl_Stats_Template">		-- StatsXP_Template
+			<Frame name="$parentstatsFrame" inherits="XPerl_Stats_Template">
 				<Anchors>
 					<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" relativeTo="$parentnameFrame">
 						<Offset>
@@ -403,6 +429,17 @@
 						</Offset>
 					</Anchor>
 				</Anchors>
+				<Backdrop bgFile="Interface\Addons\ZPerl\Images\XPerl_FrameBack" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
+					<EdgeSize>
+						<AbsValue val="16"/>
+					</EdgeSize>
+					<TileSize>
+						<AbsValue val="32"/>
+					</TileSize>
+					<BackgroundInsets>
+						<AbsInset left="3" right="4" top="3" bottom="4"/>
+					</BackgroundInsets>
+				</Backdrop>
 			</Frame>
 
 			<Frame name="$parentgroupFrame" hidden="true">

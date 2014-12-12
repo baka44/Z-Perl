@@ -75,26 +75,41 @@
 				<AbsValue val="32"/>
 			</TileSize>
 			<BackgroundInsets>
-				<AbsInset left="4" right="4" top="4" bottom="4"/>
+				<AbsInset left="4" right="4" top="3" bottom="4"/>
 			</BackgroundInsets>
 		</Backdrop>
 	</Frame>
 
 	<Frame name="XPerl_Portrait_Template" inherits="XPerl_BorderStyleTemplate" virtual="true">
 		<Size>
-			<AbsDimension x="60" y="62"/>
+			<AbsDimension x="62" y="62"/>
 		</Size>
+		<Backdrop bgFile="Interface\Addons\ZPerl\Images\XPerl_FrameBack" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
+			<EdgeSize>
+				<AbsValue val="16"/>
+			</EdgeSize>
+			<TileSize>
+				<AbsValue val="32"/>
+			</TileSize>
+			<BackgroundInsets>
+				<AbsInset left="3" right="4" top="3" bottom="4"/>
+			</BackgroundInsets>
+		</Backdrop>
 		<Frames>
 			<PlayerModel name="$parentportrait3D">
 				<Size>
-					<AbsDimension x="51" y="52"/>
+					<AbsDimension x="52" y="52"/>
 				</Size>
 				<Anchors>
 					<Anchor point="TOPLEFT">
-						<Offset><AbsDimension x="5" y="-5"/></Offset>
+						<Offset>
+							<AbsDimension x="3" y="-3"/>
+						</Offset>
 					</Anchor>
 					<Anchor point="BOTTOMRIGHT">
-						<Offset><AbsDimension x="-5" y="5"/></Offset>
+						<Offset>
+							<AbsDimension x="-4" y="4"/>
+						</Offset>
 					</Anchor>
 				</Anchors>
 			</PlayerModel>
@@ -102,13 +117,19 @@
 		<Layers>
 			<Layer level="ARTWORK">
 				<Texture name="$parentportrait" hidden="true">
-					<Size><AbsDimension x="50" y="50"/></Size>
+					<Size>
+						<AbsDimension x="52" y="52"/>
+					</Size>
 					<Anchors>
 						<Anchor point="TOPLEFT">
-							<Offset><AbsDimension x="6" y="-5"/></Offset>
+							<Offset>
+								<AbsDimension x="6" y="-5"/>
+							</Offset>
 						</Anchor>
 						<Anchor point="BOTTOMRIGHT">
-							<Offset><AbsDimension x="-4" y="4"/></Offset>
+							<Offset>
+								<AbsDimension x="-4" y="4"/>
+							</Offset>
 						</Anchor>
 					</Anchors>
 				</Texture>
