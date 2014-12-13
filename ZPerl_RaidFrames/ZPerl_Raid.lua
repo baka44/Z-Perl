@@ -119,7 +119,7 @@ function XPerl_Raid_OnLoad(self)
 	
 	if (rconf.enable and CompactUnitFrameProfiles) then
 		--CompactRaidFrameManager:SetParent(self)
-		CompactUnitFrameProfiles:UnregisterAllEvents() -- This disables the creation of the blizzard raid frames
+		--CompactUnitFrameProfiles:UnregisterAllEvents() -- This disables the creation of the blizzard raid frames
 	end
 	
 	XPerl_RegisterOptionChanger(function()
@@ -708,9 +708,9 @@ local function GetBuffButton(self, buffnum, createIfAbsent)
 
 		button:SetScript("OnEnter", XPerl_Raid_SetBuffTooltip)
 		button:SetScript("OnLeave", function()
-						lastNamesList, lastName, lastWith = nil, nil, nil
-						XPerl_PlayerTipHide()
-					end)
+			lastNamesList, lastName, lastWith = nil, nil, nil
+			XPerl_PlayerTipHide()
+		end)
 	end
 
 	return button

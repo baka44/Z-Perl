@@ -254,7 +254,9 @@
 	</Button>
 
 	<Frame name="XPerl_Raid_TitleFrameTemplate" inherits="SecureRaidGroupHeaderTemplate" clampedToScreen="true" frameStrata="LOW" virtual="true" hidden="true">
-		<Size><AbsDimension x="80" y="10"/></Size>
+		<Size>
+			<AbsDimension x="80" y="10"/>
+		</Size>
 		<Anchors>
 			<Anchor point="TOPLEFT">
 				<Offset>

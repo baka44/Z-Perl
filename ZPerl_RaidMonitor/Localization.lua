@@ -1,6 +1,6 @@
 ﻿-- Local stuff
 
-XPERL_RAID_MONITOR_TITLE		= "Casting Monitor |c00A04040(BETA)|r"
+XPERL_RAID_MONITOR_TITLE		= "Casting Monitor"
 XPERL_RAID_MONITOR_TOTALS		= "Toggle display of Totals and Statistics"
 
 XPERL_RAID_MONITOR_STATS_RAID_MANA	= "Raid Mana"

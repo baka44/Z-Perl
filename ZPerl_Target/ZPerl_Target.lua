@@ -5,14 +5,24 @@
 local XPerl_Target_Events = {}
 local conf, tconf
 XPerl_RequestConfig(function(new)
-				conf = new
-				tconf = conf.target
-				if (XPerl_Target) then XPerl_Target.conf = conf.target end
-				if (XPerl_Focus) then XPerl_Focus.conf = conf.focus end
-				if (XPerl_TargetTarget) then XPerl_TargetTarget.conf = conf.targettarget end
-				if (XPerl_FocusTarget) then XPerl_FocusTarget.conf = conf.focustarget end
-				if (XPerl_PetTarget) then XPerl_PetTarget.conf = conf.pettarget end
-			end, "$Revision: 877 $")
+	conf = new
+	tconf = conf.target
+	if (XPerl_Target) then
+		XPerl_Target.conf = conf.target
+	end
+	if (XPerl_Focus) then
+		XPerl_Focus.conf = conf.focus
+	end
+	if (XPerl_TargetTarget) then
+		XPerl_TargetTarget.conf = conf.targettarget
+	end
+	if (XPerl_FocusTarget) then
+		XPerl_FocusTarget.conf = conf.focustarget
+	end
+	if (XPerl_PetTarget) then
+		XPerl_PetTarget.conf = conf.pettarget
+	end
+end, "$Revision: 877 $")
 
 local percD = "%d"..PERCENT_SYMBOL
 local format = format
@@ -188,11 +198,16 @@ end
 
 -- GetComboColour
 local function GetComboColour(num)
-	if (num == 5) then		return 1,   0, 0
-	elseif (num == 4) then		return 1, 0.5, 0
-	elseif (num == 3) then		return 1,   1, 0
-	elseif (num == 2) then		return 0.5, 1, 0
-	elseif (num == 1) then		return 0,   1, 0
+	if (num == 5) then
+		return 1, 0, 0
+	elseif (num == 4) then
+		return 1, 0.5, 0
+	elseif (num == 3) then
+		return 1, 1, 0
+	elseif (num == 2) then
+		return 0.5, 1, 0
+	elseif (num == 1) then
+		return 0, 1, 0
 	end
 end
 
@@ -326,7 +341,7 @@ local function XPerl_Target_UpdateLevel(self)
 		self.levelFrame.skull:Hide()
 		self.levelFrame:SetWidth(27)
 		if (targetlevel < 0) then
-			if (UnitClassification(partyid) == "normal") then
+			if (UnitClassification(self.partyid) == "normal") then
 				self.levelFrame.text:Hide()
 				self.levelFrame.skull:Show()
 			else
@@ -500,6 +515,7 @@ do
 	local lastInspectName, lastInspectUnit, lastInspectGUID
 	local talentCache = setmetatable({}, {__mode = "kv"})
 	local LTQ = LibStub and LibStub("LibTalentQuery-1.0", true)
+	local lastInspectInvalid
 	if (LTQ) then
 		local function TalentQuery_Ready(e, name, realm, unit)
 			if (UnitIsUnit(unit, XPerl_Target.partyid)) then
@@ -887,7 +903,7 @@ local function XPerl_Target_UpdateLeader(self)
 	local ml
 	--if (UnitInParty("party1") or UnitInRaid("player")) then
 	
-		method, pindex,rindex = GetLootMethod()
+		local method, pindex, rindex = GetLootMethod()
 		--[[local method, index = GetLootMethod()
 
 		if (method == "master" and index) then
@@ -944,10 +960,7 @@ end
 -- XPerl_Target_CheckDebuffs
 local function XPerl_Target_CheckDebuffs(self)
 	if (self.conf.highlightDebuffs.enable) then
-       		if (self.conf.highlightDebuffs.who == 1 or
-       			(self.conf.highlightDebuffs.who == 2 and UnitCanAssist("player", self.partyid)) or
-       			(self.conf.highlightDebuffs.who == 3 and not UnitCanAssist("player", self.partyid))) then
-
+       		if (self.conf.highlightDebuffs.who == 1 or (self.conf.highlightDebuffs.who == 2 and UnitCanAssist("player", self.partyid)) or (self.conf.highlightDebuffs.who == 3 and not UnitCanAssist("player", self.partyid))) then
        			XPerl_CheckDebuffs(self, self.partyid)
        		else
        			XPerl_CheckDebuffs(self, self.partyid, true)
@@ -1250,6 +1263,30 @@ function XPerl_Target_Events:PLAYER_TARGET_CHANGED()
 	self.PlayerFlash = 0
 	XPerl_CombatFlashSetFrames(self)
 	XPerl_Target_UpdateDisplay(self)
+
+	if (XPerl_Target) then
+		XPerl_Target_Set_Bits(XPerl_Target)
+		XPerl_Target_UpdateDisplay(XPerl_Target)
+	end
+
+	if (XPerl_TargetTarget_Set_Bits) then
+		XPerl_TargetTarget_Set_Bits(XPerl_TargetTarget)
+		XPerl_TargetTarget_UpdateDisplay(XPerl_TargetTarget)
+		if (XPerl_TargetTargetTarget) then
+			XPerl_TargetTarget_UpdateDisplay(XPerl_TargetTargetTarget)
+		end
+		if (XPerl_FocusTarget) then
+			XPerl_TargetTarget_UpdateDisplay(XPerl_FocusTarget)
+		end
+		if (XPerl_PetTarget) then
+			XPerl_TargetTarget_UpdateDisplay(XPerl_PetTarget)
+		end
+	end
+
+	if (XPerl_Focus) then
+		XPerl_Target_Set_Bits(XPerl_Focus)
+		XPerl_Target_UpdateDisplay(XPerl_Focus)
+	end
 end
 
 XPerl_Target_Events.PLAYER_FOCUS_CHANGED = XPerl_Target_Events.PLAYER_TARGET_CHANGED
@@ -1331,14 +1368,8 @@ function XPerl_Target_Events:UNIT_AURA()
 		XPerl_Target_UpdateDisplay(XPerl_Target)
 	end
 
-	if (XPerl_Focus) then
-		XPerl_Target_Set_Bits(XPerl_Focus)
-		XPerl_Target_UpdateDisplay(XPerl_Focus)
-	end
-
 	if (XPerl_TargetTarget_Set_Bits) then
-		XPerl_TargetTarget_Set_Bits()
-
+		XPerl_TargetTarget_Set_Bits(XPerl_TargetTarget)
 		XPerl_TargetTarget_UpdateDisplay(XPerl_TargetTarget)
 		if (XPerl_TargetTargetTarget) then
 			XPerl_TargetTarget_UpdateDisplay(XPerl_TargetTargetTarget)
@@ -1351,8 +1382,14 @@ function XPerl_Target_Events:UNIT_AURA()
 		end
 	end
 
+	if (XPerl_Focus) then
+		XPerl_Target_Set_Bits(XPerl_Focus)
+		XPerl_Target_UpdateDisplay(XPerl_Focus)
+	end
+
 	XPerl_Targets_BuffUpdate(self)
 	XPerl_Target_DebuffUpdate(self)
+	--XPerl_Target_UpdateDisplay(self)
 
 	if (select(2, UnitClass(self.partyid)) == "HUNTER") then
 		local f = UnitIsFeignDeath(self.partyid)
@@ -1447,7 +1484,7 @@ function XPerl_Target_Set_Bits(self)
 	local _
 	_, playerClass = UnitClass("player")
 
-	self.buffOptionString = nil
+	--self.buffOptionString = nil
 
 	if (self.conf.portrait) then
 		self.portraitFrame:Show()

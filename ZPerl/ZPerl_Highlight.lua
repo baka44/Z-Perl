@@ -28,8 +28,8 @@ local pomSpells = XPERL_HIGHLIGHT_SPELLS.pomSpells
 local shieldSpells = XPERL_HIGHLIGHT_SPELLS.shieldSpells
 
 local function GetTalentPosition(findName)
-	for i = 1,GetNumSpecializations() do
-		for j = 1,GetNumTalents(i) do
+	for i = 1, GetNumSpecializations() do
+		for j = 1, GetNumTalents(i) do
 			local name = GetTalentInfo(i, j)
 			if (name == findName) then
 				return i, j
@@ -142,9 +142,9 @@ end
 
 -- XPerl_Highlight:Add
 function xpHigh:Add(guid, highlightType, duration, source)
-	if (not strfind(guid, "^0x")) then
+	--[[if (not strfind(guid, "^0x")) then
 		guid = self.lookup and self.lookup[guid]
-	end
+	end]]
 	if (not guid) then
 		return
 	end
@@ -214,9 +214,9 @@ end
 
 -- xpHigh:Remove
 function xpHigh:Remove(guid, highlightType)
-	if (not strfind(guid, "^0x")) then
+	--[[if (not strfind(guid, "^0x")) then
 		guid = self.lookup and self.lookup[guid]
-	end
+	end]]
 	if (not guid) then
 		return
 	end
@@ -230,9 +230,9 @@ end
 
 -- xpHigh:HasEffect
 function xpHigh:HasEffect(guid, effect)
-	if (not strfind(guid, "^0x")) then
+	--[[if (not strfind(guid, "^0x")) then
 		guid = self.lookup and self.lookup[guid]
-	end
+	end]]
 	if (not guid) then
 		return
 	end
@@ -866,8 +866,8 @@ function xpHigh:TriggerMendingAnimation(sourceGUID, targetGUID)
 		end
 
 	elseif (GetNumSubgroupMembers() > 0 and XPerl_Party_GetUnitFrameByUnit) then
-		sourceFrame = sourceID == "player" and XPerl_Player or XPerl_Party_GetUnitFrameByGUID(sourceGUID)
-		targetFrame = targetID == "player" and XPerl_Player or XPerl_Party_GetUnitFrameByGUID(targetGUID)
+		sourceFrame = sourceGUID == UnitGUID("player") and XPerl_Player or XPerl_Party_GetUnitFrameByGUID(sourceGUID)
+		targetFrame = targetGUID == UnitGUID("player") and XPerl_Player or XPerl_Party_GetUnitFrameByGUID(targetGUID)
 		if (not sourceFrame and XPerl_Party_Pet_GetUnitFrameByGUID) then
 			sourceFrame = XPerl_Party_Pet_GetUnitFrameByGUID(sourceGUID)
 		end
@@ -1405,7 +1405,7 @@ xpHigh.clEvents.SPELL_PERIODIC_DAMAGE = xpHigh.clEvents.SPELL_DAMAGE
 -- COMBATLOG:SPELL_MISSED
 function xpHigh.clEvents:SPELL_MISSED(timestamp, event, srcGUID, srcName, srcFlags, dstGUID, dstName, dstFlags, ...)
 	if (self:checkEventFlags(dstFlags)) then
-		local spellId, spellName, spellSchool, missType, missAmount = ...
+		local spellId, spellName, spellSchool, missType, isOffHand, multistrike, missAmount = ...
 		if (missType == "ABSORB") then
 			self:Damage(dstGUID, missAmount)
 		end
@@ -1437,7 +1437,7 @@ end
 function xpHigh.clEvents:ENVIRONMENTAL_DAMAGE(timestamp, event, srcGUID, srcName, srcFlags, dstGUID, dstName, dstFlags, ...)
 	if (self:checkEventFlags(dstFlags)) then
 		local environmentalType, amount, overkill, school, resisted, blocked, absorbed, critical, glancing, crushing = ...
-		if (missType == "ABSORB") then
+		if (environmentalType == "ABSORB") then
 			self:Damage(dstGUID, absorbed)
 		end
 	end
@@ -1520,7 +1520,7 @@ function xpHigh:Damage(guid, absorbed)
 	local list = self.shields[guid]
 	if (list) then
 		local s = list[1]
-		if (s) and absorbed then
+		if (s) and absorbed and type(absorbed) == "number" and s.amount and type(s.amount) == "number" then
 			local update
 			if (absorbed >= s.amount) then
 				absorbed = absorbed - s.amount
@@ -1529,7 +1529,7 @@ function xpHigh:Damage(guid, absorbed)
 					self.shields[guid] = del(self.shields[guid])
 				end
 				if (absorbed > 0) then
-					self:Damage(guid, absorbed)			-- Recursion
+					self:Damage(guid, absorbed) -- Recursion
 				else
 					update = true
 				end
@@ -1608,6 +1608,7 @@ end
 
 -- RemoveAllFromGUID
 function xpHigh:RemoveAllFromGUID(unit)
+	local guid = UnitGUID(unit)
 	if (guid and self.list[guid]) then
 		self.list[guid] = nil
 		self:Send(guid)

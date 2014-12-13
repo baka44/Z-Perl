@@ -426,21 +426,27 @@ function XPerl_TargetTarget_SetWidth(self)
 	local bonus = self.conf.size.width
 
 	if self.conf.percent then
-		self:SetWidth(160 + bonus)
-		self.nameFrame:SetWidth(160 + bonus)
-		self.statsFrame:SetWidth(160 + bonus)
+		if (not InCombatLockdown()) then
+			self:SetWidth(160 + bonus)
+			self.nameFrame:SetWidth(160 + bonus)
+			self.statsFrame:SetWidth(160 + bonus)
+		end
 		self.statsFrame.healthBar.percent:Show()
 		self.statsFrame.manaBar.percent:Show()
 	else
-		self:SetWidth(128 + bonus)
-		self.nameFrame:SetWidth(128 + bonus)
-		self.statsFrame:SetWidth(128 + bonus)
+		if (not InCombatLockdown()) then
+			self:SetWidth(128 + bonus)
+			self.nameFrame:SetWidth(128 + bonus)
+			self.statsFrame:SetWidth(128 + bonus)
+		end
 		self.statsFrame.healthBar.percent:Hide()
 		self.statsFrame.manaBar.percent:Hide()
 	end
 
 	self.conf.scale = self.conf.scale or 0.8
-	self:SetScale(self.conf.scale)
+	if (not InCombatLockdown()) then
+		self:SetScale(self.conf.scale)
+	end
 
 	XPerl_SavePosition(self, true)
 

@@ -6,54 +6,140 @@ local conf
 local percD	= "%d"..PERCENT_SYMBOL
 local perc1F = "%.1f"..PERCENT_SYMBOL
 
-XPerl_RequestConfig(function(New) conf = New end, "$Revision: 891 $")
-XPerl_SetModuleRevision("$Revision: 892 $")
+XPerl_RequestConfig(function(New) conf = New end, "$Revision: 893 $")
+XPerl_SetModuleRevision("$Revision: 893 $")
 
---Some local copies for speed
-local strsub = strsub
+-- Upvalus
+local _G = _G
+local abs = abs
+local atan2 = math.atan2
+local collectgarbage = collectgarbage
+local cos = cos
+local deg = math.deg
+local error = error
+local floor = floor
 local format = format
-local cos, sin, abs = cos, sin, abs
+local ipairs = ipairs
 local max = math.max
 local min = math.min
-local IsItemInRange = IsItemInRange
-local IsSpellInRange = IsSpellInRange
-local UnitBuff = UnitBuff
-local UnitDebuff = UnitDebuff
-local UnitCanAssist = UnitCanAssist
-local UnitCanAttack = UnitCanAttack
-local UnitClass = UnitClass
-local UnitExists = UnitExists
-local UnitFactionGroup = UnitFactionGroup
-local UnitHealth = UnitHealth
-local UnitHealthMax = UnitHealthMax
-local UnitIsEnemy = UnitIsEnemy
-local UnitIsPVP = UnitIsPVP
-local UnitIsTapped = UnitIsTapped
-local UnitIsVisible = UnitIsVisible
-local UnitPlayerControlled = UnitPlayerControlled
-local UnitReaction = UnitReaction
+local next = next
+local pairs = pairs
+local select = select
+local setmetatable = setmetatable
+local sin = sin
+local strmatch = strmatch
+local strsub = strsub
+local strupper = strupper
+local tinsert = tinsert
+local tonumber = tonumber
+local tremove = tremove
+local type = type
+local unpack = unpack
+
+local ArcaneExclusions = XPerl_ArcaneExclusions
+local CheckInteractDistance = CheckInteractDistance
+local DebuffTypeColor = DebuffTypeColor
+local GameTooltip_SetDefaultAnchor = GameTooltip_SetDefaultAnchor
+local GetAddOnCPUUsage = GetAddOnCPUUsage
+local GetAddOnMemoryUsage = GetAddOnMemoryUsage
+local GetCursorPosition = GetCursorPosition
+local GetDifficultyColor = GetDifficultyColor or GetQuestDifficultyColor
+local GetItemCount = GetItemCount
+local GetItemInfo = GetItemInfo
+local GetNumAddOns = GetNumAddOns
 local GetNumGroupMembers = GetNumGroupMembers
 local GetNumSubgroupMembers = GetNumSubgroupMembers
 local GetRaidRosterInfo = GetRaidRosterInfo
-local largeNumDiv = XPERL_LOC_LARGENUMDIV
-local largeNumTag = XPERL_LOC_LARGENUMTAG
+local GetRaidTargetIndex = GetRaidTargetIndex
+local GetReadyCheckStatus = GetReadyCheckStatus
+local GetRealmName = GetRealmName
+local GetRealZoneText = GetRealZoneText
+local GetSpecialization = GetSpecialization
+local GetSpellInfo = GetSpellInfo
+local GetTime = GetTime
+local HideDropDownMenu = HideDropDownMenu
 local hugeNumDiv = XPERL_LOC_HUGENUMDIV
-local hugeNumTag = XPERL_LOC_HUGENUMTAG
 local hugeNumDiv10 = hugeNumDiv * 10
+local hugeNumTag = XPERL_LOC_HUGENUMTAG
+local InCombatLockdown = InCombatLockdown
+local IsAddOnLoaded = IsAddOnLoaded
+local IsAltKeyDown = IsAltKeyDown
+local IsControlKeyDown = IsControlKeyDown
+local IsInRaid = IsInRaid
+local IsItemInRange = IsItemInRange
+local IsShiftKeyDown = IsShiftKeyDown
+local IsSpellInRange = IsSpellInRange
+local largeNumDiv = XPERL_LOC_LARGENUMDIV
 local largeNumDiv100 = largeNumDiv * 100
-local ArcaneExclusions = XPerl_ArcaneExclusions
-local GetDifficultyColor = GetDifficultyColor or GetQuestDifficultyColor
+local largeNumTag = XPERL_LOC_LARGENUMTAG
+local SecureButton_GetUnit = SecureButton_GetUnit
+local SetCursor = SetCursor
+local SetPortraitTexture = SetPortraitTexture
+local SetRaidTargetIconTexture = SetRaidTargetIconTexture
+local SpellCanTargetUnit = SpellCanTargetUnit
+local SpellIsTargeting = SpellIsTargeting
+local ToggleDropDownMenu = ToggleDropDownMenu
+local UIDropDownMenu_AddButton = UIDropDownMenu_AddButton
+local UIDropDownMenu_CreateInfo = UIDropDownMenu_CreateInfo
+local UnitAffectingCombat = UnitAffectingCombat
+local UnitAlternatePowerInfo = UnitAlternatePowerInfo
+local UnitAura = UnitAura
+local UnitBuff = UnitBuff
+local UnitCanAssist = UnitCanAssist
+local UnitCanAttack = UnitCanAttack
+local UnitClass = UnitClass
+local UnitDebuff = UnitDebuff
+local UnitDetailedThreatSituation = UnitDetailedThreatSituation
+local UnitExists = UnitExists
+local UnitFactionGroup = UnitFactionGroup
+local UnitGetIncomingHeals = UnitGetIncomingHeals
+local UnitHealth = UnitHealth
+local UnitHealthMax = UnitHealthMax
+local UnitInParty = UnitInParty
+local UnitInRaid = UnitInRaid
+local UnitInRange = UnitInRange
+local UnitInVehicle = UnitInVehicle
+local UnitIsConnected = UnitIsConnected
+local UnitIsDeadOrGhost = UnitIsDeadOrGhost
+local UnitIsEnemy = UnitIsEnemy
+local UnitIsPlayer = UnitIsPlayer
+local UnitIsPVP = UnitIsPVP
+local UnitIsTapped = UnitIsTapped
+local UnitIsTappedByPlayer = UnitIsTappedByPlayer
+local UnitIsUnit = UnitIsUnit
+local UnitIsVisible = UnitIsVisible
+local UnitLevel = UnitLevel
+local UnitName = UnitName
+local UnitPlayerControlled = UnitPlayerControlled
+local UnitPopup_ShowMenu = UnitPopup_ShowMenu
+local UnitPopupFrames = UnitPopupFrames
+local UnitPopupMenus = UnitPopupMenus
+local UnitPopupShown = UnitPopupShown
+local UnitPowerMax = UnitPowerMax
+local UnitPowerType = UnitPowerType
+local UnitReaction = UnitReaction
+local UnregisterUnitWatch = UnregisterUnitWatch
+local UpdateAddOnCPUUsage = UpdateAddOnCPUUsage
+local UpdateAddOnMemoryUsage = UpdateAddOnMemoryUsage
 
---[===[@debug@
+local CreateFrame = CreateFrame
+
+local BuffFrame = BuffFrame
+local GameTooltip = GameTooltip
+local Minimap = Minimap
+local UIParent = UIParent
+
+--[==[@debug@
 local function d(...)
 	ChatFrame1:AddMessage(format(...))
 end
---@end-debug@]===]
+--@end-debug@]==]
 
 ------------------------------------------------------------------------------
 -- Re-usable tables
 local FreeTables = setmetatable({}, {__mode = "k"})
 local requested, freed = 0, 0
+
 function XPerl_GetReusableTable(...)
 	requested = requested + 1
 	for t in pairs(FreeTables) do
@@ -65,6 +151,7 @@ function XPerl_GetReusableTable(...)
 	end
 	return {...}
 end
+
 function XPerl_FreeTable(t, deep)
 	if (t) then
 		if (type(t) ~= "table") then
@@ -87,6 +174,7 @@ function XPerl_FreeTable(t, deep)
 		t[''] = nil
 	end
 end
+
 function XPerl_TableStats()
 	return requested, freed
 end
@@ -223,13 +311,13 @@ local function DoRangeCheck(unit, opt)
 		local hp, hpMax = UnitHealth(unit), UnitHealthMax(unit)
 		--Begin 4.3 divide by 0 work around.
 		local percent
-		if UnitIsDeadOrGhost(unit) or (hp == 0 and hpMax == 0) then--Probably dead target
-			percent = 0--So just automatically set percent to 0 and avoid division of 0/0 all together in this situation.
-		elseif hp > 0 and hpMax == 0 then--We have current HP but max hp failed.
-			hpMax = hp--Make max hp at least equal to current health
-			percent = 100--100% if they are alive with > 0 cur hp, since curhp = maxhp in this hack.
+		if UnitIsDeadOrGhost(unit) or (hp == 0 and hpMax == 0) then -- Probably dead target
+			percent = 0 -- So just automatically set percent to 0 and avoid division of 0/0 all together in this situation.
+		elseif hp > 0 and hpMax == 0 then -- We have current HP but max hp failed.
+			hpMax = hp -- Make max hp at least equal to current health
+			percent = 100 -- 100% if they are alive with > 0 cur hp, since curhp = maxhp in this hack.
 		else
-			percent = hp / hpMax--Everything is dandy, so just do it right way.
+			percent = hp / hpMax -- Everything is dandy, so just do it right way.
 		end
 		--End divide by 0 work around
 		if (percent > opt.HealthLowPoint) then
@@ -255,7 +343,7 @@ local function DoRangeCheck(unit, opt)
 					end
 				end
 			else
-				range = nil		-- Override's the health check, because there's a debuff on unit
+				range = nil -- Override's the health check, because there's a debuff on unit
 			end
 		end
 	end
@@ -263,7 +351,7 @@ local function DoRangeCheck(unit, opt)
 	if (not range) then
 		if (opt.interact) then
 			if (opt.interact == 5) then
-				range = UnitInRange(unit)			-- 40 yards
+				range = UnitInRange(unit) -- 40 yards
 			else
 				range = CheckInteractDistance(unit, opt.interact)
 			end
@@ -298,7 +386,7 @@ function XPerl_UpdateSpellRange2(self, overrideUnit, isRaidFrame)
 	end
 	if (unit) then
 		local rf = conf.rangeFinder
-		local mainA, nameA, statsA		-- Receives main, name and stats alpha levels
+		local mainA, nameA, statsA -- Receives main, name and stats alpha levels
 
 		if (rf.enabled and (isRaidFrame or not conf.rangeFinder.raidOnly)) then
 			if (not UnitIsVisible(unit)) or UnitInVehicle(unit) then
@@ -313,8 +401,8 @@ function XPerl_UpdateSpellRange2(self, overrideUnit, isRaidFrame)
 					end
 				end
 
-			--elseif (XPerl_Highlight:HasEffect(UnitName(unit), "AGGRO")) then
-			--	mainA = conf.transparency.frame
+			--[[elseif (XPerl_Highlight:HasEffect(UnitName(unit), "AGGRO")) then
+				mainA = conf.transparency.frame]]
 
 			elseif (UnitCanAssist("player", unit)) then
 				if (rf.Main.enabled) then
@@ -366,10 +454,6 @@ function XPerl_UpdateSpellRange2(self, overrideUnit, isRaidFrame)
 				forcedMainA = true
 			end
 		end
-
---if (self == XPerl_Target) then
---   ChatFrame7:AddMessage(format("%4s %4s %4s", tostring(mainA), tostring(nameA), tostring(statsA)))
---end
 
 		self:SetAlpha(mainA)
 		if (self.nameFrame) then
@@ -431,7 +515,7 @@ function XPerl_StartupSpellRange()
 
 	--if (rangeCheckSpell) then
 		-- Put the real work function in place
-		XPerl_UpdateSpellRange = XPerl_UpdateSpellRange2
+	XPerl_UpdateSpellRange = XPerl_UpdateSpellRange2
 	--else
 	--	XPerl_UpdateSpellRange = function() end
 	--end
@@ -1095,7 +1179,7 @@ function XPerl_MinimapButton_Dragging(self, elapsed)
 		conf.minimap.radius = radius
 		end
 
-	local angle = math.deg(math.atan2(ypos,xpos))
+	local angle = deg(atan2(ypos, xpos))
 	if (angle < 0) then
 		angle = angle + 360
 	end
@@ -1830,12 +1914,7 @@ function XPerl_RestoreAllPositions()
 	end
 end
 
-
- 
-local DebuffExceptions
-local BuffExceptions
-
- BuffExceptions = {
+local BuffExceptions = {
 	PRIEST = {
 		[GetSpellInfo(774)] = true,					-- Rejuvenation
 		[GetSpellInfo(8936)] = true,				-- Regrowth
@@ -1848,41 +1927,39 @@ local BuffExceptions
 		[GetSpellInfo(20707)] = true,				-- Soulstone Resurrection
 	},
 	HUNTER = {
-		
-		--[GetSpellInfo(13165)] = "HUNTER",			-- Aspect of the Hawk
-		[GetSpellInfo(5118)] = "HUNTER",			-- Aspect of the Cheetah
+		--[GetSpellInfo(13165)] = true,				-- Aspect of the Hawk
+		[GetSpellInfo(5118)] = true,				-- Aspect of the Cheetah
 		[GetSpellInfo(13159)] = true,				-- Aspect of the Pack
-		[GetSpellInfo(61648)] = "HUNTER",			-- Aspect of the Beast
-		-- [GetSpellInfo(13163)] = "HUNTER",			-- Aspect of the Monkey
+		[GetSpellInfo(61648)] = true,				-- Aspect of the Beast
+		-- [GetSpellInfo(13163)] = true,			-- Aspect of the Monkey
 		[GetSpellInfo(19506)] = true,				-- Trueshot Aura
-		[GetSpellInfo(5384)] = "HUNTER",			-- Feign Death
+		[GetSpellInfo(5384)] = true,				-- Feign Death
 	},
 	ROGUE = {
-		[GetSpellInfo(1784)] = "ROGUE",				-- Stealth
-		[GetSpellInfo(1856)] = "ROGUE",			-- Vanish
-		[GetSpellInfo(2983)] = "ROGUE",			-- Sprint
-		[GetSpellInfo(13750)] = "ROGUE",			-- Adrenaline Rush
-		[GetSpellInfo(13877)] = "ROGUE",			-- Blade Flurry
+		[GetSpellInfo(1784)] = true,				-- Stealth
+		[GetSpellInfo(1856)] = true,				-- Vanish
+		[GetSpellInfo(2983)] = true,				-- Sprint
+		[GetSpellInfo(13750)] = true,				-- Adrenaline Rush
+		[GetSpellInfo(13877)] = true,				-- Blade Flurry
 	},
 	PALADIN = {
 		[GetSpellInfo(20154)] = true,				-- Seal of Righteousness
 		[GetSpellInfo(20165)] = true,				-- Seal of Insight
 		[GetSpellInfo(20164)] = true,				-- Seal of Justice
 		[GetSpellInfo(31801)] = true,				-- Seal of Truth
-		-- [GetSpellInfo(20375)] = true,				-- Seal of Command
-		-- [GetSpellInfo(20166)] = true,				-- Seal of Wisdom
-		-- [GetSpellInfo(20165)] = true,				-- Seal of Light
-		-- [GetSpellInfo(53736)] = true,				-- Seal of Corruption
-		-- [GetSpellInfo(31892)] = true,				-- Seal of Blood
-		-- [GetSpellInfo(31801)] = true,				-- Seal of Vengeance
-
+		--[GetSpellInfo(20375)] = true,				-- Seal of Command
+		--[GetSpellInfo(20166)] = true,				-- Seal of Wisdom
+		--[GetSpellInfo(20165)] = true,				-- Seal of Light
+		--[GetSpellInfo(53736)] = true,				-- Seal of Corruption
+		--[GetSpellInfo(31892)] = true,				-- Seal of Blood
+		--[GetSpellInfo(31801)] = true,				-- Seal of Vengeance
 		[GetSpellInfo(25780)] = true,				-- Righteous Fury
 		[GetSpellInfo(20925)] = true,				-- Holy Shield
 		--[GetSpellInfo(54428)] = true,				-- Divine Plea
 	},
 }
 
- DebuffExceptions = {
+local DebuffExceptions = {
 	ALL = {
 		[GetSpellInfo(11196)] = true,				-- Recently Bandaged
 	},
@@ -2431,7 +2508,7 @@ function XPerl_GetBuffButton(self, buffnum, debuff, createIfAbsent, newID)
 		end
 
 		buffIconCount = buffIconCount + 1
-			button = CreateFrame("Button", "XPerlBuff"..buffIconCount, parent, format("XPerl_Cooldown_%sTemplate", buffType))
+		button = CreateFrame("Button", "XPerlBuff"..buffIconCount, parent, format("XPerl_Cooldown_%sTemplate", buffType))
 		button:Hide()
 		--button.cooldown.noCooldownCount = true				-- OmniCC to NOT show cooldown
 
@@ -2794,8 +2871,12 @@ function XPerl_Unit_BuffPositions(self, buffList1, buffList2, size1, size2)
 		end
 
 		-- De-anchor first 2 because faction changes can mess up the order of things.
-		if (buffList1 and buffList1[1]) then buffList1[1]:ClearAllPoints() end
-		if (buffList2 and buffList2[1]) then buffList2[1]:ClearAllPoints() end
+		if (buffList1 and buffList1[1]) then
+			buffList1[1]:ClearAllPoints()
+		end
+		if (buffList2 and buffList2[1]) then
+			buffList2[1]:ClearAllPoints()
+		end
 
 		if (buffList1) then
 			XPerl_Unit_BuffPositionsType(self, buffList1, true, size1)
@@ -2841,8 +2922,12 @@ function XPerl_Unit_UpdateBuffs(self, maxBuffs, maxDebuffs, castableOnly, curabl
 	local partyid = self.partyid
 
 	if (self.conf and UnitExists(partyid)) then
-		if (not maxBuffs) then maxBuffs = 24 end
-		if (not maxDebuffs) then maxDebuffs = 40 end
+		if (not maxBuffs) then
+			maxBuffs = 24
+		end
+		if (not maxDebuffs) then
+			maxDebuffs = 40
+		end
 		local lastIcon = 0
 
 		XPerl_GetBuffButton(self, 1, 0, true)
@@ -3193,11 +3278,11 @@ function XPerl_ProtectedCall(func, self)
 	if (func) then
 		if (InCombatLockdown()) then
 			XPerl_OutOfCombatQueue[func] = self == nil and false or self
-			--if (self) then
-			--	tinsert(XPerl_OutOfCombatQueue, {func, self})
-			--else
-			--	tinsert(XPerl_OutOfCombatQueue, func)
-			--end
+			--[[if (self) then
+				tinsert(XPerl_OutOfCombatQueue, {func, self})
+			else
+				tinsert(XPerl_OutOfCombatQueue, func)
+			end]]
 		else
 			func(self)
 		end
