@@ -181,23 +181,23 @@ end
 local function DoEnchant(self, slotID, hasEnchant, expire, charges)
 	if (hasEnchant) then
 		-- Fix to check to see if the player is a shaman and sets the fullDuration to 30 minutes. Shaman weapon enchants are only 30 minutes.
-		if (playerClass == "SHAMAN") then
+		--[[if (playerClass == "SHAMAN") then
 			if ((expire / 1000) > 30 * 60) then
 				self.fullDuration = 60 * 60
 			else         
 				self.fullDuration = 30 * 60
 			end
-		end
+		end]]
 		if (not self.fullDuration) then
 			self.fullDuration = expire - GetTime()
 			if (self.fullDuration > 1 * 60) then
-				self.fullDuration = 60 * 60
+				self.fullDuration = 10 * 60
 			end
 		end
 
-		-- self:Show()
+		--self:Show()
 
-		local textureName = GetInventoryItemTexture("player", slotID)	-- Weapon Icon
+		local textureName = GetInventoryItemTexture("player", slotID) -- Weapon Icon
 		self.icon:SetTexture(textureName)
 		self:SetAlpha(1)
 		self.border:SetVertexColor(0.7, 0, 0.7)
@@ -205,7 +205,7 @@ local function DoEnchant(self, slotID, hasEnchant, expire, charges)
 		-- Handle cooldowns
 		if (self.cooldown and expire and conf.buffs.cooldown and pconf.buffs.cooldown) then
 			local timeEnd = GetTime() + (expire / 1000)
-			local timeStart = timeEnd - self.fullDuration		--          (30 * 60)
+			local timeStart = timeEnd - self.fullDuration --(30 * 60)
 			XPerl_CooldownFrame_SetTimer(self.cooldown, timeStart, self.fullDuration, 1)
 
 			if (pconf.buffs.flash) then
@@ -220,7 +220,7 @@ local function DoEnchant(self, slotID, hasEnchant, expire, charges)
 		end
 	else
 		self.fullDuration = nil
-		-- self:Hide()
+		self:Hide()
 	end
 end
 
@@ -229,19 +229,27 @@ end
 
 function XPerl_PlayerBuffs_Show(self)
 	self:RegisterEvent("UNIT_AURA")
+	--self:RegisterEvent("PLAYER_EQUIPMENT_CHANGED")
 	XPerl_PlayerBuffs_Update(self)
 end
 
 function XPerl_PlayerBuffs_Hide(self)
 	self:UnregisterEvent("UNIT_AURA")
+	--self:UnregisterEvent("PLAYER_EQUIPMENT_CHANGED")
 	XPerl_PlayerBuffs_Update(self)
 end
 
-function XPerl_PlayerBuffs_OnEvent(self, event, unit)
+function XPerl_PlayerBuffs_OnEvent(self, event, ...)
 	if (event == "UNIT_AURA") then
+		local unit = ...
 		if (unit == "player" or unit == "pet" or unit == "vehicle") then
 			XPerl_PlayerBuffs_Update(self)
 		end
+	--[[elseif (event == "PLAYER_EQUIPMENT_CHANGED") then
+		local slot, hasItem = ...
+		if (slot == 16 or slot == 17) then
+			XPerl_PlayerBuffs_Update(self)
+		end]]
 	end
 end
 
@@ -254,7 +262,7 @@ end
 function XPerl_PlayerBuffs_OnEnter(self)
 	if (conf.tooltip.enableBuffs and XPerl_TooltipModiferPressed(true)) then
 		if (not conf.tooltip.hideInCombat or not InCombatLockdown()) then
-			GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT",0,0)
+			GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT", 0, 0)
 
 			local slot = self:GetAttribute("target-slot")
 			if (slot) then
@@ -281,7 +289,7 @@ function XPerl_PlayerBuffs_Update(self)
 	local slot = self:GetAttribute("target-slot")
 	if (slot) then
 		-- Weapon Enchant
-		local hasMainHandEnchant, mainHandExpiration, mainHandCharges, hasOffHandEnchant, offHandExpiration, offHandCharges = GetWeaponEnchantInfo()
+		local hasMainHandEnchant, mainHandExpiration, mainHandCharges, mainHandEnchantID, hasOffHandEnchant, offHandExpiration, offHandCharges, offHandEnchantId = GetWeaponEnchantInfo()
 		if (slot == 16) then
 			DoEnchant(self, 16, hasMainHandEnchant, mainHandExpiration, mainHandCharges)
 		else

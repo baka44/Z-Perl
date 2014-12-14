@@ -1261,35 +1261,85 @@ function XPerl_Target_Events:PLAYER_TARGET_CHANGED()
 
 	self.feigning = nil
 	self.PlayerFlash = 0
-	XPerl_CombatFlashSetFrames(self)
-	XPerl_Target_UpdateDisplay(self)
+	XPerl_CombatFlashSetFrames(XPerl_Target)
+	XPerl_Target_UpdateDisplay(XPerl_Target)
 
-	if (XPerl_Target) then
-		XPerl_Target_Set_Bits(XPerl_Target)
-		XPerl_Target_UpdateDisplay(XPerl_Target)
-	end
+	--[[if (XPerl_Target) then
+		XPerl_Target_Set_Bits(XPerl_Target, true)
+		--XPerl_Target_UpdateDisplay(XPerl_Target)
+	end]]
 
 	if (XPerl_TargetTarget_Set_Bits) then
 		XPerl_TargetTarget_Set_Bits(XPerl_TargetTarget)
-		XPerl_TargetTarget_UpdateDisplay(XPerl_TargetTarget)
+		--XPerl_TargetTarget_UpdateDisplay(XPerl_TargetTarget)
 		if (XPerl_TargetTargetTarget) then
-			XPerl_TargetTarget_UpdateDisplay(XPerl_TargetTargetTarget)
+			--XPerl_TargetTarget_UpdateDisplay(XPerl_TargetTargetTarget)
 		end
 		if (XPerl_FocusTarget) then
 			XPerl_TargetTarget_UpdateDisplay(XPerl_FocusTarget)
 		end
 		if (XPerl_PetTarget) then
-			XPerl_TargetTarget_UpdateDisplay(XPerl_PetTarget)
+			--XPerl_TargetTarget_UpdateDisplay(XPerl_PetTarget)
 		end
 	end
 
-	if (XPerl_Focus) then
-		XPerl_Target_Set_Bits(XPerl_Focus)
+	--[[if (XPerl_Focus) then
+		XPerl_Target_Set_Bits(XPerl_Focus, true)
 		XPerl_Target_UpdateDisplay(XPerl_Focus)
-	end
+	end]]
 end
 
-XPerl_Target_Events.PLAYER_FOCUS_CHANGED = XPerl_Target_Events.PLAYER_TARGET_CHANGED
+-- PLAYER_FOCUS_CHANGED
+function XPerl_Target_Events:PLAYER_FOCUS_CHANGED()
+	if (self == XPerl_Target) then
+		if (self.conf.sound and UnitExists("focus")) then
+			if (UnitIsEnemy("focus", "player")) then
+				PlaySound("igCreatureAggroSelect")
+			elseif (UnitIsFriend("player", "focus")) then
+				PlaySound("igCharacterNPCSelect")
+			else
+				PlaySound("igCreatureNeutralSelect")
+			end
+		end
+
+		if (UnitIsUnit("target", "focus")) then
+			XPerl_Target.statsFrame.focusTarget:Show()
+		else
+			XPerl_Target.statsFrame.focusTarget:Hide()
+		end
+	end
+
+	self.feigning = nil
+	self.PlayerFlash = 0
+	XPerl_CombatFlashSetFrames(XPerl_Focus)
+	XPerl_Target_UpdateDisplay(XPerl_Focus)
+
+	--[[if (XPerl_Target) then
+		XPerl_Target_Set_Bits(XPerl_Target, true)
+		--XPerl_Target_UpdateDisplay(XPerl_Target)
+	end]]
+
+	if (XPerl_TargetTarget_Set_Bits) then
+		XPerl_TargetTarget_Set_Bits(XPerl_TargetTarget)
+		--XPerl_TargetTarget_UpdateDisplay(XPerl_TargetTarget)
+		if (XPerl_TargetTargetTarget) then
+			--XPerl_TargetTarget_UpdateDisplay(XPerl_TargetTargetTarget)
+		end
+		if (XPerl_FocusTarget) then
+			XPerl_TargetTarget_UpdateDisplay(XPerl_FocusTarget)
+		end
+		if (XPerl_PetTarget) then
+			--XPerl_TargetTarget_UpdateDisplay(XPerl_PetTarget)
+		end
+	end
+
+	--[[if (XPerl_Focus) then
+		XPerl_Target_Set_Bits(XPerl_Focus, true)
+		XPerl_Target_UpdateDisplay(XPerl_Focus)
+	end]]
+end
+
+--XPerl_Target_Events.PLAYER_FOCUS_CHANGED = XPerl_Target_Events.PLAYER_TARGET_CHANGED
 
 -- UNIT_HEALTH, UNIT_MAXHEALTH
 function XPerl_Target_Events:UNIT_HEALTH_FREQUENT()
@@ -1364,27 +1414,27 @@ function XPerl_Target_Events:UNIT_AURA()
 	--end
 
 	if (XPerl_Target) then
-		XPerl_Target_Set_Bits(XPerl_Target)
-		XPerl_Target_UpdateDisplay(XPerl_Target)
+		XPerl_Target_Set_Bits(XPerl_Target, true)
+		--XPerl_Target_UpdateDisplay(XPerl_Target)
 	end
 
 	if (XPerl_TargetTarget_Set_Bits) then
 		XPerl_TargetTarget_Set_Bits(XPerl_TargetTarget)
-		XPerl_TargetTarget_UpdateDisplay(XPerl_TargetTarget)
+		--XPerl_TargetTarget_UpdateDisplay(XPerl_TargetTarget)
 		if (XPerl_TargetTargetTarget) then
-			XPerl_TargetTarget_UpdateDisplay(XPerl_TargetTargetTarget)
+			--XPerl_TargetTarget_UpdateDisplay(XPerl_TargetTargetTarget)
 		end
 		if (XPerl_FocusTarget) then
-			XPerl_TargetTarget_UpdateDisplay(XPerl_FocusTarget)
+			--XPerl_TargetTarget_UpdateDisplay(XPerl_FocusTarget)
 		end
 		if (XPerl_PetTarget) then
-			XPerl_TargetTarget_UpdateDisplay(XPerl_PetTarget)
+			--XPerl_TargetTarget_UpdateDisplay(XPerl_PetTarget)
 		end
 	end
 
 	if (XPerl_Focus) then
-		XPerl_Target_Set_Bits(XPerl_Focus)
-		XPerl_Target_UpdateDisplay(XPerl_Focus)
+		XPerl_Target_Set_Bits(XPerl_Focus, true)
+		--XPerl_Target_UpdateDisplay(XPerl_Focus)
 	end
 
 	XPerl_Targets_BuffUpdate(self)
@@ -1480,7 +1530,7 @@ function XPerl_Target_SetWidth(self)
 end
 
 -- XPerl_Target_Set_Bits
-function XPerl_Target_Set_Bits(self)
+function XPerl_Target_Set_Bits(self, dontUpdate)
 	local _
 	_, playerClass = UnitClass("player")
 
@@ -1558,7 +1608,7 @@ function XPerl_Target_Set_Bits(self)
 	end
 	self.buffOptMix = nil
 
-	if (self:IsShown()) then
+	if (self:IsShown() and not dontUpdate) then
 		XPerl_Target_UpdateDisplay(self)
 	end
 end
