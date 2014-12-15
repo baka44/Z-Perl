@@ -59,8 +59,12 @@ function XPerl_Target_OnLoad(self, partyid)
 		"PARTY_MEMBER_DISABLE", "PARTY_MEMBER_ENABLE", "RAID_TARGET_UPDATE", "GROUP_ROSTER_UPDATE",
 		"PARTY_LEADER_CHANGED", "PARTY_LOOT_METHOD_CHANGED", "UNIT_THREAT_LIST_UPDATE","UNIT_SPELLMISS", "UNIT_FACTION", "UNIT_FLAGS",
 			"UNIT_CLASSIFICATION_CHANGED", "UNIT_PORTRAIT_UPDATE", "UNIT_AURA", "UNIT_HEALTH_FREQUENT","UNIT_POWER_FREQUENT", "UNIT_MAXPOWER", "UNIT_MAXHEALTH", "UNIT_LEVEL", "UNIT_DISPLAYPOWER", "UNIT_NAME_UPDATE", "PET_BATTLE_OPENING_START","PET_BATTLE_CLOSE"}
-	for i,event in pairs(events) do
-		self:RegisterUnitEvent(event, "target", "focus")
+	for i, event in pairs(events) do
+		if string.find(event, "UNIT_") then
+			self:RegisterUnitEvent(event, "target", "focus")
+		else
+			self:RegisterEvent(event)
+		end
 	end
 
 	XPerl_Highlight:Register(XPerl_Target_HighlightCallback, self)
