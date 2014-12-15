@@ -7008,6 +7008,8 @@
 									if (XPerl_Target) then
 										XPerl_Target_SetWidth(XPerl_Target)
 									end
+									XPerl_Target_Reset()
+									XPerl_TargetTarget_Reset()
 								end
 								_G[self:GetName().."Current"]:SetText(value)
 							</OnValueChanged>
@@ -7411,6 +7413,7 @@
 													XPerl_TargetTarget_SetWidth(XPerl_TargetTargetTarget)
 												end
 											end
+											XPerl_TargetTarget_Reset()
 										end
 										_G[self:GetName().."Current"]:SetText(value)
 									</OnValueChanged>
@@ -8369,6 +8372,8 @@
 									if (XPerl_Focus) then
 										XPerl_Target_SetWidth(XPerl_Focus)
 									end
+									XPerl_Target_Reset()
+									XPerl_TargetTarget_Reset()
 								end
 								_G[self:GetName().."Current"]:SetText(value)
 							</OnValueChanged>
@@ -8676,6 +8681,7 @@
 											if (XPerl_FocusTarget) then
 												XPerl_TargetTarget_SetWidth(XPerl_FocusTarget)
 											end
+											XPerl_TargetTarget_Reset()
 										end
 										_G[self:GetName().."Current"]:SetText(value)
 									</OnValueChanged>
@@ -8689,16 +8695,20 @@
 								</Anchors>
 								<Scripts>
 									<OnLoad>
-										self.getEnable = function() return XPerlDB.focustarget.healerMode.enable end
+										self.getEnable = function()
+											return XPerlDB.focustarget.healerMode.enable
+										end
 										self.setEnable = function(n)
-													XPerlDB.focustarget.healerMode.enable = n
-													XPerl_TargetTarget_Reset()
-												end
-										self.getType = function() return XPerlDB.focustarget.healerMode.type end
+											XPerlDB.focustarget.healerMode.enable = n
+											XPerl_TargetTarget_Reset()
+										end
+										self.getType = function()
+											return XPerlDB.focustarget.healerMode.type
+										end
 										self.setType = function(n)
-													XPerlDB.focustarget.healerMode.type = n
-													XPerl_TargetTarget_Reset()
-												end
+											XPerlDB.focustarget.healerMode.type = n
+											XPerl_TargetTarget_Reset()
+										end
 									</OnLoad>
 								</Scripts>
 							</Frame>

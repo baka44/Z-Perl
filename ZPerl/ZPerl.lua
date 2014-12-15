@@ -6,8 +6,8 @@ local conf
 local percD	= "%d"..PERCENT_SYMBOL
 local perc1F = "%.1f"..PERCENT_SYMBOL
 
-XPerl_RequestConfig(function(New) conf = New end, "$Revision: 893 $")
-XPerl_SetModuleRevision("$Revision: 893 $")
+XPerl_RequestConfig(function(New) conf = New end, "$Revision: 895 $")
+XPerl_SetModuleRevision("$Revision: 895 $")
 
 -- Upvalus
 local _G = _G
@@ -793,7 +793,6 @@ local SetValuedText = XPerl_SetValuedText
 -- XPerl_SetHealthBar
 function XPerl_SetHealthBar(self, hp, Max)
 	local bar = self.statsFrame.healthBar
-	--print(self.partyid .. hp .. ":" .. Max)
 	bar:SetMinMaxValues(0, Max)
 	local percent
 	if hp >= 1 and Max == 0 then--For some dumb reason max HP is 0, normal HP is not, so lets use normal HP as max
@@ -804,8 +803,8 @@ function XPerl_SetHealthBar(self, hp, Max)
 	else
 		percent = hp / Max
 	end		
-    if percent > 100 then percent = 100 end -- percent only goes to 100        
-    if (conf.bar.inverse) then
+	if percent > 100 then percent = 100 end -- percent only goes to 100        
+	if (conf.bar.inverse) then
 
 		bar:SetValue(Max - hp)
 		bar.tex:SetTexCoord(0, max(0,(1 - percent)), 0, 1)
@@ -1671,9 +1670,9 @@ function ZPerl_DebufHighlightInit()
 end
 
 local bgDef = {bgFile = "Interface\\Addons\\ZPerl\\Images\\XPerl_FrameBack",
-	       edgeFile = "",
-	       tile = true, tileSize = 32, edgeSize = 16,
-	       insets = { left = 5, right = 5, top = 5, bottom = 5 }
+		   edgeFile = "",
+		   tile = true, tileSize = 32, edgeSize = 16,
+		   insets = { left = 5, right = 5, top = 5, bottom = 5 }
 		}
 local normalEdge = "Interface\\Tooltips\\UI-Tooltip-Border"
 local curseEdge = "Interface\\Addons\\ZPerl\\Images\\XPerl_Curse"
@@ -1898,15 +1897,15 @@ function XPerl_RestoreAllPositions()
 							end
 						end
 						if (k == "XPerl_Runes") then
-                            frame:SetMovable(true)
-                            frame:EnableMouse(true)
-                            frame:RegisterForDrag("LeftButton")
-                            frame:SetScript("OnDragStart", frame.StartMoving)
-                            frame:SetScript("OnDragStop", frame.StopMovingOrSizing)
-                            frame:SetUserPlaced(true)
-                        else
-                            frame:SetUserPlaced(true)
-                        end
+							frame:SetMovable(true)
+							frame:EnableMouse(true)
+							frame:RegisterForDrag("LeftButton")
+							frame:SetScript("OnDragStart", frame.StartMoving)
+							frame:SetScript("OnDragStop", frame.StopMovingOrSizing)
+							frame:SetUserPlaced(true)
+						else
+							frame:SetUserPlaced(true)
+						end
 					end
 				end
 			end
@@ -2370,7 +2369,7 @@ function XPerl_SecureUnitButton_OnLoad(self, unit, menufunc, m1, m2, toggledisab
 	if (toggledisabled) then
 		self:SetAttribute("type2", "menu")
 	else
-	    self:SetAttribute("type2", "togglemenu")
+		self:SetAttribute("type2", "togglemenu")
 	end
 	
 	if (unit) then
@@ -2436,7 +2435,7 @@ local function HideSetFocus(param)
 				end
 			end
 		end
- 	end
+	end
 end
 hooksecurefunc("UnitPopup_HideButtons", HideSetFocus)
 
@@ -2855,7 +2854,7 @@ end
 
 -- XPerl_Unit_BuffPositions
 function XPerl_Unit_BuffPositions(self, buffList1, buffList2, size1, size2)
-	local optMix = format("%d%d%d%d%d%d%d", self.perlBuffs and 1 or 0, self.perlDebuffs and 1 or 0, self.perlBuffsMine and 1 or 0, self.perlDebuffsMine and 1 or 0, UnitCanAttack("player", self.partyid) and 1 or 2, (UnitPowerMax(self.partyid) > 0 and 1) or 0, (self.creatureTypeFrame and self.creatureTypeFrame:IsVisible() and 1) or 0)
+	local optMix = format("%d%d%d%d%d%d%d", self.perlBuffs or 0, self.perlDebuffs or 0, self.perlBuffsMine or 0, self.perlDebuffsMine or 0, UnitCanAttack("player", self.partyid) and 1 or 2, (UnitPowerMax(self.partyid) > 0 and 1) or 0, (self.creatureTypeFrame and self.creatureTypeFrame:IsVisible() and 1) or 0)
 	if (optMix ~= self.buffOptMix) then
 		WieghAnchor(self)
 
@@ -2994,7 +2993,7 @@ function XPerl_Unit_UpdateBuffs(self, maxBuffs, maxDebuffs, castableOnly, curabl
 
 						button:Show()
 
-						if (isStealable) then		--  and UnitCanAttack("player", partyid)
+						if (isStealable) then --  and UnitCanAttack("player", partyid)
 							if (not button.steal) then
 								button.steal = CreateFrame("Frame", nil, button)
 								button.steal:SetPoint("TOPLEFT", -2, 2)
@@ -3018,7 +3017,7 @@ function XPerl_Unit_UpdateBuffs(self, maxBuffs, maxDebuffs, castableOnly, curabl
 							end
 
 							button.steal:Show()
-							button.steal:SetScript("OnUpdate", fixMeBlizzard)		-- Workaround for Play not always working..
+							button.steal:SetScript("OnUpdate", fixMeBlizzard) -- Workaround for Play not always working...
 						else
 							if (button.steal) then
 								button.steal:Hide()

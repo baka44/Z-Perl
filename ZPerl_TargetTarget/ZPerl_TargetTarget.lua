@@ -42,7 +42,7 @@ XPerl_RequestConfig(function(new)
 	if XPerl_PetTarget then
 		XPerl_PetTarget.conf = conf.pettarget
 	end
-end, "$Revision: 860 $")
+end, "$Revision: 895 $")
 
 local UnitName = UnitName
 local UnitHealth = UnitHealth

@@ -22,10 +22,11 @@ XPerl_RequestConfig(function(new)
 	if (XPerl_PetTarget) then
 		XPerl_PetTarget.conf = conf.pettarget
 	end
-end, "$Revision: 877 $")
+end, "$Revision: 895 $")
 
 local percD = "%d"..PERCENT_SYMBOL
 local format = format
+local bit_band = bit.band
 local GetNumGroupMembers = GetNumGroupMembers
 local UnitHealth = UnitHealth
 local UnitHealthMax = UnitHealthMax
@@ -59,7 +60,7 @@ function XPerl_Target_OnLoad(self, partyid)
 		"PARTY_LEADER_CHANGED", "PARTY_LOOT_METHOD_CHANGED", "UNIT_THREAT_LIST_UPDATE","UNIT_SPELLMISS", "UNIT_FACTION", "UNIT_FLAGS",
 			"UNIT_CLASSIFICATION_CHANGED", "UNIT_PORTRAIT_UPDATE", "UNIT_AURA", "UNIT_HEALTH_FREQUENT","UNIT_POWER_FREQUENT", "UNIT_MAXPOWER", "UNIT_MAXHEALTH", "UNIT_LEVEL", "UNIT_DISPLAYPOWER", "UNIT_NAME_UPDATE", "PET_BATTLE_OPENING_START","PET_BATTLE_CLOSE"}
 	for i,event in pairs(events) do
-		self:RegisterEvent(event)
+		self:RegisterUnitEvent(event, "target", "focus")
 	end
 
 	XPerl_Highlight:Register(XPerl_Target_HighlightCallback, self)
@@ -87,7 +88,7 @@ function XPerl_Target_OnLoad(self, partyid)
 		--self:SetScript("OnShow", XPerl_Target_UpdateDisplay)
 		self.combatMask = 0x00020000
 	end
-	self:RegisterEvent("UNIT_COMBO_POINTS")			-- Not a standard unit event, becuase we want events for "player" even tho it's "target" or "focus" unit frame
+	self:RegisterEvent("UNIT_COMBO_POINTS") -- Not a standard unit event, becuase we want events for "player" even tho it's "target" or "focus" unit frame
 	self:RegisterEvent("PLAYER_REGEN_ENABLED")
 	self:RegisterEvent("PLAYER_REGEN_DISABLED")
 
@@ -318,7 +319,7 @@ local function XPerl_Target_UpdatePVP(self)
 		XPerl_SetUnitNameColor(self.nameFrame.text, partyid)
 	end
 
-        if (UnitIsVisible(partyid) and UnitIsCharmed(partyid)) then
+		if (UnitIsVisible(partyid) and UnitIsCharmed(partyid)) then
 		self.nameFrame.warningIcon:Show()
 	else
 		self.nameFrame.warningIcon:Hide()
@@ -563,22 +564,14 @@ do
 					return
 				else
 					local cached = talentCache[name]
-					--local name1, name2, name3, num1, num2, num3, iconTexture, background
 					local name1, name2, name3, group, iconTexture, background
 					if (cached) then
 						name1, name2, name3, group = unpack(cached)
 					elseif (inspectReady and guid == UnitGUID(partyid)) then
-						--local group = GetSpecialization(remoteInspectNeeded)
 						local remoteInspectNeeded = not UnitIsUnit("player", partyid) or nil
-						--group = GetSpecialization(true)
 						group =  GetInspectSpecialization("target")
-						--print(group)
 						name1 = group and select(2, GetSpecializationInfoByID(group)) or "None"
-						
-						
-						--_, name1, _, iconTexture, num1, background = GetSpecializationInfo(1, remoteInspectNeeded, nil, group)
-						--_, name2, _, iconTexture, num2, background = GetSpecializationInfo(2, remoteInspectNeeded, nil, group)
-						--_, name3, _, iconTexture, num3, background = GetSpecializationInfo(3, remoteInspectNeeded, nil, group)
+
 						inspectReady = nil
 					end
 
@@ -589,8 +582,6 @@ do
 							end
 							ShowSpec(self, name1)
 					end
-					
-
 
 					if (not cached) then
 						if (LTQ) then
@@ -771,7 +762,7 @@ function XPerl_Target_SetHealth(self)
 	XPerl_SetHealthBar(self, hp, hpMax)
 
 	if (percent) then
-		if UnitIsDeadOrGhost(partyid) or hpMax == 0 then--4.3+ fix so if for some dumb reason max HP is 0, prevent any division by 0.
+		if UnitIsDeadOrGhost(partyid) or hpMax == 0 then -- 4.3+ fix so if for some dumb reason max HP is 0, prevent any division by 0.
 			hbt:SetFormattedText(percD, 0)
 		else
 			hbt:SetFormattedText(percD, 100 * hp / hpMax)
@@ -825,7 +816,7 @@ function XPerl_Target_SetHealth(self)
 	end
 
 	if (color) then
-		if hpMax == 0 then--For some dumb reason max HP is 0, this should never happen, but it does, prevent any division by 0.
+		if hpMax == 0 then -- For some dumb reason max HP is 0, this should never happen, but it does, prevent any division by 0.
 			XPerl_ColourHealthBar(self, 0)
 		else
 			XPerl_ColourHealthBar(self, hp / hpMax)
@@ -913,8 +904,6 @@ local function XPerl_Target_UpdateLeader(self)
 				ml = UnitIsUnit(partyid, "party"..index)
 			end
 		end]]--
-		--print(rindex)
-		--print(partyid)
 		
 		if (method == "master") then
 			if (rindex ~= nil) then
@@ -960,11 +949,11 @@ end
 -- XPerl_Target_CheckDebuffs
 local function XPerl_Target_CheckDebuffs(self)
 	if (self.conf.highlightDebuffs.enable) then
-       		if (self.conf.highlightDebuffs.who == 1 or (self.conf.highlightDebuffs.who == 2 and UnitCanAssist("player", self.partyid)) or (self.conf.highlightDebuffs.who == 3 and not UnitCanAssist("player", self.partyid))) then
-       			XPerl_CheckDebuffs(self, self.partyid)
-       		else
-       			XPerl_CheckDebuffs(self, self.partyid, true)
-       		end
+		if (self.conf.highlightDebuffs.who == 1 or (self.conf.highlightDebuffs.who == 2 and UnitCanAssist("player", self.partyid)) or (self.conf.highlightDebuffs.who == 3 and not UnitCanAssist("player", self.partyid))) then
+			XPerl_CheckDebuffs(self, self.partyid)
+		else
+			XPerl_CheckDebuffs(self, self.partyid, true)
+		end
 
 		if (self.conf.reactionHighlight) then
 			XPerl_Target_UpdatePVP(self)
@@ -1040,7 +1029,7 @@ function XPerl_Target_OnUpdate(self, elapsed)
 		if (self.deferring) then
 			self.deferring = nil
 			XPerl_Target_UpdateLeader(self)
-                	XPerl_Target_Update_Combat(self)
+					XPerl_Target_Update_Combat(self)
 			XPerl_Target_UpdateCombo(self)
 			XPerl_Unit_UpdatePortrait(self)
 			RaidTargetUpdate(self)
@@ -1055,26 +1044,8 @@ end
 -- Event Handler --
 -------------------
 function XPerl_Target_OnEvent(self, event, ...)
-
-	--[[
 	local func = XPerl_Target_Events[event]
-	if (func) then
-		func(self, ...)
-	else
-		XPerl_ShowMessage("EXTRA EVENT")
-	end]]--
-	
-	
-	local func = XPerl_Target_Events[event]
-	local unitid = select(1,...);
-	if (strsub(event, 1, 5) == "UNIT_") then
-		if (unitid == "target" or unitid == "focus" or event == "UNIT_COMBO_POINTS") then
-		--print(event)
-			func(self, ...)
-		end
-	else
-		func(self, ...)
-	end
+	func(self, ...)
 end
 
 
@@ -1131,8 +1102,6 @@ function XPerl_Target_Events:PLAYER_ENTERING_WORLD()
 		XPerl_Target_UpdateDisplay(self)
 	end
 end
-
-local bit_band = bit.band
 
 local amountIndex = {
 	SWING_DAMAGE = 1,
@@ -1241,21 +1210,16 @@ end
 
 -- PLAYER_TARGET_CHANGED
 function XPerl_Target_Events:PLAYER_TARGET_CHANGED()
-	if (self == XPerl_Target) then
-		if (self.conf.sound and UnitExists("target")) then
-			if (UnitIsEnemy("target", "player")) then
-				PlaySound("igCreatureAggroSelect")
-			elseif (UnitIsFriend("player", "target")) then
-				PlaySound("igCharacterNPCSelect")
-			else
-				PlaySound("igCreatureNeutralSelect")
-			end
-		end
-
-		if (UnitIsUnit("target", "focus")) then
-			XPerl_Target.statsFrame.focusTarget:Show()
+	if self ~= XPerl_Target then
+		return
+	end
+	if (self.conf.sound and UnitExists("target")) then
+		if (UnitIsEnemy("target", "player")) then
+			PlaySound("igCreatureAggroSelect")
+		elseif (UnitIsFriend("player", "target")) then
+			PlaySound("igCharacterNPCSelect")
 		else
-			XPerl_Target.statsFrame.focusTarget:Hide()
+			PlaySound("igCreatureNeutralSelect")
 		end
 	end
 
@@ -1264,49 +1228,32 @@ function XPerl_Target_Events:PLAYER_TARGET_CHANGED()
 	XPerl_CombatFlashSetFrames(XPerl_Target)
 	XPerl_Target_UpdateDisplay(XPerl_Target)
 
-	--[[if (XPerl_Target) then
-		XPerl_Target_Set_Bits(XPerl_Target, true)
-		--XPerl_Target_UpdateDisplay(XPerl_Target)
-	end]]
-
 	if (XPerl_TargetTarget_Set_Bits) then
-		XPerl_TargetTarget_Set_Bits(XPerl_TargetTarget)
-		--XPerl_TargetTarget_UpdateDisplay(XPerl_TargetTarget)
-		if (XPerl_TargetTargetTarget) then
-			--XPerl_TargetTarget_UpdateDisplay(XPerl_TargetTargetTarget)
-		end
 		if (XPerl_FocusTarget) then
 			XPerl_TargetTarget_UpdateDisplay(XPerl_FocusTarget)
 		end
-		if (XPerl_PetTarget) then
-			--XPerl_TargetTarget_UpdateDisplay(XPerl_PetTarget)
-		end
 	end
-
-	--[[if (XPerl_Focus) then
-		XPerl_Target_Set_Bits(XPerl_Focus, true)
-		XPerl_Target_UpdateDisplay(XPerl_Focus)
-	end]]
 end
 
 -- PLAYER_FOCUS_CHANGED
 function XPerl_Target_Events:PLAYER_FOCUS_CHANGED()
-	if (self == XPerl_Target) then
-		if (self.conf.sound and UnitExists("focus")) then
-			if (UnitIsEnemy("focus", "player")) then
-				PlaySound("igCreatureAggroSelect")
-			elseif (UnitIsFriend("player", "focus")) then
-				PlaySound("igCharacterNPCSelect")
-			else
-				PlaySound("igCreatureNeutralSelect")
-			end
-		end
-
-		if (UnitIsUnit("target", "focus")) then
-			XPerl_Target.statsFrame.focusTarget:Show()
+	if self ~= XPerl_Focus then
+		return
+	end
+	if (self.conf.sound and UnitExists("focus")) then
+		if (UnitIsEnemy("focus", "player")) then
+			PlaySound("igCreatureAggroSelect")
+		elseif (UnitIsFriend("player", "focus")) then
+			PlaySound("igCharacterNPCSelect")
 		else
-			XPerl_Target.statsFrame.focusTarget:Hide()
+			PlaySound("igCreatureNeutralSelect")
 		end
+	end
+
+	if (UnitIsUnit("target", "focus")) then
+		XPerl_Target.statsFrame.focusTarget:Show()
+	else
+		XPerl_Target.statsFrame.focusTarget:Hide()
 	end
 
 	self.feigning = nil
@@ -1314,29 +1261,11 @@ function XPerl_Target_Events:PLAYER_FOCUS_CHANGED()
 	XPerl_CombatFlashSetFrames(XPerl_Focus)
 	XPerl_Target_UpdateDisplay(XPerl_Focus)
 
-	--[[if (XPerl_Target) then
-		XPerl_Target_Set_Bits(XPerl_Target, true)
-		--XPerl_Target_UpdateDisplay(XPerl_Target)
-	end]]
-
 	if (XPerl_TargetTarget_Set_Bits) then
-		XPerl_TargetTarget_Set_Bits(XPerl_TargetTarget)
-		--XPerl_TargetTarget_UpdateDisplay(XPerl_TargetTarget)
-		if (XPerl_TargetTargetTarget) then
-			--XPerl_TargetTarget_UpdateDisplay(XPerl_TargetTargetTarget)
-		end
 		if (XPerl_FocusTarget) then
 			XPerl_TargetTarget_UpdateDisplay(XPerl_FocusTarget)
 		end
-		if (XPerl_PetTarget) then
-			--XPerl_TargetTarget_UpdateDisplay(XPerl_PetTarget)
-		end
 	end
-
-	--[[if (XPerl_Focus) then
-		XPerl_Target_Set_Bits(XPerl_Focus, true)
-		XPerl_Target_UpdateDisplay(XPerl_Focus)
-	end]]
 end
 
 --XPerl_Target_Events.PLAYER_FOCUS_CHANGED = XPerl_Target_Events.PLAYER_TARGET_CHANGED
@@ -1362,7 +1291,7 @@ end
 
 -- UNIT_POWER / UNIT_MAXPOWER
 function XPerl_Target_Events:UNIT_POWER_FREQUENT()
-        XPerl_Target_SetMana(self)
+		XPerl_Target_SetMana(self)
 end
 
 XPerl_Target_Events.UNIT_MAXPOWER = XPerl_Target_Events.UNIT_POWER_FREQUENT
@@ -1405,41 +1334,10 @@ end
 
 -- UNIT_AURA
 function XPerl_Target_Events:UNIT_AURA()
-	XPerl_Target_CheckDebuffs(self, self.partyid)
-
-	--if (not self.perlBuffs or XPerl_UnitBuff(self.partyid, self.perlBuffs + 1, self.conf.buffs.castable)) then
-	--	XPerl_Targets_BuffPositions(self)
-	--elseif (XPerl_UnitDebuff(self.partyid, self.perlDebuffs + 1, self.conf.debuffs.curable)) then
-	--	XPerl_Targets_BuffPositions(self)
-	--end
-
-	if (XPerl_Target) then
-		XPerl_Target_Set_Bits(XPerl_Target, true)
-		--XPerl_Target_UpdateDisplay(XPerl_Target)
-	end
-
-	if (XPerl_TargetTarget_Set_Bits) then
-		XPerl_TargetTarget_Set_Bits(XPerl_TargetTarget)
-		--XPerl_TargetTarget_UpdateDisplay(XPerl_TargetTarget)
-		if (XPerl_TargetTargetTarget) then
-			--XPerl_TargetTarget_UpdateDisplay(XPerl_TargetTargetTarget)
-		end
-		if (XPerl_FocusTarget) then
-			--XPerl_TargetTarget_UpdateDisplay(XPerl_FocusTarget)
-		end
-		if (XPerl_PetTarget) then
-			--XPerl_TargetTarget_UpdateDisplay(XPerl_PetTarget)
-		end
-	end
-
-	if (XPerl_Focus) then
-		XPerl_Target_Set_Bits(XPerl_Focus, true)
-		--XPerl_Target_UpdateDisplay(XPerl_Focus)
-	end
+	XPerl_Target_CheckDebuffs(self)
 
 	XPerl_Targets_BuffUpdate(self)
 	XPerl_Target_DebuffUpdate(self)
-	--XPerl_Target_UpdateDisplay(self)
 
 	if (select(2, UnitClass(self.partyid)) == "HUNTER") then
 		local f = UnitIsFeignDeath(self.partyid)
@@ -1530,7 +1428,7 @@ function XPerl_Target_SetWidth(self)
 end
 
 -- XPerl_Target_Set_Bits
-function XPerl_Target_Set_Bits(self, dontUpdate)
+function XPerl_Target_Set_Bits(self)
 	local _
 	_, playerClass = UnitClass("player")
 
@@ -1608,7 +1506,7 @@ function XPerl_Target_Set_Bits(self, dontUpdate)
 	end
 	self.buffOptMix = nil
 
-	if (self:IsShown() and not dontUpdate) then
+	if (self:IsShown()) then
 		XPerl_Target_UpdateDisplay(self)
 	end
 end
