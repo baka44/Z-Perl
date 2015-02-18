@@ -4,7 +4,7 @@
 
 local playerClass, playerName, playerGUID
 local conf
-XPerl_RequestConfig(function(new) conf = new end, "$Revision: 905 $")
+XPerl_RequestConfig(function(new) conf = new end, "$Revision: 907 $")
 
 local GetNumSubgroupMembers = GetNumSubgroupMembers
 local GetNumGroupMembers = GetNumGroupMembers
@@ -141,6 +141,7 @@ end
 
 -- XPerl_Highlight:Add
 function xpHigh:Add(guid, highlightType, duration, source)
+	print(guid, highlightType, duration, source)
 	if (not strfind(guid, "-")) then
 		guid = self.lookup and self.lookup[guid]
 	end
@@ -1291,9 +1292,7 @@ end
 function xpHigh:checkEventFlags(dstFlags)
 	local dstMask = COMBATLOG_OBJECT_AFFILIATION_MINE + COMBATLOG_OBJECT_AFFILIATION_PARTY + COMBATLOG_OBJECT_AFFILIATION_RAID
 	-- The Target and Focus flags are NON-EXCLUSIVE, so we can't just add them to the dstMask and mask them
-	return (
-			(band(dstFlags, dstMask) ~= 0) or ((band(dstFlags, COMBATLOG_OBJECT_TARGET) ~= 0) or (band(dstFlags, COMBATLOG_OBJECT_FOCUS) ~= 0))
-	)
+	return ((band(dstFlags, dstMask) ~= 0) or ((band(dstFlags, COMBATLOG_OBJECT_TARGET) ~= 0) or (band(dstFlags, COMBATLOG_OBJECT_FOCUS) ~= 0)))
 end
 
 

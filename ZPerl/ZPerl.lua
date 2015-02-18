@@ -6,8 +6,8 @@ local conf
 local percD	= "%d"..PERCENT_SYMBOL
 local perc1F = "%.1f"..PERCENT_SYMBOL
 
-XPerl_RequestConfig(function(New) conf = New end, "$Revision: 906 $")
-XPerl_SetModuleRevision("$Revision: 906 $")
+XPerl_RequestConfig(function(New) conf = New end, "$Revision: 907 $")
+XPerl_SetModuleRevision("$Revision: 907 $")
 
 -- Upvalus
 local _G = _G
@@ -136,7 +136,9 @@ end
 
 -- Compact Raid frame manager
 local c = _G.CompactRaidFrameManager
-c:SetFrameStrata("High")
+if c then
+	c:SetFrameStrata("High")
+end
 
 ------------------------------------------------------------------------------
 -- Re-usable tables
@@ -2518,7 +2520,7 @@ function XPerl_GetBuffButton(self, buffnum, debuff, createIfAbsent, newID)
 		buffIconCount = buffIconCount + 1
 		button = CreateFrame("Button", "XPerlBuff"..buffIconCount, parent, format("XPerl_Cooldown_%sTemplate", buffType))
 		button:Hide()
-		--button.cooldown.noCooldownCount = true				-- OmniCC to NOT show cooldown
+		button.cooldown.noCooldownCount = true -- OmniCC to NOT show cooldown
 
 		if (setup.rightClickable) then
 			button:RegisterForClicks("RightButtonUp")
