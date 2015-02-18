@@ -13,7 +13,7 @@ XPerl_RequestConfig(function(new)
 	for k,v in pairs(PartyFrames) do
 		v.conf = pconf
 	end
-end, "$Revision: 913 $")
+end, "$Revision: 917 $")
 
 local percD = "%d"..PERCENT_SYMBOL
 
@@ -57,8 +57,8 @@ function XPerl_Party_Events_OnLoad(self)
 	
 	self:RegisterEvent("GROUP_ROSTER_UPDATE")--Try detecting when we switch to raid.
 	
-	for i = 1,4 do
-		XPerl_BlizzFrameDisable(getglobal("PartyMemberFrame"..i))
+	for i = 1, 4 do
+		XPerl_BlizzFrameDisable(_G["PartyMemberFrame"..i])
 	end
 
 	self:SetScript("OnEvent", XPerl_Party_OnEvent)
@@ -184,8 +184,8 @@ function ZPerl_Party_OnLoad(self)
 	self.hitIndicator.text:SetPoint("CENTER", self.portraitFrame, "CENTER", 0, 0)
 	CombatFeedback_Initialize(self, self.hitIndicator.text, 30)
 
-	XPerl_SecureUnitButton_OnLoad(self, self.partyid, nil, getglobal("PartyMemberFrame"..self:GetID().."DropDown"), XPerl_ShowGenericMenu)				--getglobal("PartyMemberFrame" .. self:GetID()).menu)
-	XPerl_SecureUnitButton_OnLoad(self.nameFrame, self.partyid, nil, getglobal("PartyMemberFrame"..self:GetID().."DropDown"), XPerl_ShowGenericMenu)	--getglobal("PartyMemberFrame" .. self:GetID()).menu)
+	XPerl_SecureUnitButton_OnLoad(self, self.partyid, nil, _G["PartyMemberFrame"..self:GetID().."DropDown"], XPerl_ShowGenericMenu)				--_G["PartyMemberFrame" .. self:GetID()).menu
+	XPerl_SecureUnitButton_OnLoad(self.nameFrame, self.partyid, nil, _G["PartyMemberFrame"..self:GetID().."DropDown"], XPerl_ShowGenericMenu)	--_G["PartyMemberFrame" .. self:GetID()).menu]
 
 	self.time = 0
 	self.flagsCheck = 0
@@ -1484,7 +1484,7 @@ function XPerl_Party_Set_Bits1(self)
 	--		self.petFrame = CreateFrame("Button", "XPerl_partypet"..self:GetID(), self, "XPerl_Party_Pet_FrameTemplate")
 	--	end
 
-	self.petFrame = getglobal("XPerl_partypet"..self:GetID())
+	self.petFrame = _G["XPerl_partypet"..self:GetID()]
 	if (self.petFrame) then
 		self.petFrame:ClearAllPoints()
 		if (pconf.flip) then
