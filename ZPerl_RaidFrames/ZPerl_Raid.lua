@@ -51,7 +51,7 @@ local XPerl_ColourHealthBar = XPerl_ColourHealthBar
 -- TODO - Watch for:	 ERR_FRIEND_OFFLINE_S = "%s has gone offline."
 
 local conf, rconf
-XPerl_RequestConfig(function(newConf) conf = newConf rconf = conf.raid end, "$Revision: 920 $")
+XPerl_RequestConfig(function(newConf) conf = newConf rconf = conf.raid end, "$Revision: 921 $")
 
 XPERL_RAIDGRP_PREFIX = "XPerl_Raid_Grp"
 
@@ -77,6 +77,7 @@ local resSpells = {
 	[GetSpellInfo(7328)] = true,			-- Redemption
 	[GetSpellInfo(50769)] = true,			-- Revive
 	[GetSpellInfo(83968)] = true,			-- Mass Resurrection
+	[GetSpellInfo(115178)] = true,			-- Resuscitate
 }
 
 local hotSpells = XPERL_HIGHLIGHT_SPELLS.hotSpells
@@ -160,20 +161,11 @@ local function Setup1RaidFrame(self)
 		--[[if (not self.statsFrame.manaBar) then
 			CreateManaBar(self)
 		end]]
-
-		if (not InCombatLockdown()) then
-			self:SetHeight(43)
-		else
-			XPerl_OutOfCombatQueue[Setup1RaidFrame] = self
-		end
+		self:SetHeight(43)
 		self.statsFrame:SetHeight(26)
 		self.statsFrame.manaBar:Show()
 	else
-		if (not InCombatLockdown()) then
-			self:SetHeight(38)
-		else
-			XPerl_OutOfCombatQueue[Setup1RaidFrame] = self
-		end
+		self:SetHeight(38)
 		self.statsFrame:SetHeight(21)
 		if (self.statsFrame.manaBar) then
 			self.statsFrame.manaBar:Hide()
@@ -231,7 +223,7 @@ end
 
 -- SetFrameArray
 local function SetFrameArray(self, value)
-	for k,v in pairs(FrameArray) do
+	for k, v in pairs(FrameArray) do
 		if (v == self) then
 			FrameArray[k] = nil
 			break
@@ -1227,18 +1219,24 @@ function XPerl_Raid_Events:PLAYER_ENTERING_WORLDsmall()
 end
 
 function XPerl_Raid_Events:PLAYER_REGEN_ENABLED()
-	--Update all raid frame that would have tained
+	-- Update all raid frame that would have tained
+	local tainted
+	if #taintFrames > 0 then
+		tainted = true
+	end
 	for i = 1, #taintFrames do
 		taintable(taintFrames[i])
 		taintFrames[i] = nil
 	end
-	--[[XPerl_Raid_ChangeAttributes()
-	XPerl_Raid_Position()
-	XPerl_Raid_Set_Bits(XPerl_Raid_Frame)
-	XPerl_Raid_UpdateDisplayAll()
-	if (XPerl_RaidPets_OptionActions) then
-		XPerl_RaidPets_OptionActions()
-	end]]
+	if tainted then
+		XPerl_Raid_ChangeAttributes()
+		XPerl_Raid_Position()
+		XPerl_Raid_Set_Bits(XPerl_Raid_Frame)
+		XPerl_Raid_UpdateDisplayAll()
+		if (XPerl_RaidPets_OptionActions) then
+			XPerl_RaidPets_OptionActions()
+		end
+	end
 end
 
 
@@ -1587,11 +1585,11 @@ local function ProcessCTRAMessage(unitName, msg)
 		elseif (strsub(msg, 1, 3) == "CD ") then
 			local num, cooldown = strmatch(msg, "^CD (%d+) (%d+)$")
 			if ( num == "1" ) then
-				myRoster.Rebirth = GetTime() + tonumber(cooldown)*60
+				myRoster.Rebirth = GetTime() + tonumber(cooldown) * 60
 			elseif ( num == "2" ) then
-				myRoster.Reincarnation = GetTime() + tonumber(cooldown)*60
+				myRoster.Reincarnation = GetTime() + tonumber(cooldown) * 60
 			elseif ( num == "3" ) then
-				myRoster.Soulstone = GetTime() + tonumber(cooldown)*60
+				myRoster.Soulstone = GetTime() + tonumber(cooldown) * 60
 			end
 			update = nil
 
@@ -1925,7 +1923,7 @@ function XPerl_ToggleRaidBuffs(castable)
 		end
 	end
 
-	for k,v in pairs(FrameArray) do
+	for k, v in pairs(FrameArray) do
 		if (v:IsShown()) then
 			XPerl_Raid_UpdateDisplay(v)
 		end
@@ -1957,12 +1955,12 @@ function XPerl_ToggleRaidSort(New)
 end
 
 -- GetCombatRezzerList()
-local normalRezzers = {PRIEST = true, SHAMAN = true, PALADIN = true}
+local normalRezzers = {PRIEST = true, SHAMAN = true, PALADIN = true, MONK = true}
 local function GetCombatRezzerList()
 
 	local anyCombat = 0
 	local anyAlive = 0
-	for i = 1,GetNumGroupMembers() do
+	for i = 1, GetNumGroupMembers() do
 		local unit = "raid"..i
 		if (normalRezzers[select(2, UnitClass(unit))]) then
 			if (UnitAffectingCombat(unit)) then
@@ -1979,14 +1977,14 @@ local function GetCombatRezzerList()
 		local ret = new()
 		local t = GetTime()
 
-		for i = 1,GetNumGroupMembers() do
+		for i = 1, GetNumGroupMembers() do
 			local raidid = "raid"..i
 			if (not UnitIsDeadOrGhost(raidid) and UnitIsVisible(raidid)) then
 				local name, rank, subgroup, level, _, fileName, zone, online, isDead = GetRaidRosterInfo(i)
 
 				local good
 				if (not UnitAffectingCombat(raidid)) then
-					if (fileName == "PRIEST" or fileName == "SHAMAN" or fileName == "PALADIN") then
+					if (fileName == "PRIEST" or fileName == "SHAMAN" or fileName == "PALADIN" or fileName == "MONK") then
 						tinsert(ret, {["name"] = name, class = fileName, cd = 0})
 					end
 				else
@@ -2050,7 +2048,7 @@ function XPerl_RaidTipExtra(unitid)
 		local zone
 		local name, rank, subgroup, level, class, fileName, zone, online, isDead
 
-		for i = 1,GetNumGroupMembers() do
+		for i = 1, GetNumGroupMembers() do
 			name, rank, subgroup, level, class, fileName, zone, online, isDead = GetRaidRosterInfo(i)
 			if (name == unitName) then
 				break
@@ -2263,10 +2261,10 @@ end
 
 -- XPerl_Raid_Set_Bits
 function XPerl_Raid_Set_Bits(self)
-	if (InCombatLockdown()) then
+	--[[if (InCombatLockdown()) then
 		XPerl_OutOfCombatQueue[XPerl_Raid_Set_Bits] = self
 		return
-	end
+	end]]
 	if (raidLoaded) then
 		XPerl_ProtectedCall(XPerl_Raid_HideShowRaid)
 	end

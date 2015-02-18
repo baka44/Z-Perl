@@ -1,0 +1,180 @@
+**r920**
+* Version bump.
+
+**r919**
+* File fixes.
+
+**r918**
+* Say goodbye to CompactRaidFrame taints.
+* Say goodbye to DropDown taints.
+* Loads of other tweaks/fixes.
+* Client restart required.
+
+**r917**
+* Version bump.
+* Auto version increment is still not working for some reason.
+
+**r916**
+* Version bump.
+
+**r915**
+* Toc updates.
+* Version bump.
+
+**r914**
+* Testing the auto packaging.
+* Some GUI fixes.
+
+**r913**
+* Stop updating party buffs, when the party is not visible for any reason.
+* Focus highlighting on the target frame should be updated properly on target change too.
+* Color pickers text color can be set to disabled/gray.
+
+**r912**
+* Re-enabled OmniCC support.
+* Anticipation support for the combo bar frame.
+* Raid role icons should update properly after enable/disable.
+* Virtual raid frames should not appear in configuration mode, when the group is disabled.
+* Removed old combo-like debuffs functions.
+* Some other smaller fixes.
+
+**r911**
+* Player buffs/debuffs should showing/hiding when enabling/disabling them immediately.
+* Coloring options should apply to the options frame immediately.
+* GUI cleanup.
+
+**r910**
+* Added Totem frame for warriors.
+* Totem GUI fixes.
+* Custom Highlight GUI fixes.
+* Some other smaller fixes.
+
+**r909**
+* Priest totem fix.
+* Removed debug code.
+
+**r908**
+* Monk totem fix. (Thanks to: Sadia)
+
+**r907**
+* Disabling OmniCC support for buffs, to check performance issues without it.
+* Fix for users with disabled "CompactRaidFrame".
+
+**r906**
+* Auto fixing tainted/unclickable frames after combat end.
+* Increased "CompactRaidFrameManager" strata to "HIGH".
+* Load/unload addon modules should properly work again.
+* Removed some useless events.
+
+**r905**
+* Reverting the last fixes, need to look into this more.
+
+**r904**
+* Fixed combat raid taints.
+
+**r903**
+* Custom Highlight fixes. (Thanks to Muz01699.)
+
+**r902**
+* Fixed the degrading FPS issues with the raid frames.
+
+**r901**
+* Shield fix.
+
+**r900**
+* More fixes on the degrading FPS issues.
+* Fixed some taints.
+
+**r899**
+* Version bump.
+
+**r898**
+* Vehicle event fixes.
+* Boss icon fix.
+* Range detection fixes.
+
+**r897**
+* Fixed degrading FPS issues, had to temporary remove Status Highlighting/Shields functionality for this.
+* Some event handler updates.
+* Fixed the tooltip issues.
+* Some other smaller fixes.
+
+**r896**
+* Event fixes for target and focus frames.
+
+**r895**
+* Proper buff/debuff wrapping fixes for every frame.
+* Fixed the degrading fps issues is heavy combats.
+* Changing the extra width of target and focus frames should properly update buffs and debuffs.
+* Some other minor fixes.
+
+**r894**
+* Fixed the damn fishing pole error.
+* Fixed the redisplaying portrait issues.
+* Focus target changes should be much more faster.
+* Changing targets should properly update focus target too.
+* Setting/changing focus should no longer pointlessly update the target frame.
+* Pet target taint fix.
+
+**r893**
+* Status highlighting fixes. (Thanks to: dvyn.)
+* More buff/debuff wrapping issues fixed on: player, target, targettarget, targettargettarget, focus, focustarget. (Not yet on party frames.)
+* Target's target taint fix in combat.
+* CompactUnitFrames are no longer killed on load.
+* Added upvalues.
+* Absorb error fix.
+* Fixed a lot of leaks.
+
+**r892**
+* Buff/debuff wrapping fix.
+* Raid leak fixes.
+* Slider ondrag value fixes.
+* Loads of smaller GUI tweaks.
+* A lot of other smaller fixes.
+
+**r891**
+* Pet target fixes.
+* Some other various fixes.
+
+**r890**
+* Texture path fixes.
+
+**r889**
+* Slash command fix.
+* Status Highlight is enabled for all classes. (It's partially broken still.)
+* Custom Highlight fixes.
+
+**r888**
+* More check button fixes.
+* Aggro warning should work again while not grouped.
+
+**r887**
+* Fixed DK rune swipe.
+* DK rune swipe has round texture now.
+* DK rune cooldowns now ignores the default cooldown numbers.
+
+**r886**
+* TargetTarget module updates and bugfixes.
+
+**r885**
+* Fix for last commit.
+
+**r884**
+* Removed a buggy dev command.
+* Global fixes.
+
+**r883**
+* More global scope fixes.
+
+**r882**
+* Global scope fixes.
+
+**r881**
+* Importing updates.
+* De-xperlializing, round one.
+
+**r880**
+* Importing updates.
+
+**r879**
+* Initial fork.

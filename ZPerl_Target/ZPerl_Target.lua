@@ -22,7 +22,7 @@ XPerl_RequestConfig(function(new)
 	if (XPerl_PetTarget) then
 		XPerl_PetTarget.conf = conf.pettarget
 	end
-end, "$Revision: 913 $")
+end, "$Revision: 921 $")
 
 local percD = "%d"..PERCENT_SYMBOL
 local format = format
@@ -339,6 +339,7 @@ local function XPerl_Target_UpdatePVP(self)
 			self.nameFrame.text:SetTextColor(1, 1, 1, conf.transparency.text)
 		end
 	else
+		self.nameFrame:SetBackdropColor(0, 0, 0)
 		XPerl_SetUnitNameColor(self.nameFrame.text, partyid)
 	end
 
