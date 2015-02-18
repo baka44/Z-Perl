@@ -51,7 +51,7 @@ local XPerl_ColourHealthBar = XPerl_ColourHealthBar
 -- TODO - Watch for:	 ERR_FRIEND_OFFLINE_S = "%s has gone offline."
 
 local conf, rconf
-XPerl_RequestConfig(function(newConf) conf = newConf rconf = conf.raid end, "$Revision: 903 $")
+XPerl_RequestConfig(function(newConf) conf = newConf rconf = conf.raid end, "$Revision: 904 $")
 
 XPERL_RAIDGRP_PREFIX	= "XPerl_Raid_Grp"
 
@@ -66,7 +66,9 @@ ZPerl_Roster = {}
 
 local localGroups = LOCALIZED_CLASS_NAMES_MALE
 local WoWclassCount = 0
-for k,v in pairs(localGroups) do WoWclassCount = WoWclassCount + 1 end
+for k, v in pairs(localGroups) do
+	WoWclassCount = WoWclassCount + 1
+end
 
 local resSpells = {
 	[GetSpellInfo(2006)] = true,			-- Resurrection
@@ -143,6 +145,10 @@ end
 
 -- CreateManaBar
 local function CreateManaBar(self)
+	if (InCombatLockdown()) then
+		XPerl_OutOfCombatQueue[CreateManaBar] = self
+		return
+	end
 	local sf = self.statsFrame
 	sf.manaBar = CreateFrame("StatusBar", sf:GetName().."manaBar", sf, "XPerlRaidStatusBar")
 	sf.manaBar:SetScale(0.7)
@@ -592,6 +598,10 @@ end
 
 -- XPerl_Raid_Single_OnLoad
 function XPerl_Raid_Single_OnLoad(self)
+	if (InCombatLockdown()) then
+		XPerl_OutOfCombatQueue[XPerl_Raid_Single_OnLoad] = self
+		return
+	end
 	XPerl_SetChildMembers(self)
 	self:RegisterForClicks("AnyUp")
 
@@ -1143,7 +1153,7 @@ function XPerl_Raid_HideShowRaid()
 		end
 	end
 
-	for i = 1,WoWclassCount do
+	for i = 1, WoWclassCount do
 		if (rconf.group[i] and enable and (i < 11 or rconf.sortByClass) and not singleGroup) then
 			if (not raidHeaders[i]:IsShown()) then
 				raidHeaders[i]:Show()
@@ -2241,6 +2251,10 @@ end
 
 -- XPerl_Raid_Set_Bits
 function XPerl_Raid_Set_Bits(self)
+	if (InCombatLockdown()) then
+		XPerl_OutOfCombatQueue[XPerl_Raid_Set_Bits] = self
+		return
+	end
 	if (raidLoaded) then
 		XPerl_ProtectedCall(XPerl_Raid_HideShowRaid)
 	end
@@ -2253,12 +2267,12 @@ function XPerl_Raid_Set_Bits(self)
 		XPerl_SavePosition(_G["XPerl_Raid_Title"..i], true)
 	end
 
-	for i,frame in pairs(FrameArray) do
+	for i, frame in pairs(FrameArray) do
 		Setup1RaidFrame(frame)
 	end
 
 	local manaEvents = {"UNIT_DISPLAYPOWER", "UNIT_POWER", "UNIT_MAXPOWER"}
-	for i,event in pairs(manaEvents) do
+	for i, event in pairs(manaEvents) do
 		if (rconf.mana) then
 			self:RegisterEvent(event)
 		else
