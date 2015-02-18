@@ -2,7 +2,7 @@
 -- Author: Zek <Boodhoof-EU>
 -- License: GNU GPL v3, 29 June 2007 (see LICENSE.txt)
 
-XPerl_SetModuleRevision("$Revision: 913 $")
+XPerl_SetModuleRevision("$Revision: 918 $")
 
 local localGroups = LOCALIZED_CLASS_NAMES_MALE
 local WoWclassCount = 0
@@ -549,12 +549,12 @@ end
 -- XPerl_Options_LoadSettings_OnLoad
 function XPerl_Options_LoadSettings_OnLoad(self)
 	self.displayMode = "MENU"
-	UIDropDownMenu_Initialize(self, XPerl_Options_LoadSettings_Initialize)
-	UIDropDownMenu_SetWidth(self, 140)
+	Lib_UIDropDownMenu_Initialize(self, XPerl_Options_LoadSettings_Initialize)
+	Lib_UIDropDownMenu_SetWidth(self, 140)
 	if (MyIndex == 0) then
 		XPerl_Options_DropDown_LoadSettingsText:SetText("")
 	else
-		UIDropDownMenu_SetSelectedID(self, MyIndex, 1)
+		Lib_UIDropDownMenu_SetSelectedID(self, MyIndex, 1)
 	end
 end
 
@@ -563,19 +563,19 @@ function XPerl_Options_LoadSettings_Initialize()
 	local list = GetPlayerList()
 
 	for i,entry in pairs(list) do
-		local info = UIDropDownMenu_CreateInfo()
+		local info = Lib_UIDropDownMenu_CreateInfo()
 		info.text = entry.name
 		info.func = XPerl_Options_LoadSettings_OnClick
-		UIDropDownMenu_AddButton(info)
+		Lib_UIDropDownMenu_AddButton(info)
 	end
 end
 
 -- XPerl_Options_Anchor_OnLoad
 function XPerl_Options_Anchor_OnLoad(self)
 	self.displayMode = "MENU"
-	UIDropDownMenu_Initialize(self, XPerl_Options_Anchor_Initialize)
-	UIDropDownMenu_SetSelectedID(self, MyIndex, 1)
-	UIDropDownMenu_SetWidth(self, 100)
+	Lib_UIDropDownMenu_Initialize(self, XPerl_Options_Anchor_Initialize)
+	Lib_UIDropDownMenu_SetSelectedID(self, MyIndex, 1)
+	Lib_UIDropDownMenu_SetWidth(self, 100)
 end
 
 -- XPerl_Options_Anchor_OnLoad
@@ -592,17 +592,17 @@ function XPerl_Options_Anchor_Initialize()
 			MyIndex = k
 		end
 
-		UIDropDownMenu_AddButton(info)
+		Lib_UIDropDownMenu_AddButton(info)
 	end
 end
 
 -- XPerl_Options_Anchor_OnClick
 function XPerl_Options_Anchor_OnClick(self)
-	local obj = UIDROPDOWNMENU_OPEN_MENU
+	local obj = LIB_UIDROPDOWNMENU_OPEN_MENU
 
 	obj.varSet(XPerl_AnchorList[self:GetID()])
 	MyIndex = self:GetID()
-	UIDropDownMenu_SetSelectedID(obj, MyIndex, 1)
+	Lib_UIDropDownMenu_SetSelectedID(obj, MyIndex, 1)
 
 	XPerl_ProtectedCall(obj.setFunc)
 
@@ -619,7 +619,7 @@ end
 local CopyFrom
 local function CopySelectedSettings()
 	--ChatFrame7:AddMessage("Copying settings from "..CopyFrom)
-	--UIDropDownMenu_SetSelectedID(XPerl_Options_DropDown_LoadSettings, self:GetID(), 1)
+	--Lib_UIDropDownMenu_SetSelectedID(XPerl_Options_DropDown_LoadSettings, self:GetID(), 1)
 
 	XPerlDB = XPerl_CopyTable(CopyFrom.config)
 

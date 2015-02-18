@@ -2274,7 +2274,7 @@
 						</Scripts>
 					</Button>
 
-					<Frame name="$parent_Anchor" inherits="UIDropDownMenuTemplate" enableMouse="true">
+					<Frame name="$parent_Anchor" inherits="Lib_UIDropDownMenuTemplate" enableMouse="true">
 						<Anchors>
 							<Anchor point="TOPLEFT" relativeTo="$parent_BiggerGap" relativePoint="BOTTOMLEFT">
 								<Offset>
@@ -2408,7 +2408,7 @@
 						</Layers>
 					</Frame>
 
-					<Frame name="$parent_Anchor" inherits="UIDropDownMenuTemplate" enableMouse="true">
+					<Frame name="$parent_Anchor" inherits="Lib_UIDropDownMenuTemplate" enableMouse="true">
 						<Anchors>
 							<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" relativeTo="$parent_Title">
 								<Offset>
@@ -4748,7 +4748,7 @@
 						</Scripts>
 					</Button>
 
-					<Frame name="XPerl_Options_DropDown_LoadSettings" inherits="UIDropDownMenuTemplate" enableMouse="true">
+					<Frame name="XPerl_Options_DropDown_LoadSettings" inherits="Lib_UIDropDownMenuTemplate" enableMouse="true">
 						<Anchors>
 							<Anchor point="TOPLEFT" relativeTo="$parent_Reset" relativePoint="BOTTOMLEFT">
 								<Offset>

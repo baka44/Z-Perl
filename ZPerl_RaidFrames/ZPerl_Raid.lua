@@ -51,7 +51,7 @@ local XPerl_ColourHealthBar = XPerl_ColourHealthBar
 -- TODO - Watch for:	 ERR_FRIEND_OFFLINE_S = "%s has gone offline."
 
 local conf, rconf
-XPerl_RequestConfig(function(newConf) conf = newConf rconf = conf.raid end, "$Revision: 912 $")
+XPerl_RequestConfig(function(newConf) conf = newConf rconf = conf.raid end, "$Revision: 920 $")
 
 XPERL_RAIDGRP_PREFIX = "XPerl_Raid_Grp"
 
@@ -216,7 +216,7 @@ function XPerl_Raid_ShowPopup(self)
 		me = self:GetParent()
 	end
 
-	HideDropDownMenu(1)
+	Lib_HideDropDownMenu(1)
 	FriendsDropDown.initialize = XPerl_RaidFrameDropDown_Initialize
 	FriendsDropDown.displayMode = "MENU"
 
@@ -225,7 +225,7 @@ function XPerl_Raid_ShowPopup(self)
 	FriendsDropDown.id = tonumber(strmatch(FriendsDropDown.unit, "(%d+)"))
 
 	XPerl_ShouldHideSetFocus = true
-	ToggleDropDownMenu(1, nil, FriendsDropDown, me.statsFrame:GetName(), 0, 0)
+	Lib_ToggleDropDownMenu(1, nil, FriendsDropDown, me.statsFrame:GetName(), 0, 0)
 	XPerl_ShouldHideSetFocus = nil
 end
 
@@ -591,8 +591,8 @@ local function taintable(self)
 	--self.nameFrame:SetAttribute("*type1", "target")
 	--self.nameFrame:SetAttribute("type2", "menu")
 	--self.nameFrame.menu = XPerl_Raid_ShowPopup --Again, doesnt seem todo anything...
-	XPerl_SecureUnitButton_OnLoad(self.nameFrame, nil, nil, TargetFrameDropDown, XPerl_ShowGenericMenu, true)
-	XPerl_SecureUnitButton_OnLoad(self, nil, nil, TargetFrameDropDown, XPerl_ShowGenericMenu, true)
+	XPerl_SecureUnitButton_OnLoad(self.nameFrame, nil, nil, XPerl_ShowGenericMenu, true)
+	XPerl_SecureUnitButton_OnLoad(self, nil, nil, XPerl_ShowGenericMenu, true)
 end
 
 -- XPerl_Raid_Single_OnLoad
@@ -1232,6 +1232,13 @@ function XPerl_Raid_Events:PLAYER_REGEN_ENABLED()
 		taintable(taintFrames[i])
 		taintFrames[i] = nil
 	end
+	--[[XPerl_Raid_ChangeAttributes()
+	XPerl_Raid_Position()
+	XPerl_Raid_Set_Bits(XPerl_Raid_Frame)
+	XPerl_Raid_UpdateDisplayAll()
+	if (XPerl_RaidPets_OptionActions) then
+		XPerl_RaidPets_OptionActions()
+	end]]
 end
 
 

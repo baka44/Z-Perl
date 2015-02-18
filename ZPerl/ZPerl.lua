@@ -6,8 +6,8 @@ local conf
 local percD	= "%d"..PERCENT_SYMBOL
 local perc1F = "%.1f"..PERCENT_SYMBOL
 
-XPerl_RequestConfig(function(New) conf = New end, "$Revision: 912 $")
-XPerl_SetModuleRevision("$Revision: 912 $")
+XPerl_RequestConfig(function(New) conf = New end, "$Revision: 918 $")
+XPerl_SetModuleRevision("$Revision: 918 $")
 
 -- Upvalus
 local _G = _G
@@ -56,7 +56,6 @@ local GetRealZoneText = GetRealZoneText
 local GetSpecialization = GetSpecialization
 local GetSpellInfo = GetSpellInfo
 local GetTime = GetTime
-local HideDropDownMenu = HideDropDownMenu
 local hugeNumDiv = XPERL_LOC_HUGENUMDIV
 local hugeNumDiv10 = hugeNumDiv * 10
 local hugeNumTag = XPERL_LOC_HUGENUMTAG
@@ -77,9 +76,6 @@ local SetPortraitTexture = SetPortraitTexture
 local SetRaidTargetIconTexture = SetRaidTargetIconTexture
 local SpellCanTargetUnit = SpellCanTargetUnit
 local SpellIsTargeting = SpellIsTargeting
-local ToggleDropDownMenu = ToggleDropDownMenu
-local UIDropDownMenu_AddButton = UIDropDownMenu_AddButton
-local UIDropDownMenu_CreateInfo = UIDropDownMenu_CreateInfo
 local UnitAffectingCombat = UnitAffectingCombat
 local UnitAlternatePowerInfo = UnitAlternatePowerInfo
 local UnitAura = UnitAura
@@ -650,6 +646,9 @@ function XPerl_GetClassColour(class)
 	return (class and (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[class]) or defaultColour
 end
 
+local hiddenParent = CreateFrame("Frame")
+hiddenParent:Hide()
+
 ---------------------------------
 --Loading Function             --
 ---------------------------------
@@ -659,25 +658,43 @@ function XPerl_BlizzFrameDisable(self)
 	if (self) then
 		UnregisterUnitWatch(self)		-- Should stop Archaeologist from re-showing target frame
 		self:UnregisterAllEvents()
-		self:Hide()
 		-- Make it so it won't be visible, even if shown by another mod
 		--[[self:ClearAllPoints()
 		self:SetPoint("BOTTOMLEFT", UIParent, "TOPLEFT", -400, 500)]]
 		self:SetMovable(true)
-		self:SetUserPlaced(false)
+		self:SetUserPlaced(true)
+		self:SetDontSavePosition(true)
 		self:SetMovable(false)
-		self:HookScript("OnShow", function(self)
+		if not InCombatLockdown() then
 			self:Hide()
+		end
+		self:SetParent(hiddenParent)
+		self:HookScript("OnShow", function(self)
+			if not InCombatLockdown() then
+				self:Hide()
+			end
 		end)
 
-		local healthBar = _G[self:GetName().."HealthBar"]
-		if (healthBar) then
-			healthBar:UnregisterAllEvents()
+		local frame = _G[self:GetName()]
+
+		local health = frame.healthbar
+		if health then
+			health:UnregisterAllEvents()
 		end
 
-		local manaBar = _G[self:GetName().."ManaBar"]
-		if (manaBar) then
-			manaBar:UnregisterAllEvents()
+		local power = frame.manabar
+		if power then
+			power:UnregisterAllEvents()
+		end
+
+		local spell = frame.spellbar
+		if spell then
+			spell:UnregisterAllEvents()
+		end
+
+		local altpowerbar = frame.powerBarAlt
+		if altpowerbar then
+			altpowerbar:UnregisterAllEvents()
 		end
 	end
 end
@@ -809,7 +826,7 @@ function XPerl_SetHealthBar(self, hp, Max)
 	else
 		percent = hp / Max
 	end		
-	if percent > 100 then percent = 100 end -- percent only goes to 100
+	if percent > 100 then percent = 100 end -- percent only goes to 100        
 	if (conf.bar.inverse) then
 
 		bar:SetValue(Max - hp)
@@ -981,7 +998,7 @@ end
 -- XPerl_MinimapMenu_OnLoad
 function XPerl_MinimapMenu_OnLoad(self)
 	self.displayMode = "MENU"
-	UIDropDownMenu_Initialize(self, XPerl_MinimapMenu_Initialize)
+	Lib_UIDropDownMenu_Initialize(self, XPerl_MinimapMenu_Initialize)
 end
 
 -- XPerl_MinimapMenu_Initialize
@@ -989,80 +1006,80 @@ function XPerl_MinimapMenu_Initialize(self, level)
 	local info
 
 	if (level == 2) then
-		--[[if (UIDROPDOWNMENU_MENU_VALUE == "raidbuffs") then
-			info = UIDropDownMenu_CreateInfo()
+		--[[if (LIB_UIDROPDOWNMENU_MENU_VALUE == "raidbuffs") then
+			info = Lib_UIDropDownMenu_CreateInfo()
 			info.isTitle = 1
 			info.text = XPERL_MINIMENU_RAIDBUFF
-			UIDropDownMenu_AddButton(info, level)
+			Lib_UIDropDownMenu_AddButton(info, level)
 
-			info = UIDropDownMenu_CreateInfo()
+			info = Lib_UIDropDownMenu_CreateInfo()
 			info.notCheckable = 1
 			info.text = BINDING_NAME_TOGGLEBUFFCASTABLE
 			info.func = function() XPerl_ToggleRaidBuffs(1) end
-			UIDropDownMenu_AddButton(info, level)
+			Lib_UIDropDownMenu_AddButton(info, level)
 
-			info = UIDropDownMenu_CreateInfo()
+			info = Lib_UIDropDownMenu_CreateInfo()
 			info.notCheckable = 1
 			info.text = BINDING_NAME_TOGGLEBUFFTYPE
 			info.func = XPerl_ToggleRaidBuffs
-			UIDropDownMenu_AddButton(info, level)
-		elseif (UIDROPDOWNMENU_MENU_VALUE == "raidsort") then
-			info = UIDropDownMenu_CreateInfo()
+			Lib_UIDropDownMenu_AddButton(info, level)
+		elseif (LIB_UIDROPDOWNMENU_MENU_VALUE == "raidsort") then
+			info = Lib_UIDropDownMenu_CreateInfo()
 			info.isTitle = 1
 			info.text = XPERL_MINIMENU_RAIDSORT
-			UIDropDownMenu_AddButton(info, level)
+			Lib_UIDropDownMenu_AddButton(info, level)
 
-			info = UIDropDownMenu_CreateInfo()
+			info = Lib_UIDropDownMenu_CreateInfo()
 			info.checked = XPerlDB.raid.sortByClass == nil
 			info.text = XPERL_MINIMENU_RAIDSORT_GROUP
 			info.func = function()
 				XPerl_ToggleRaidSort(1)
 			end
-			UIDropDownMenu_AddButton(info, level)
+			Lib_UIDropDownMenu_AddButton(info, level)
 
-			info = UIDropDownMenu_CreateInfo()
+			info = Lib_UIDropDownMenu_CreateInfo()
 			info.checked = XPerlDB.raid.sortByClass == 1
 			info.text = XPERL_MINIMENU_RAIDSORT_CLASS
 			info.func = function()
 				XPerl_ToggleRaidSort(0)
 			end
-			UIDropDownMenu_AddButton(info, level)
+			Lib_UIDropDownMenu_AddButton(info, level)
 		end]]
 		return
 	end
 
-	info = UIDropDownMenu_CreateInfo()
+	info = Lib_UIDropDownMenu_CreateInfo()
 	info.isTitle = 1
 	info.text = XPerl_ProductName
-	UIDropDownMenu_AddButton(info)
+	Lib_UIDropDownMenu_AddButton(info)
 
-	info = UIDropDownMenu_CreateInfo()
+	info = Lib_UIDropDownMenu_CreateInfo()
 	info.notCheckable = 1
 	info.func = XPerl_Toggle
 	info.text = XPERL_MINIMENU_OPTIONS
-	UIDropDownMenu_AddButton(info)
+	Lib_UIDropDownMenu_AddButton(info)
 
 	--[[if (XPerl_ToggleRaidBuffs) then
-		info = UIDropDownMenu_CreateInfo()
+		info = Lib_UIDropDownMenu_CreateInfo()
 		info.notCheckable = 1
 		info.text = XPERL_MINIMENU_RAIDBUFF
 		info.hasArrow = 1
 		info.value = "raidbuffs"
-		UIDropDownMenu_AddButton(info)
+		Lib_UIDropDownMenu_AddButton(info)
 	end]]
 
 	--[[if (XPerl_ToggleRaidSort) then
-		info = UIDropDownMenu_CreateInfo()
+		info = Lib_UIDropDownMenu_CreateInfo()
 		info.notCheckable = 1
 		info.text = XPERL_MINIMENU_RAIDSORT
 		info.hasArrow = 1
 		info.value = "raidsort"
-		UIDropDownMenu_AddButton(info)
+		Lib_UIDropDownMenu_AddButton(info)
 	end]]
 
 	if (IsAddOnLoaded("ZPerl_RaidHelper")) then
 		if (XPerl_Assists_Frame and not XPerl_Assists_Frame:IsShown()) then
-			info = UIDropDownMenu_CreateInfo()
+			info = Lib_UIDropDownMenu_CreateInfo()
 			info.notCheckable = 1
 			info.text = XPERL_MINIMENU_ASSIST
 			info.func = function()
@@ -1070,46 +1087,46 @@ function XPerl_MinimapMenu_Initialize(self, level)
 					ZPerlConfigHelper.TargettingFrame = 1
 					XPerl_SetFrameSides()
 				end
-			UIDropDownMenu_AddButton(info)
+			Lib_UIDropDownMenu_AddButton(info)
 		end
 	end
 
 	if (IsAddOnLoaded("ZPerl_RaidMonitor")) then
 		if (XPerl_RaidMonitor_Frame and not XPerl_RaidMonitor_Frame:IsShown()) then
-			info = UIDropDownMenu_CreateInfo()
+			info = Lib_UIDropDownMenu_CreateInfo()
 			info.notCheckable = 1
 			info.text = XPERL_MINIMENU_CASTMON
 			info.func = function()
 					XPerlRaidMonConfig.enabled = 1
 					XPerl_RaidMonitor_Frame:SetFrameSizes()
 				end
-			UIDropDownMenu_AddButton(info)
+			Lib_UIDropDownMenu_AddButton(info)
 		end
 	end
 
 	if (IsAddOnLoaded("ZPerl_RaidAdmin")) then
 		if (XPerl_AdminFrame and not XPerl_AdminFrame:IsShown()) then
-			info = UIDropDownMenu_CreateInfo()
+			info = Lib_UIDropDownMenu_CreateInfo()
 			info.notCheckable = 1
 			info.text = XPERL_MINIMENU_RAIDAD
 			info.func = function() XPerl_AdminFrame:Show() end
-			UIDropDownMenu_AddButton(info)
+			Lib_UIDropDownMenu_AddButton(info)
 		end
 
 		if (XPerl_Check and not XPerl_Check:IsShown()) then
-			info = UIDropDownMenu_CreateInfo()
+			info = Lib_UIDropDownMenu_CreateInfo()
 			info.notCheckable = 1
 			info.text = XPERL_MINIMENU_ITEMCHK
 			info.func = function() XPerl_Check:Show() end
-			UIDropDownMenu_AddButton(info)
+			Lib_UIDropDownMenu_AddButton(info)
 		end
 
 		if (XPerl_RosterText and not XPerl_RosterText:IsShown()) then
-			info = UIDropDownMenu_CreateInfo()
+			info = Lib_UIDropDownMenu_CreateInfo()
 			info.notCheckable = 1
 			info.text = XPERL_MINIMENU_ROSTERTEXT
 			info.func = function() XPerl_RosterText:Show() end
-			UIDropDownMenu_AddButton(info)
+			Lib_UIDropDownMenu_AddButton(info)
 		end
 	end
 end
@@ -1121,7 +1138,7 @@ function XPerl_MinimapMenu(self)
 		XPerl_MinimapMenu_OnLoad(XPerl_Minimap_Dropdown)
 	end
 
-	ToggleDropDownMenu(1, nil, XPerl_Minimap_Dropdown, "cursor", 0, 0)
+	Lib_ToggleDropDownMenu(1, nil, XPerl_Minimap_Dropdown, "cursor", 0, 0)
 end
 
 local xpModList = {"ZPerl", "ZPerl_Player", "ZPerl_PlayerBuffs", "ZPerl_PlayerPet", "ZPerl_Target", "ZPerl_TargetTarget", "ZPerl_Party", "ZPerl_PartyPet", "ZPerl_ArcaneBar", "ZPerl_RaidFrames", "ZPerl_RaidHelper", "ZPerl_RaidAdmin", "ZPerl_RaidMonitor", "ZPerl_RaidPets"}
@@ -2175,21 +2192,21 @@ function XPerl_WhoList_Update()
 			end
 
 			if (conf.colour.class and conf.colour.guildList) then
-				if (UIDropDownMenu_GetSelectedID(WhoFrameDropDown) == 1) then
+				if (Lib_UIDropDownMenu_GetSelectedID(WhoFrameDropDown) == 1) then
 					-- Zone
 					if (zone == myZone) then
 						_G["WhoFrameButton"..i.."Variable"]:SetTextColor(0, 1, 0)
 					else
 						_G["WhoFrameButton"..i.."Variable"]:SetTextColor(1, 1, 1)
 					end
-				elseif (UIDropDownMenu_GetSelectedID(WhoFrameDropDown) == 2) then
+				elseif (Lib_UIDropDownMenu_GetSelectedID(WhoFrameDropDown) == 2) then
 					if (guild == myGuild) then
 						_G["WhoFrameButton"..i.."Variable"]:SetTextColor(0, 1, 0)
 					else
 						_G["WhoFrameButton"..i.."Variable"]:SetTextColor(1, 1, 1)
 					end
 
-				elseif (UIDropDownMenu_GetSelectedID(WhoFrameDropDown) == 3) then
+				elseif (Lib_UIDropDownMenu_GetSelectedID(WhoFrameDropDown) == 3) then
 					if (race == myRace) then
 						_G["WhoFrameButton"..i.."Variable"]:SetTextColor(0, 1, 0)
 					else
@@ -2356,7 +2373,7 @@ end
 
 -- unitmenuOnPostClick
 local function unitmenuOnPostClick(self)
-	if (UIDROPDOWNMENU_OPEN_MENU == self.dropdownMenu and DropDownList1:IsShown()) then
+	if (LIB_UIDROPDOWNMENU_OPEN_MENU == self.dropdownMenu and DropDownList1:IsShown()) then
 		local parent = self
 		if (self:GetParent() and self:GetParent().nameFrame == self) then
 			parent = self:GetParent()
@@ -2400,7 +2417,7 @@ end
 
 -- XPerl_GenericDropDown_OnLoad
 function XPerl_GenericDropDown_OnLoad(self)
-	--UIDropDownMenu_Initialize(self, XPerl_GenericDropDown_Initialize, "MENU")
+	--Lib_UIDropDownMenu_Initialize(self, XPerl_GenericDropDown_Initialize, "MENU")
 	tinsert(UnitPopupFrames, "XPerl_DropDown")
 end
 
@@ -2435,6 +2452,7 @@ function XPerl_GenericDropDown_Initialize()
 	end
 end
 
+-- Hide set focus from the raid dropdown
 local function HideSetFocus(param)
 	local unit = UIDROPDOWNMENU_INIT_MENU.unit
 	if (unit and strsub(unit, 0, 4) == "raid") then
@@ -2459,7 +2477,7 @@ function XPerl_ShowGenericMenu(self, unit, button, actionType)
 	XPerl_DropDown.unit = unit
 
 	if (unit) then
-		HideDropDownMenu(1)
+		Lib_HideDropDownMenu(1)
 		XPerl_DropDown.id = strmatch(unit or "", "(%d+)")
 		XPerl_DropDown.displayMode = "MENU"
 
@@ -2478,7 +2496,7 @@ function XPerl_ShowGenericMenu(self, unit, button, actionType)
 			parent = self:GetParent()
 		end
 
-		ToggleDropDownMenu(1, nil, XPerl_DropDown, parent, 0, 0)
+		Lib_ToggleDropDownMenu(1, nil, XPerl_DropDown, parent, 0, 0)
 	end
 end
 
@@ -2797,7 +2815,7 @@ local function XPerl_Unit_BuffPositionsType(self, list, useSmallStart, buffSizeB
 					end
 				end
 
-				if (tempColPoint < rowSize - buffSizeBase) then		-- and rowsHeight - buffSizeBase - 1 >= self.buffSpacing.smallRowHeight
+				if (tempColPoint < rowSize - buffSizeBase) then		--  and rowsHeight - buffSizeBase - 1 >= self.buffSpacing.smallRowHeight
 					local prevRowBig, prevRowBigI = list[j], j
 					colPoint = tempColPoint
 					buff:SetPoint(self.BOTTOMLEFT, prevRowBig, self.BOTTOMRIGHT, self.SPACING, 0)
@@ -3004,7 +3022,7 @@ function XPerl_Unit_UpdateBuffs(self, maxBuffs, maxDebuffs, castableOnly, curabl
 
 						button:Show()
 
-						if (isStealable) then -- and UnitCanAttack("player", partyid)
+						if (isStealable) then --  and UnitCanAttack("player", partyid)
 							if (not button.steal) then
 								button.steal = CreateFrame("Frame", nil, button)
 								button.steal:SetPoint("TOPLEFT", -2, 2)

@@ -1,4 +1,76 @@
 ------------------------------------------------------------------------
+r920 | Resike | 2015-02-16 00:28:43 +0000 (Mon, 16 Feb 2015) | 1 line
+Changed paths:
+   M /trunk/ZPerl_RaidFrames/ZPerl_Raid.lua
+
+- Version bump.
+------------------------------------------------------------------------
+r919 | Resike | 2015-02-16 00:26:58 +0000 (Mon, 16 Feb 2015) | 1 line
+Changed paths:
+   A /trunk/ZPerl/Libs
+   A /trunk/ZPerl/Libs/UIDropDownMenu.lua
+   A /trunk/ZPerl/Libs/UIDropDownMenuTemplates.xml
+   A /trunk/ZPerl_PartyPet/ZPerl_PartyPet.lua
+   A /trunk/ZPerl_PartyPet/ZPerl_PartyPet.xml
+   D /trunk/ZPerl_PartyPet/ZPerl_Party_Pet.lua
+   D /trunk/ZPerl_PartyPet/ZPerl_Party_Pet.xml
+   A /trunk/ZPerl_PlayerPet/ZPerl_PlayerPet.lua
+   A /trunk/ZPerl_PlayerPet/ZPerl_PlayerPet.xml
+   D /trunk/ZPerl_PlayerPet/ZPerl_Player_Pet.lua
+   D /trunk/ZPerl_PlayerPet/ZPerl_Player_Pet.xml
+   M /trunk/ZPerl_RaidFrames/ZPerl_Raid.lua
+
+- File fixes.
+------------------------------------------------------------------------
+r918 | Resike | 2015-02-15 21:46:28 +0000 (Sun, 15 Feb 2015) | 4 lines
+Changed paths:
+   M /trunk/ZPerl/ZPerl.lua
+   M /trunk/ZPerl/ZPerl.toc
+   M /trunk/ZPerl/ZPerl.xml
+   M /trunk/ZPerl_Options/ZPerl_FrameOptions.lua
+   M /trunk/ZPerl_Options/ZPerl_FrameOptions.xml
+   M /trunk/ZPerl_Party/ZPerl_Party.lua
+   M /trunk/ZPerl_PartyPet/ZPerl_PartyPet.toc
+   M /trunk/ZPerl_PartyPet/ZPerl_Party_Pet.xml
+   M /trunk/ZPerl_PlayerPet/ZPerl_PlayerPet.toc
+   M /trunk/ZPerl_PlayerPet/ZPerl_Player_Pet.xml
+   M /trunk/ZPerl_RaidAdmin/ZPerl_Check.lua
+   M /trunk/ZPerl_RaidAdmin/ZPerl_Check.xml
+   M /trunk/ZPerl_RaidFrames/ZPerl_Raid.lua
+
+- Say goodbye to CompactRaidFrame taints.
+- Say goodbye to DropDown taints.
+- Loads of other tweaks/fixes.
+- Client restart required.
+------------------------------------------------------------------------
+r917 | Resike | 2015-02-15 14:14:07 +0000 (Sun, 15 Feb 2015) | 2 lines
+Changed paths:
+   M /trunk/ZPerl_Party/ZPerl_Party.lua
+
+- Version bump.
+- Auto version increment is still not working for some reason.
+------------------------------------------------------------------------
+r916 | Resike | 2015-02-15 14:01:53 +0000 (Sun, 15 Feb 2015) | 1 line
+Changed paths:
+   M /trunk/ZPerl_ArcaneBar/ZPerl_ArcaneBar.toc
+   M /trunk/ZPerl_CustomHighlight/ZPerl_CustomHighlight.toc
+   M /trunk/ZPerl_Options/ZPerl_Options.toc
+   M /trunk/ZPerl_Party/ZPerl_Party.lua
+   M /trunk/ZPerl_Party/ZPerl_Party.toc
+   M /trunk/ZPerl_PartyPet/ZPerl_PartyPet.toc
+   M /trunk/ZPerl_Player/ZPerl_Player.toc
+   M /trunk/ZPerl_PlayerBuffs/ZPerl_PlayerBuffs.toc
+   M /trunk/ZPerl_PlayerPet/ZPerl_PlayerPet.toc
+   M /trunk/ZPerl_RaidAdmin/ZPerl_RaidAdmin.toc
+   M /trunk/ZPerl_RaidFrames/ZPerl_RaidFrames.toc
+   M /trunk/ZPerl_RaidHelper/ZPerl_RaidHelper.toc
+   M /trunk/ZPerl_RaidMonitor/ZPerl_RaidMonitor.toc
+   M /trunk/ZPerl_RaidPets/ZPerl_RaidPets.toc
+   M /trunk/ZPerl_Target/ZPerl_Target.toc
+   M /trunk/ZPerl_TargetTarget/ZPerl_TargetTarget.toc
+
+- Version bump.
+------------------------------------------------------------------------
 r915 | Resike | 2015-02-15 13:31:10 +0000 (Sun, 15 Feb 2015) | 2 lines
 Changed paths:
    M /trunk/ZPerl/ZPerl.lua
@@ -5552,10 +5624,4 @@ Changed paths:
 
 - More fixes on the degrading FPS issues.
 - Fixed some taints.
-------------------------------------------------------------------------
-r10 | Resike | 2015-01-14 23:44:59 +0000 (Wed, 14 Jan 2015) | 1 line
-Changed paths:
-   M /trunk/ZPerl_Player/ZPerl_Player.lua
-
-- Version bump.
 ------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\FrameXML\UI.xsd">
 
-	<Script file="ZPerl_Party_Pet.lua"/>
+	<Script file="ZPerl_PartyPet.lua"/>
 
 	<Button name="XPerl_Party_Pet_FrameTemplate" inherits="SecureUnitButtonTemplate" clampedToScreen="true" frameStrata="LOW" hidden="true" movable="false" virtual="true">
 		<Size>
