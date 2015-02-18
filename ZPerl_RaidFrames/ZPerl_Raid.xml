@@ -44,7 +44,7 @@
 		</Scripts>
 	</StatusBar>
 
-	<Button name="XPerl_Raid_FrameTemplate" frameStrata="LOW" virtual="true" hidden="true" inherits="SecureActionButtonTemplate">
+	<Button name="XPerl_Raid_FrameTemplate" frameStrata="LOW" virtual="true" hidden="true" inherits="SecureUnitButtonTemplate">
 		<Size>
 			<!-- The size of this frame determines what can be clicked for the menu and moving, hence it is the same size as the name frame. -->
 			<AbsDimension x="80" y="40"/>
@@ -65,7 +65,7 @@
 		</Scripts>
 
 		<Frames>
-			<Button name="$parentnameFrame" inherits="SecureActionButtonTemplate">
+			<Button name="$parentnameFrame" inherits="SecureUnitButtonTemplate">
 				<Scripts>
 					<OnLoad>
 						self:RegisterForClicks("AnyUp")
@@ -185,6 +185,30 @@
 							</Anchor>
 						</Anchors>
 						<BarColor r="0" g="0.8" b="0"/>
+					</StatusBar>
+
+					<StatusBar name="$parentmanaBar" inherits="XPerlRaidStatusBar">
+						<Size>
+							<AbsDimension x="70" y="7"/>
+						</Size>
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="$parenthealthBar" relativePoint="BOTTOMLEFT">
+								<Offset>
+									<AbsDimension x="0" y="-0"/>
+								</Offset>
+							</Anchor>
+							<Anchor point="BOTTOMRIGHT" relativeTo="$parenthealthBar" relativePoint="BOTTOMRIGHT">
+								<Offset>
+									<AbsDimension x="0" y="-7"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<BarColor r="0" g="0" b="1"/>
+						<Scripts>
+							<OnLoad>
+								self:SetScale(0.7)
+							</OnLoad>
+						</Scripts>
 					</StatusBar>
 
 					<StatusBar name="$parentexpectedHealth" drawLayer="OVERLAY" hidden="true" setAllPoints="true">

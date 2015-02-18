@@ -51,7 +51,7 @@ local XPerl_ColourHealthBar = XPerl_ColourHealthBar
 -- TODO - Watch for:	 ERR_FRIEND_OFFLINE_S = "%s has gone offline."
 
 local conf, rconf
-XPerl_RequestConfig(function(newConf) conf = newConf rconf = conf.raid end, "$Revision: 904 $")
+XPerl_RequestConfig(function(newConf) conf = newConf rconf = conf.raid end, "$Revision: 905 $")
 
 XPERL_RAIDGRP_PREFIX	= "XPerl_Raid_Grp"
 
@@ -145,10 +145,6 @@ end
 
 -- CreateManaBar
 local function CreateManaBar(self)
-	if (InCombatLockdown()) then
-		XPerl_OutOfCombatQueue[CreateManaBar] = self
-		return
-	end
 	local sf = self.statsFrame
 	sf.manaBar = CreateFrame("StatusBar", sf:GetName().."manaBar", sf, "XPerlRaidStatusBar")
 	sf.manaBar:SetScale(0.7)
@@ -161,18 +157,22 @@ end
 -- Setup1RaidFrame
 local function Setup1RaidFrame(self)
 	if (rconf.mana) then
-		if (not self.statsFrame.manaBar) then
+		--[[if (not self.statsFrame.manaBar) then
 			CreateManaBar(self)
-		end
+		end]]
 
 		if (not InCombatLockdown()) then
 			self:SetHeight(43)
+		else
+			XPerl_OutOfCombatQueue[Setup1RaidFrame] = self
 		end
 		self.statsFrame:SetHeight(26)
 		self.statsFrame.manaBar:Show()
 	else
 		if (not InCombatLockdown()) then
 			self:SetHeight(38)
+		else
+			XPerl_OutOfCombatQueue[Setup1RaidFrame] = self
 		end
 		self.statsFrame:SetHeight(21)
 		if (self.statsFrame.manaBar) then
@@ -513,9 +513,9 @@ end
 -- XPerl_Raid_UpdateMana
 local function XPerl_Raid_UpdateMana(self)
 	if (rconf.mana) then
-		if (not self.statsFrame.manaBar) then
+		--[[if (not self.statsFrame.manaBar) then
 			CreateManaBar(self)
-		end
+		end]]
 
 		local partyid = self.partyid
 		if (not partyid) then
@@ -548,7 +548,6 @@ local function XPerl_Raid_UpdateMana(self)
 				else
 					self.statsFrame.manaBar.text:SetFormattedText(percD, pmanaPct * 100)
 				end
-				
 			end
 		else
 			self.statsFrame.manaBar.text:SetText("")
@@ -598,10 +597,6 @@ end
 
 -- XPerl_Raid_Single_OnLoad
 function XPerl_Raid_Single_OnLoad(self)
-	if (InCombatLockdown()) then
-		XPerl_OutOfCombatQueue[XPerl_Raid_Single_OnLoad] = self
-		return
-	end
 	XPerl_SetChildMembers(self)
 	self:RegisterForClicks("AnyUp")
 
@@ -2263,7 +2258,7 @@ function XPerl_Raid_Set_Bits(self)
 
 	XPerl_ScaleRaid()
 
-	for i = 1,WoWclassCount do
+	for i = 1, WoWclassCount do
 		XPerl_SavePosition(_G["XPerl_Raid_Title"..i], true)
 	end
 

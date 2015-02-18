@@ -4,7 +4,7 @@
 
 local playerClass, playerName, playerGUID
 local conf
-XPerl_RequestConfig(function(new) conf = new end, "$Revision: 901 $")
+XPerl_RequestConfig(function(new) conf = new end, "$Revision: 905 $")
 
 local GetNumSubgroupMembers = GetNumSubgroupMembers
 local GetNumGroupMembers = GetNumGroupMembers
@@ -1376,12 +1376,12 @@ function xpHigh.clEvents:SPELL_PERIODIC_HEAL(timestamp, event, srcGUID, srcName,
 					name, rank, tex, count, buffType, dur, endTime, isMine = UnitBuff(checkName, spellName, "", "PLAYER")
 					
 					if (isMine) then
-							-- Figure out how many seconds are left in the HOT so we can ensure the flashy only stays up as long as the HOT is active
-							local secondsLeft = endTime - GetTime();
-							self:Add(dstGUID, "HOT", secondsLeft)
-							if (conf.highlight.extraSparkles) then
-								self:Add(dstGUID, "HOTSPARKS", 0.1)
-							end
+						-- Figure out how many seconds are left in the HOT so we can ensure the flashy only stays up as long as the HOT is active
+						local secondsLeft = endTime - GetTime();
+						self:Add(dstGUID, "HOT", secondsLeft)
+						if (conf.highlight.extraSparkles) then
+							self:Add(dstGUID, "HOTSPARKS", 0.1)
+						end
 					end
 				end
 			end
