@@ -3,7 +3,7 @@
 -- License: GNU GPL v3, 29 June 2007 (see LICENSE.txt)
 
 local conf, pconf
-XPerl_RequestConfig(function(new) conf = new pconf = new.player end, "$Revision: 844 $")
+XPerl_RequestConfig(function(new) conf = new pconf = new.player end, "$Revision: 900 $")
 
 local playerClass
 
@@ -220,7 +220,9 @@ local function DoEnchant(self, slotID, hasEnchant, expire, charges)
 		end
 	else
 		self.fullDuration = nil
-		self:Hide()
+		if not InCombatLockdown() then
+			self:Hide()
+		end
 	end
 end
 

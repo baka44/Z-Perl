@@ -4,7 +4,7 @@
 
 local playerClass, playerName, playerGUID
 local conf
-XPerl_RequestConfig(function(new) conf = new end, "$Revision: 862 $")
+XPerl_RequestConfig(function(new) conf = new end, "$Revision: 900 $")
 
 local GetNumSubgroupMembers = GetNumSubgroupMembers
 local GetNumGroupMembers = GetNumGroupMembers
@@ -68,7 +68,7 @@ end
 
 local absorbSpells = {
 	-- Shield Barrier
-	[GetSpellInfo(174926)] = {
+	--[[[GetSpellInfo(174926)] = {
 		ranks = {
 			[174926] = 4459 --level 85 (4459 + $SPFR * 0.807)
 		},
@@ -76,7 +76,7 @@ local absorbSpells = {
 		class = "WARRIOR",
 		GetModifier = getTalentModifier,
 		GetRankAmount = getRankAmount,
-	},
+	},]]
 	-- Ice Barrier
 	[GetSpellInfo(11426)] = {
 		ranks = {
@@ -141,9 +141,9 @@ end
 
 -- XPerl_Highlight:Add
 function xpHigh:Add(guid, highlightType, duration, source)
-	--[[if (not strfind(guid, "^0x")) then
+	if (not strfind(guid, "-")) then
 		guid = self.lookup and self.lookup[guid]
-	end]]
+	end
 	if (not guid) then
 		return
 	end
@@ -213,9 +213,9 @@ end
 
 -- xpHigh:Remove
 function xpHigh:Remove(guid, highlightType)
-	--[[if (not strfind(guid, "^0x")) then
+	if (not strfind(guid, "-")) then
 		guid = self.lookup and self.lookup[guid]
-	end]]
+	end
 	if (not guid) then
 		return
 	end
@@ -229,9 +229,9 @@ end
 
 -- xpHigh:HasEffect
 function xpHigh:HasEffect(guid, effect)
-	--[[if (not strfind(guid, "^0x")) then
+	if (not strfind(guid, "-")) then
 		guid = self.lookup and self.lookup[guid]
-	end]]
+	end
 	if (not guid) then
 		return
 	end
@@ -522,7 +522,7 @@ end
 
 -- ShowHotBar
 function xpHigh:ShowShieldBar(frame, show)
-	--[[local h = frame.highlight
+	local h = frame.highlight
 	if (show and conf.highlight.SHIELD and conf.highlight.sparkles) then
 		local unit = SecureButton_GetUnit(frame)
 		local guid = unit and UnitGUID(unit)
@@ -546,7 +546,7 @@ function xpHigh:ShowShieldBar(frame, show)
 	if (h.shieldBar) then
 		h.shieldBar:Hide()
 		h.shieldBar:SetMinMaxValues(0, 0.1)
-	end]]
+	end
 end
 
 -- CreateShine
@@ -587,18 +587,17 @@ function xpHigh:CreateHotBar(frame)
 	f:SetStatusBarColor(1, 1, 0)
 
 	f:SetScript("OnUpdate", hotBarOnUpdate)
-	f:SetScript("OnShow",
-		function(self)
-			self.angle = 0
-			self.alpha = 1
-			self.alphaPulse = "out"
-		end)
+	f:SetScript("OnShow", function(self)
+		self.angle = 0
+		self.alpha = 1
+		self.alphaPulse = "out"
+	end)
 end
 
 -- GetMyHotTime
 function xpHigh:GetMyHotTime(unit)
 	local maxDur, maxTimeLeft = 0, 0
-	for i = 1,40 do
+	for i = 1, 40 do
 		local name, rank, tex, count, buffType, dur, endTime, isMine = UnitBuff(unit, i, "PLAYER")
 		if (not name) then
 			break
@@ -1445,7 +1444,7 @@ end
 -- COMBATLOG:SPELL_AURA_APPLIED
 function xpHigh.clEvents:SPELL_AURA_APPLIED(timestamp, event, srcGUID, srcName, srcFlags, dstGUID, dstName, dstFlags, spellId, spellName, spellSchool, auraType, ...)
 	if (conf.highlight.SHIELD) then
-		--[[if ((srcGUID == dstGUID or srcGUID == playerGUID or dstGUID == playerGUID) and self:checkEventFlags(dstFlags)) then
+		if ((srcGUID == dstGUID or srcGUID == playerGUID or dstGUID == playerGUID) and self:checkEventFlags(dstFlags)) then
 			local def = absorbSpells[spellName]
 			if (not def) then
 				def = absorbSpells[spellId]
@@ -1479,7 +1478,7 @@ function xpHigh.clEvents:SPELL_AURA_APPLIED(timestamp, event, srcGUID, srcName, 
 					end
 				end
 			end
-		end]]
+		end
 	end
 end
 xpHigh.clEvents.SPELL_AURA_REFRESH = xpHigh.clEvents.SPELL_AURA_APPLIED
@@ -1487,7 +1486,7 @@ xpHigh.clEvents.SPELL_AURA_REFRESH = xpHigh.clEvents.SPELL_AURA_APPLIED
 -- COMBATLOG:SPELL_AURA_REMOVED
 function xpHigh.clEvents:SPELL_AURA_REMOVED(timestamp, event, srcGUID, srcName, srcFlags, dstGUID, dstName, dstFlags, spellId, spellName, spellSchool, auraType, ...)
 	if (conf.highlight.SHIELD) then
-		--[[if (self:checkEventFlags(dstFlags)) then
+		if (self:checkEventFlags(dstFlags)) then
 			local def = absorbSpells[spellName]
 			if (not def) then
 				def = absorbSpells[spellId]
@@ -1510,7 +1509,7 @@ function xpHigh.clEvents:SPELL_AURA_REMOVED(timestamp, event, srcGUID, srcName, 
 					end
 				end
 			end
-		end]]
+		end
 	end
 end
 
@@ -1718,7 +1717,7 @@ function xpHigh:OptionChange()
 	_, playerClass = UnitClass("player")
 	playerName = UnitName("player")
 
-	if (conf.highlight.enable and (conf.highlight.HOT --[[or conf.highlight.SHIELD]] or conf.highlight.HEAL)) then
+	if (conf.highlight.enable and (conf.highlight.HOT or conf.highlight.SHIELD or conf.highlight.HEAL)) then
 		events = true
 		self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 	else
@@ -1741,7 +1740,7 @@ function xpHigh:OptionChange()
 		self:ClearAll("HEAL")
 	end
 
-	if (conf.highlight.enable and (conf.highlight.HOTCOUNT or conf.highlight.HOT --[[or conf.highlight.SHIELD]])) then
+	if (conf.highlight.enable and (conf.highlight.HOTCOUNT or conf.highlight.HOT or conf.highlight.SHIELD)) then
 		events = true
 		self:RegisterEvent("UNIT_AURA")
 		self:RegisterEvent("GROUP_ROSTER_UPDATE")
@@ -1771,7 +1770,7 @@ function xpHigh:OptionChange()
 		self:SetScript("OnEvent", nil)
 	end
 
-	if (conf.highlight.enable and (conf.highlight.HOT --[[or conf.highlight.SHIELD]] or conf.highlight.HEAL)) then
+	if (conf.highlight.enable and (conf.highlight.HOT or conf.highlight.SHIELD or conf.highlight.HEAL)) then
 		self:SetScript("OnUpdate", self.OnUpdate)
 	else
 		self:SetScript("OnUpdate", nil)
