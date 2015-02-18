@@ -11463,9 +11463,9 @@
 									</OnShow>
 									<OnClick>
 										if (self:GetChecked()) then
-											EnableAddOn("XPerl_Player")
+											EnableAddOn("ZPerl_Player")
 										else
-											DisableAddOn("XPerl_Player")
+											DisableAddOn("ZPerl_Player")
 										end
 										self:Validate()
 									</OnClick>
@@ -11510,9 +11510,9 @@
 									</OnShow>
 									<OnClick>
 										if (self:GetChecked()) then
-											EnableAddOn("XPerl_PlayerPet")
+											EnableAddOn("ZPerl_PlayerPet")
 										else
-											DisableAddOn("XPerl_PlayerPet")
+											DisableAddOn("ZPerl_PlayerPet")
 										end
 									</OnClick>
 								</Scripts>
@@ -11560,9 +11560,9 @@
 									</OnShow>
 									<OnClick>
 										if (self:GetChecked()) then
-											EnableAddOn("XPerl_TargetTarget")
+											EnableAddOn("ZPerl_TargetTarget")
 										else
-											DisableAddOn("XPerl_TargetTarget")
+											DisableAddOn("ZPerl_TargetTarget")
 										end
 									</OnClick>
 								</Scripts>
@@ -11586,9 +11586,9 @@
 									</OnShow>
 									<OnClick>
 										if (self:GetChecked()) then
-											EnableAddOn("XPerl_Party")
+											EnableAddOn("ZPerl_Party")
 										else
-											DisableAddOn("XPerl_Party")
+											DisableAddOn("ZPerl_Party")
 										end
 										self:Validate()
 									</OnClick>
@@ -11610,9 +11610,9 @@
 									</OnShow>
 									<OnClick>
 										if (self:GetChecked()) then
-											EnableAddOn("XPerl_PartyPet")
+											EnableAddOn("ZPerl_PartyPet")
 										else
-											DisableAddOn("XPerl_PartyPet")
+											DisableAddOn("ZPerl_PartyPet")
 										end
 									</OnClick>
 								</Scripts>
@@ -11659,9 +11659,9 @@
 									</OnShow>
 									<OnClick>
 										if (self:GetChecked()) then
-											EnableAddOn("XPerl_RaidFrames")
+											EnableAddOn("ZPerl_RaidFrames")
 										else
-											DisableAddOn("XPerl_RaidFrames")
+											DisableAddOn("ZPerl_RaidFrames")
 										end
 										self:Validate()
 									</OnClick>
@@ -11683,9 +11683,9 @@
 									</OnShow>
 									<OnClick>
 										if (self:GetChecked()) then
-											EnableAddOn("XPerl_RaidPets")
+											EnableAddOn("ZPerl_RaidPets")
 										else
-											DisableAddOn("XPerl_RaidPets")
+											DisableAddOn("ZPerl_RaidPets")
 										end
 									</OnClick>
 								</Scripts>
@@ -11706,9 +11706,9 @@
 									</OnShow>
 									<OnClick>
 										if (self:GetChecked()) then
-											EnableAddOn("XPerl_RaidHelper")
+											EnableAddOn("ZPerl_RaidHelper")
 										else
-											DisableAddOn("XPerl_RaidHelper")
+											DisableAddOn("ZPerl_RaidHelper")
 										end
 									</OnClick>
 								</Scripts>
@@ -11729,9 +11729,9 @@
 									</OnShow>
 									<OnClick>
 										if (self:GetChecked()) then
-											EnableAddOn("XPerl_RaidMonitor")
+											EnableAddOn("ZPerl_RaidMonitor")
 										else
-											DisableAddOn("XPerl_RaidMonitor")
+											DisableAddOn("ZPerl_RaidMonitor")
 										end
 									</OnClick>
 								</Scripts>
@@ -11752,9 +11752,9 @@
 									</OnShow>
 									<OnClick>
 										if (self:GetChecked()) then
-											EnableAddOn("XPerl_RaidAdmin")
+											EnableAddOn("ZPerl_RaidAdmin")
 										else
-											DisableAddOn("XPerl_RaidAdmin")
+											DisableAddOn("ZPerl_RaidAdmin")
 										end
 									</OnClick>
 								</Scripts>
@@ -11766,26 +11766,24 @@
 								</Size>
 								<Anchors>
 									<Anchor point="TOPLEFT" relativeTo="$parent_RaidAdmin" relativePoint="BOTTOMLEFT">
-										<Offset><AbsDimension x="0" y="6"/></Offset>
+										<Offset>
+											<AbsDimension x="3" y="0"/>
+										</Offset>
 									</Anchor>
 								</Anchors>
 								<Scripts>
 									<OnLoad>
 										XPerl_OptionsSetMyText(self, "XPERL_CONF_RELOADUI")
 										self.Validate = function()
-											local list = {"Player", "PlayerBuffs", "PlayerPet", "Target", "TargetTarget",
-													"Party", "PartyPet", "ArcaneBar", "RaidFrames", "RaidPets", "RaidHelper",
-													"RaidMonitor", "RaidAdmin"}
-
+											local list = {"Player", "PlayerBuffs", "PlayerPet", "Target", "TargetTarget", "Party", "PartyPet", "ArcaneBar", "RaidFrames", "RaidPets", "RaidHelper", "RaidMonitor", "RaidAdmin"}
 											local enable
-											for i,name in pairs(list) do
-												if (XPerl_Options_GetSiblingChecked(name,self) ~= IsAddOnLoaded("ZPerl_"..name)) then
+											for i, name in pairs(list) do
+												if XPerl_Options_GetSiblingChecked(name,self) ~= IsAddOnLoaded("ZPerl_"..name) then
 													enable = true
 													break;
 												end
 											end
-
-											if (enable) then
+											if enable then
 												self:Enable()
 											else
 												self:Disable()

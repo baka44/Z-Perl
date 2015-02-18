@@ -51,7 +51,7 @@ local XPerl_ColourHealthBar = XPerl_ColourHealthBar
 -- TODO - Watch for:	 ERR_FRIEND_OFFLINE_S = "%s has gone offline."
 
 local conf, rconf
-XPerl_RequestConfig(function(newConf) conf = newConf rconf = conf.raid end, "$Revision: 905 $")
+XPerl_RequestConfig(function(newConf) conf = newConf rconf = conf.raid end, "$Revision: 906 $")
 
 XPERL_RAIDGRP_PREFIX	= "XPerl_Raid_Grp"
 
@@ -98,7 +98,7 @@ function XPerl_Raid_OnLoad(self)
 		self:RegisterEvent(event)
 	end
 	
-	self:SetScript("OnEvent", XPerl_Raid_OnEvent);
+	self:SetScript("OnEvent", XPerl_Raid_OnEvent)
 
 	for i = 1, WoWclassCount do
 		--_G["XPerl_Raid_Grp"..i]:UnregisterEvent("UNIT_NAME_UPDATE")
@@ -522,7 +522,7 @@ local function XPerl_Raid_UpdateMana(self)
 			return
 		end
 		
-		local pType = XPerl_GetDisplayedPowerType(self.partyid);
+		local pType = XPerl_GetDisplayedPowerType(self.partyid)
 
 		local mana = UnitPower(partyid, pType)
 		local manamax = UnitPowerMax(partyid, pType)
@@ -591,8 +591,8 @@ local function taintable(self)
 	--self.nameFrame:SetAttribute("*type1", "target")
 	--self.nameFrame:SetAttribute("type2", "menu")
 	--self.nameFrame.menu = XPerl_Raid_ShowPopup --Again, doesnt seem todo anything...
-	XPerl_SecureUnitButton_OnLoad(self.nameFrame, nil, nil, TargetFrameDropDown, XPerl_ShowGenericMenu, 1)
-	XPerl_SecureUnitButton_OnLoad(self, nil, nil, TargetFrameDropDown, XPerl_ShowGenericMenu, 1)
+	XPerl_SecureUnitButton_OnLoad(self.nameFrame, nil, nil, TargetFrameDropDown, XPerl_ShowGenericMenu, true)
+	XPerl_SecureUnitButton_OnLoad(self, nil, nil, TargetFrameDropDown, XPerl_ShowGenericMenu, true)
 end
 
 -- XPerl_Raid_Single_OnLoad
@@ -617,7 +617,7 @@ function XPerl_Raid_Single_OnLoad(self)
 	Setup1RaidFrame(self)
 
 	if (InCombatLockdown()) then
-		tinsert(taintFrames, self);
+		tinsert(taintFrames, self)
 		return
 	else
 		taintable(self)
@@ -1203,13 +1203,13 @@ end
 
 function XPerl_Raid_Events:PET_BATTLE_OPENING_START()
 	if(self) then
-		XPerl_Raid_HideShowRaid();
+		XPerl_Raid_HideShowRaid()
 	end
 end
 
 function XPerl_Raid_Events:PET_BATTLE_CLOSE()
 	if(self) then
-		XPerl_Raid_HideShowRaid();
+		XPerl_Raid_HideShowRaid()
 	end
 end
 
@@ -1227,9 +1227,9 @@ end
 
 function XPerl_Raid_Events:PLAYER_REGEN_ENABLED()
 	--Update all raid frame that would have tained
-	for frame, arg in pairs(taintFrames) do
-		taintable(frame)
-		taintFrames[frame] = nil
+	for i = 1, #taintFrames do
+		taintable(taintFrames[i])
+		taintFrames[i] = nil
 	end
 end
 
@@ -1476,13 +1476,13 @@ end
 
 -- Direct string matches can be done via table lookup
 local QuickFuncs = {
-	--AFK	= function(m)	m.afk = GetTime(); m.dnd = nil; end,
-	--UNAFK	= function(m)	m.afk = nil; end,
-	--DND	= function(m)	m.dnd = GetTime(); m.afk = nil; end,
-	--UNDND	= function(m)	m.dnd = nil; end,
+	--AFK	= function(m)	m.afk = GetTime() m.dnd = nil end,
+	--UNAFK	= function(m)	m.afk = nil end,
+	--DND	= function(m)	m.dnd = GetTime() m.afk = nil end,
+	--UNDND	= function(m)	m.dnd = nil end,
 	RESNO	= function(m,n) SetResStatus(n) end,
-	RESSED	= function(m)	m.ressed = 1; end,
-	CANRES	= function(m)	m.ressed = 2; end,
+	RESSED	= function(m)	m.ressed = 1 end,
+	CANRES	= function(m)	m.ressed = 2 end,
 	NORESSED= function(m)
 		if (m.ressed) then
 			m.ressed = 3

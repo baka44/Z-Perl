@@ -6,8 +6,8 @@ local conf
 local percD	= "%d"..PERCENT_SYMBOL
 local perc1F = "%.1f"..PERCENT_SYMBOL
 
-XPerl_RequestConfig(function(New) conf = New end, "$Revision: 902 $")
-XPerl_SetModuleRevision("$Revision: 902 $")
+XPerl_RequestConfig(function(New) conf = New end, "$Revision: 906 $")
+XPerl_SetModuleRevision("$Revision: 906 $")
 
 -- Upvalus
 local _G = _G
@@ -133,6 +133,10 @@ local function d(...)
 	ChatFrame1:AddMessage(format(...))
 end
 --@end-debug@]==]
+
+-- Compact Raid frame manager
+local c = _G.CompactRaidFrameManager
+c:SetFrameStrata("High")
 
 ------------------------------------------------------------------------------
 -- Re-usable tables

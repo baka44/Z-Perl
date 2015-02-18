@@ -34,7 +34,7 @@ XPERL_CONF_TARGET_COUNTERS				= "Target Counters"
 XPERL_CONF_COLOUR_REACTIONS				= "Unit Reactions"
 XPERL_CONF_COLOUR_BARS					= "Bar Colours"
 XPERL_CONF_COLOUR_FRAMES				= "Frame Colours"
-XPERL_CONF_ADDONS						= "X-Perl Addons"
+XPERL_CONF_ADDONS						= "Z-Perl Addons"
 XPERL_CONF_PLAYERBUFF_OPTIONS			= "Player Buffs"
 XPERL_CONF_FRAME_LAYOUT					= "Frame Layout"
 
