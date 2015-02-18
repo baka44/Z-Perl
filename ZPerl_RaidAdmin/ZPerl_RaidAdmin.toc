@@ -1,4 +1,6 @@
 ﻿## Interface: 60000
+## Version: r915
+## Author: Resike
 ## Title: Z-Perl |cffeda55fRaid Admin|r
 ## Title-itIT: Z-Perl |cffeda55fAmministrazione Incursione|r
 ## Title-ruRU: Z-Perl |cffeda55fРейд админ|r
@@ -10,10 +12,9 @@
 ## Notes-ruRU: Обеспечивает рейд лидера полезными инструментами рейд админа.
 ## Notes-deDE: Bietet Schlachtzugsleitern nützliche Einstellungsmöglichkeiten.
 ## Notes-zhTW: 提供團隊管理工具給予領隊以方便地整合人員
-## Author: Resike
 ## SavedVariablesPerCharacter: ZPerl_Admin, ZPerl_CheckItems
 ## RequiredDeps: ZPerl
-## X-Curse-Packaged-Version: r914
+## X-Curse-Packaged-Version: r915
 ## X-Curse-Project-Name: Z-Perl UnitFrames
 ## X-Curse-Project-ID: zperl
 ## X-Curse-Repository-ID: wow/zperl/mainline

@@ -809,7 +809,7 @@ function XPerl_SetHealthBar(self, hp, Max)
 	else
 		percent = hp / Max
 	end		
-	if percent > 100 then percent = 100 end -- percent only goes to 100        
+	if percent > 100 then percent = 100 end -- percent only goes to 100
 	if (conf.bar.inverse) then
 
 		bar:SetValue(Max - hp)
@@ -2797,7 +2797,7 @@ local function XPerl_Unit_BuffPositionsType(self, list, useSmallStart, buffSizeB
 					end
 				end
 
-				if (tempColPoint < rowSize - buffSizeBase) then		--  and rowsHeight - buffSizeBase - 1 >= self.buffSpacing.smallRowHeight
+				if (tempColPoint < rowSize - buffSizeBase) then		-- and rowsHeight - buffSizeBase - 1 >= self.buffSpacing.smallRowHeight
 					local prevRowBig, prevRowBigI = list[j], j
 					colPoint = tempColPoint
 					buff:SetPoint(self.BOTTOMLEFT, prevRowBig, self.BOTTOMRIGHT, self.SPACING, 0)
@@ -3004,7 +3004,7 @@ function XPerl_Unit_UpdateBuffs(self, maxBuffs, maxDebuffs, castableOnly, curabl
 
 						button:Show()
 
-						if (isStealable) then --  and UnitCanAttack("player", partyid)
+						if (isStealable) then -- and UnitCanAttack("player", partyid)
 							if (not button.steal) then
 								button.steal = CreateFrame("Frame", nil, button)
 								button.steal:SetPoint("TOPLEFT", -2, 2)

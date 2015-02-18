@@ -1,4 +1,6 @@
 ﻿## Interface: 60000
+## Version: r915
+## Author: Resike
 ## Title: Z-Perl |cffeda55fPlayer Pet|r
 ## Title-itIT: Z-Perl |cffeda55fFamiglio Giocatore|r
 ## Title-ruRU: Z-Perl |cffeda55fПитомец игрока|r
@@ -10,9 +12,8 @@
 ## Notes-ruRU: Заменяет стандартный фрейм питомца игрока.
 ## Notes-deDE: Ersetzt das Begleiterfenster des Spielers.
 ## Notes-zhTW: 顯示玩家單位的寵物框架
-## Author: Resike
 ## RequiredDeps: ZPerl, ZPerl_Player
-## X-Curse-Packaged-Version: r914
+## X-Curse-Packaged-Version: r915
 ## X-Curse-Project-Name: Z-Perl UnitFrames
 ## X-Curse-Project-ID: zperl
 ## X-Curse-Repository-ID: wow/zperl/mainline

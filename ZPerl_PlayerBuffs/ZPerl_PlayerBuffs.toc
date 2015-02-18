@@ -1,4 +1,6 @@
 ﻿## Interface: 60000
+## Version: r915
+## Author: Resike
 ## Title: Z-Perl |cffeda55fPlayer Buffs|r
 ## Title-itIT: Z-Perl |cffeda55fBenefici Giocatore|r
 ## Title-ruRU: Z-Perl |cffeda55fБаффы игрока|r
@@ -10,9 +12,8 @@
 ## Notes-ruRU: Отображает иконки баффов на фрейме игрока.
 ## Notes-deDE: Zeigt die Buffsymbole am Z-Perl Spielerfenster an.
 ## Notes-zhTW: 給予 Z-Perl 玩家單位框架增益狀態圖標功能
-## Author: Resike
 ## RequiredDeps: ZPerl_Player
-## X-Curse-Packaged-Version: r914
+## X-Curse-Packaged-Version: r915
 ## X-Curse-Project-Name: Z-Perl UnitFrames
 ## X-Curse-Project-ID: zperl
 ## X-Curse-Repository-ID: wow/zperl/mainline

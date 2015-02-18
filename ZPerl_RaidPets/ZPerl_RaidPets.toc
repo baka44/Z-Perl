@@ -1,4 +1,6 @@
 ﻿## Interface: 60000
+## Version: r915
+## Author: Resike
 ## Title: Z-Perl |cffeda55fRaid Pets|r
 ## Title-itIT: Z-Perl |cffeda55fFamigli Incursione|r
 ## Title-ruRU: Z-Perl |cffeda55fПитомцы рейда|r
@@ -10,9 +12,8 @@
 ## Notes-ruRU: Фреймы питомцев рейда.
 ## Notes-deDE: Z-Perl Schlachtzugsbegleiter
 ## Notes-zhTW: Z-Perl 團隊寵物框架
-## Author: Resike
 ## Dependencies: ZPerl_RaidFrames
-## X-Curse-Packaged-Version: r914
+## X-Curse-Packaged-Version: r915
 ## X-Curse-Project-Name: Z-Perl UnitFrames
 ## X-Curse-Project-ID: zperl
 ## X-Curse-Repository-ID: wow/zperl/mainline
