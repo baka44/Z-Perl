@@ -5,7 +5,7 @@
 if (not XPerl_GetUsage) then
 
 local conf
-XPerl_RequestConfig(function(new) conf = new end, "$Revision: 800 $")
+XPerl_RequestConfig(function(new) conf = new end, "$Revision: 902 $")
 
 XPerl_Usage = {}
 
@@ -32,18 +32,17 @@ end
 mod:SetScript("OnEvent", modOnEvent)
 mod.notifiedVersion = nil
 
-GameTooltip:HookScript("OnTooltipSetUnit",
-	function(self)
-		local name, unitid = self:GetUnit()
-		if (not unitid) then
-			unitid = "mouseover"
-		end
-		mod:TooltipInfo(self, unitid)
-	end)
+GameTooltip:HookScript("OnTooltipSetUnit", function(self)
+	local name, unitid = self:GetUnit()
+	if (not unitid) then
+		unitid = "mouseover"
+	end
+	mod:TooltipInfo(self, unitid)
+end)
 
 
 local function UnitFullName(unit)
-	local n,s = UnitName(unit)
+	local n, s = UnitName(unit)
 	if (s and s ~= "") then
 		return n.."-"..s
 	end

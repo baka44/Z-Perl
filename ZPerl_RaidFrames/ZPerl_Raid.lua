@@ -51,7 +51,7 @@ local XPerl_ColourHealthBar = XPerl_ColourHealthBar
 -- TODO - Watch for:	 ERR_FRIEND_OFFLINE_S = "%s has gone offline."
 
 local conf, rconf
-XPerl_RequestConfig(function(newConf) conf = newConf rconf = conf.raid end, "$Revision: 879 $")
+XPerl_RequestConfig(function(newConf) conf = newConf rconf = conf.raid end, "$Revision: 902 $")
 
 XPERL_RAIDGRP_PREFIX	= "XPerl_Raid_Grp"
 
@@ -87,25 +87,18 @@ local raidHeaders = {}
 
 -- XPerl_Raid_OnLoad
 function XPerl_Raid_OnLoad(self)
-	local events = {"CHAT_MSG_ADDON",
-			"PLAYER_ENTERING_WORLD", "VARIABLES_LOADED", "GROUP_ROSTER_UPDATE",
-			"UNIT_FLAGS", "UNIT_AURA", "UNIT_POWER", "UNIT_MAXPOWER",
-			"UNIT_HEALTH_FREQUENT", "UNIT_MAXHEALTH", "UNIT_NAME_UPDATE", "PLAYER_FLAGS_CHANGED",
-			"UNIT_COMBAT", "UNIT_SPELLCAST_START", "UNIT_SPELLCAST_STOP", "UNIT_SPELLCAST_FAILED",
-			"UNIT_SPELLCAST_INTERRUPTED", "READY_CHECK", "READY_CHECK_CONFIRM", "READY_CHECK_FINISHED",
-			"RAID_TARGET_UPDATE", "PLAYER_LOGIN", "ROLE_CHANGED_INFORM", 
-			"PET_BATTLE_OPENING_START","PET_BATTLE_CLOSE","UNIT_CONNECTION","PLAYER_REGEN_ENABLED"
-			}
-			
-			
-			--"UNIT_FACTION"
+	local events = {
+		"CHAT_MSG_ADDON","PLAYER_ENTERING_WORLD", "VARIABLES_LOADED", "GROUP_ROSTER_UPDATE", "UNIT_FLAGS", "UNIT_AURA", "UNIT_POWER", "UNIT_MAXPOWER", "UNIT_HEALTH_FREQUENT", "UNIT_MAXHEALTH", "UNIT_NAME_UPDATE", "PLAYER_FLAGS_CHANGED", "UNIT_COMBAT", "UNIT_SPELLCAST_START", "UNIT_SPELLCAST_STOP", "UNIT_SPELLCAST_FAILED", "UNIT_SPELLCAST_INTERRUPTED", "READY_CHECK", "READY_CHECK_CONFIRM", "READY_CHECK_FINISHED", "RAID_TARGET_UPDATE", "PLAYER_LOGIN", "ROLE_CHANGED_INFORM", "PET_BATTLE_OPENING_START","PET_BATTLE_CLOSE","UNIT_CONNECTION","PLAYER_REGEN_ENABLED"
+	}
+	
+	--"UNIT_FACTION"
 	for i,event in pairs(events) do
 		self:RegisterEvent(event)
 	end
 	
 	self:SetScript("OnEvent", XPerl_Raid_OnEvent);
 
-	for i = 1,WoWclassCount do
+	for i = 1, WoWclassCount do
 		--_G["XPerl_Raid_Grp"..i]:UnregisterEvent("UNIT_NAME_UPDATE")
 		tinsert(raidHeaders, _G[XPERL_RAIDGRP_PREFIX..i])
 	end
@@ -577,7 +570,6 @@ local function onAttrChanged(self, name, value)
 	end
 end
 
-
 local function taintable(self)
 	--self:SetAttribute("*type1", "target")
 	--self:SetAttribute("type2", "menu")
@@ -594,8 +586,8 @@ local function taintable(self)
 	--self.nameFrame:SetAttribute("*type1", "target")
 	--self.nameFrame:SetAttribute("type2", "menu")
 	--self.nameFrame.menu = XPerl_Raid_ShowPopup --Again, doesnt seem todo anything...
-	XPerl_SecureUnitButton_OnLoad(self.nameFrame, self.partyid, nil, TargetFrameDropDown, XPerl_ShowGenericMenu, true)
-	XPerl_SecureUnitButton_OnLoad(self, self.partyid, nil, TargetFrameDropDown, XPerl_ShowGenericMenu, true)
+	XPerl_SecureUnitButton_OnLoad(self.nameFrame, nil, nil, TargetFrameDropDown, XPerl_ShowGenericMenu, 1)
+	XPerl_SecureUnitButton_OnLoad(self, nil, nil, TargetFrameDropDown, XPerl_ShowGenericMenu, 1)
 end
 
 -- XPerl_Raid_Single_OnLoad
@@ -1225,7 +1217,7 @@ function XPerl_Raid_Events:PLAYER_ENTERING_WORLDsmall()
 end
 
 function XPerl_Raid_Events:PLAYER_REGEN_ENABLED()
---Update all raid frame that would have tained
+	--Update all raid frame that would have tained
 	for frame, arg in pairs(taintFrames) do
 		taintable(frame)
 		taintFrames[frame] = nil
@@ -1234,9 +1226,8 @@ end
 
 
 function XPerl_Raid_Events:UNIT_CONNECTION()
---Update players health when their connection state changes.
-XPerl_Raid_UpdateHealth(self)
-
+	--Update players health when their connection state changes.
+	XPerl_Raid_UpdateHealth(self)
 end
 
 
@@ -1275,7 +1266,7 @@ do
 	local function BuildGuidMap()
 		if (IsInRaid()) then
 			rosterGuids = new()
-			for i = 1,GetNumGroupMembers() do
+			for i = 1, GetNumGroupMembers() do
 				local guid = UnitGUID("raid"..i)
 				if (guid) then
 					rosterGuids[guid] = "raid"..i
@@ -1292,8 +1283,8 @@ do
 		BuildGuidMap()
 		if (IsInRaid()) then
 			XPerl_Raid_Frame:Show()
-			if (rconf.raid_role ) then
-				for i,frame in pairs(FrameArray) do
+			if (rconf.raid_role) then
+				for i, frame in pairs(FrameArray) do
 					if (frame.partyid) then
 						XPerl_Raid_RoleUpdate(self, UnitGroupRolesAssigned(self.partyid))
 					end
@@ -1312,8 +1303,8 @@ function XPerl_Raid_Events:UNIT_FLAGS()
 	XPerl_Raid_UpdateCombat(self)
 end
 
-function XPerl_Raid_Events:PLAYER_FLAGS_CHANGED(unit,...)
-	XPerl_Raid_UpdatePlayerFlags(self, unit,...)
+function XPerl_Raid_Events:PLAYER_FLAGS_CHANGED(unit, ...)
+	XPerl_Raid_UpdatePlayerFlags(self, unit, ...)
 end
 
 -- UNIT_FACTION
@@ -1669,7 +1660,7 @@ function SetRaidRoster()
 	del(RaidGroupCounts)
 	RaidGroupCounts = new(0,0,0,0,0,0,0,0,0,0,0)
 
-	for i = 1,GetNumGroupMembers() do
+	for i = 1, GetNumGroupMembers() do
 		local name, rank, group, level, class, fileName = GetRaidRosterInfo(i)
 
 		if (name and IsInRaid()) then
@@ -1930,6 +1921,10 @@ function XPerl_ToggleRaidSort(New)
 			XPerl_Raid_ChangeAttributes()
 			XPerl_Raid_Position()
 			XPerl_Raid_Set_Bits(XPerl_Raid_Frame)
+			XPerl_Raid_UpdateDisplayAll()
+			if (XPerl_RaidPets_OptionActions) then
+				XPerl_RaidPets_OptionActions()
+			end
 		end
 	end
 end
@@ -2157,8 +2152,7 @@ function XPerl_Raid_ChangeAttributes()
 	rconf.anchor = (rconf and rconf.anchor) or "TOP"
 
 	local function DefaultRaidClasses()
-
-				return {
+		return {
 			{enable = true, name = "WARRIOR"},
 			{enable = true, name = "DEATHKNIGHT"},
 			{enable = true, name = "ROGUE"},
@@ -2171,7 +2165,6 @@ function XPerl_Raid_ChangeAttributes()
 			{enable = true, name = "PALADIN"},
 			{enable = true, name = "MONK"}
 		}
-	
 	end
 
 	local function GroupFilter(n)

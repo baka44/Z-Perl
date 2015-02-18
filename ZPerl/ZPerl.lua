@@ -6,8 +6,8 @@ local conf
 local percD	= "%d"..PERCENT_SYMBOL
 local perc1F = "%.1f"..PERCENT_SYMBOL
 
-XPerl_RequestConfig(function(New) conf = New end, "$Revision: 895 $")
-XPerl_SetModuleRevision("$Revision: 895 $")
+XPerl_RequestConfig(function(New) conf = New end, "$Revision: 902 $")
+XPerl_SetModuleRevision("$Revision: 902 $")
 
 -- Upvalus
 local _G = _G
@@ -1000,25 +1000,27 @@ function XPerl_MinimapMenu_Initialize(self, level)
 			info.text = BINDING_NAME_TOGGLEBUFFTYPE
 			info.func = XPerl_ToggleRaidBuffs
 			UIDropDownMenu_AddButton(info, level)
-
-		elseif (UIDROPDOWNMENU_MENU_VALUE == "raidsort") then
-
+		--[[elseif (UIDROPDOWNMENU_MENU_VALUE == "raidsort") then
 			info = UIDropDownMenu_CreateInfo()
 			info.isTitle = 1
 			info.text = XPERL_MINIMENU_RAIDSORT
 			UIDropDownMenu_AddButton(info, level)
 
 			info = UIDropDownMenu_CreateInfo()
-			info.checked = XPerlDB.raid.sortByClass == 1
+			info.checked = XPerlDB.raid.sortByClass == nil
 			info.text = XPERL_MINIMENU_RAIDSORT_GROUP
-			info.func = function() XPerl_ToggleRaidSort(1) end
+			info.func = function()
+				XPerl_ToggleRaidSort(1)
+			end
 			UIDropDownMenu_AddButton(info, level)
 
 			info = UIDropDownMenu_CreateInfo()
-			info.checked = XPerlDB.raid.sortByClass == nil
+			info.checked = XPerlDB.raid.sortByClass == 1
 			info.text = XPERL_MINIMENU_RAIDSORT_CLASS
-			info.func = function() XPerl_ToggleRaidSort(0) end
-			UIDropDownMenu_AddButton(info, level)
+			info.func = function()
+				XPerl_ToggleRaidSort(0)
+			end
+			UIDropDownMenu_AddButton(info, level)]]
 		end
 		return
 	end
@@ -1043,14 +1045,14 @@ function XPerl_MinimapMenu_Initialize(self, level)
 		UIDropDownMenu_AddButton(info)
 	end
 
-	if (XPerl_ToggleRaidSort) then
+	--[[if (XPerl_ToggleRaidSort) then
 		info = UIDropDownMenu_CreateInfo()
 		info.notCheckable = 1
 		info.text = XPERL_MINIMENU_RAIDSORT
 		info.hasArrow = 1
 		info.value = "raidsort"
 		UIDropDownMenu_AddButton(info)
-	end
+	end]]
 
 	if (IsAddOnLoaded("ZPerl_RaidHelper")) then
 		if (XPerl_Assists_Frame and not XPerl_Assists_Frame:IsShown()) then
@@ -1669,11 +1671,14 @@ function ZPerl_DebufHighlightInit()
 	ZPerl_DebufHighlightInit = nil
 end
 
-local bgDef = {bgFile = "Interface\\Addons\\ZPerl\\Images\\XPerl_FrameBack",
-		   edgeFile = "",
-		   tile = true, tileSize = 32, edgeSize = 16,
-		   insets = { left = 5, right = 5, top = 5, bottom = 5 }
-		}
+local bgDef = {
+	bgFile = "Interface\\Addons\\ZPerl\\Images\\XPerl_FrameBack",
+	edgeFile = "",
+	tile = true,
+	tileSize = 32,
+	edgeSize = 16,
+	insets = {left = 5, right = 5, top = 5, bottom = 5}
+}
 local normalEdge = "Interface\\Tooltips\\UI-Tooltip-Border"
 local curseEdge = "Interface\\Addons\\ZPerl\\Images\\XPerl_Curse"
 

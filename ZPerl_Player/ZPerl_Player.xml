@@ -1,8 +1,5 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\FrameXML\UI.xsd">
-
 	<Script file="ZPerl_Player.lua"/>
-
-
 
 	<Button name="XPerl_RuneButtonIndividualTemplate" virtual="true" hidden="false">
 		<Size>
@@ -177,8 +174,12 @@
 						self:RegisterForDrag("LeftButton")
 						XPerl_RegisterUnitText(getglobal(self:GetName().."text"))
 						XPerl_RegisterUnitText(getglobal(self:GetName().."group"))
-						self:SetScript("OnEnter", function(self) ZPerl_Unit_OnEnter(self:GetParent()) end)
-						self:SetScript("OnLeave", function(self) ZPerl_Unit_OnLeave(self:GetParent()) end)
+						self:SetScript("OnEnter", function(self)
+							ZPerl_Unit_OnEnter(self:GetParent())
+						end)
+						self:SetScript("OnLeave", function(self)
+							ZPerl_Unit_OnLeave(self:GetParent())
+						end)
 					</OnLoad>
 					<OnDragStart>
 						if (XPerlLocked == 0) then
