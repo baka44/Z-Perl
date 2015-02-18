@@ -497,7 +497,7 @@ function ZPerl_Init()
 			version			= XPerl_VersionNumber,
 			category		= MYADDONS_CATEGORY_OTHERS,
 			frame			= "XPerl_Globals",
-			optionsframe		= "XPerl_Options"
+			optionsframe	= "XPerl_Options"
 		}
 	end
 

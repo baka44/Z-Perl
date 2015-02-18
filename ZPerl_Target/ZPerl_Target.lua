@@ -345,12 +345,14 @@ local function XPerl_Target_UpdateLevel(self)
 		self.levelFrame.skull:Hide()
 		self.levelFrame:SetWidth(27)
 		if (targetlevel < 0) then
-			if (UnitClassification(self.partyid) == "normal") then
+			--[[if (UnitClassification(self.partyid) == "worldboss") then
 				self.levelFrame.text:Hide()
 				self.levelFrame.skull:Show()
 			else
 				self.levelFrame:Hide()
-			end
+			end]]
+			self.levelFrame.text:Hide()
+			self.levelFrame.skull:Show()
 		else
 			local color = GetDifficultyColor(targetlevel)
 			self.levelFrame.text:SetTextColor(color.r, color.g, color.b)
@@ -383,11 +385,9 @@ local function XPerl_Target_UpdateClassification(self)
 			self.eliteFrame.tex:SetTexture("Interface\\Addons\\ZPerl\\Images\\XPerl_Elite")
 			if (targetclassification == "worldboss" or targetclassification == "elite") then
 				self.eliteFrame.tex:SetVertexColor(1, 1, 0, 1)
-
 			elseif (targetclassification == "rareelite") then
 				self.eliteFrame.tex:SetVertexColor(1, 1, 1, 1)
 				--self.eliteFrame.tex:SetVertexColor(1, 1, 0.5, 1)
-
 			elseif (targetclassification == "rare") then
 				self.eliteFrame.tex:SetTexture("Interface\\Addons\\ZPerl\\Images\\XPerl_Rare")
 				self.eliteFrame.tex:SetVertexColor(1, 1, 1, 1)

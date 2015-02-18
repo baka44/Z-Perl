@@ -267,6 +267,7 @@ XPerl_AnchorList = {"TOP", "LEFT", "BOTTOM", "RIGHT"}
 -- FindABandage()
 local function FindABandage()
 	local bandages = {
+		[111603] = true, -- Antiseptic Bandage
 		[72986] = true, -- Heavy Windwool Bandage
 		[72985] = true, -- Windwool Bandage
 		[53051] = true, -- Dense Embersilk Bandage
@@ -331,7 +332,7 @@ local function DoRangeCheck(unit, opt)
 		else
 			if (ArcaneExclusions[name]) then
 				-- It's one of the filtered debuffs, so we have to iterate thru all debuffs to see if anything is curable
-				for i = 2,100 do
+				for i = 1, 40 do
 					local name = UnitDebuff(unit, i, "RAID")
 					if (not name) then
 						range = 0

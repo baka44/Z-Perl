@@ -836,7 +836,7 @@ function XPerl_Player_Events:VARIABLES_LOADED(who, what)
 	}
 	for i, event in pairs(events) do
 		if string.find(event, "UNIT_") then
-			self:RegisterUnitEvent(event, "player")
+			self:RegisterUnitEvent(event, "player", "vehicle")
 		else
 			self:RegisterEvent(event)
 		end
@@ -1094,7 +1094,7 @@ function XPerl_Player_Events:RUNE_POWER_UPDATE(event, runeIndex, isEnergize)
 end
 
 -- RUNE_TYPE_UPDATE
-function XPerl_Player_Events:RUNE_TYPE_UPDATE(self, runeIndex )
+function XPerl_Player_Events:RUNE_TYPE_UPDATE(self, runeIndex)
 	
 	if runeIndex and runeIndex >= 1 and runeIndex <= 6 then
 		
@@ -1530,14 +1530,14 @@ function XPerl_Player_InitDK(self)
 		MakeMoveable(self.runes)
 
 		local bgDef = {bgFile = "Interface\\Addons\\ZPerl\\Images\\XPerl_FrameBack",
-				edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
-				tile = true, tileSize = 32, edgeSize = 12,
-				insets = { left = 3, right = 3, top = 3, bottom = 3 }
-			}
+			edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
+			tile = true, tileSize = 32, edgeSize = 12,
+			insets = { left = 3, right = 3, top = 3, bottom = 3 }
+		}
 		self.runes:SetBackdrop(bgDef)
 		self.runes:SetBackdropColor(0, 0, 0, 0.8)
 		self.runes:SetBackdropBorderColor(1, 1, 1, 1)
-		self.runes.list = {}
+		self.runes.list = { }
 
 		--Let's not do anything drastic to the original runeframe, let's just hide it
 		--RuneFrame:SetParent(self.runes)
@@ -1554,7 +1554,7 @@ function XPerl_Player_InitDK(self)
 
 		local prev
 		local idSwitch = {1, 2, 5, 6, 3, 4}	-- Non sequential rune IDs.. gg
-		for i = 1,6 do
+		for i = 1, 6 do
 			local rune = CreateFrame("Button", "XPerl_RuneButtonIndividual"..i, self.runes, "XPerl_RuneButtonIndividualTemplate")
 			self.runes.list[ idSwitch[i] ] = rune
 			rune:EnableMouse(false)
