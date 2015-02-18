@@ -6,8 +6,8 @@ local conf
 local percD	= "%d"..PERCENT_SYMBOL
 local perc1F = "%.1f"..PERCENT_SYMBOL
 
-XPerl_RequestConfig(function(New) conf = New end, "$Revision: 907 $")
-XPerl_SetModuleRevision("$Revision: 907 $")
+XPerl_RequestConfig(function(New) conf = New end, "$Revision: 910 $")
+XPerl_SetModuleRevision("$Revision: 910 $")
 
 -- Upvalus
 local _G = _G
@@ -989,7 +989,7 @@ function XPerl_MinimapMenu_Initialize(self, level)
 	local info
 
 	if (level == 2) then
-		if (UIDROPDOWNMENU_MENU_VALUE == "raidbuffs") then
+		--[[if (UIDROPDOWNMENU_MENU_VALUE == "raidbuffs") then
 			info = UIDropDownMenu_CreateInfo()
 			info.isTitle = 1
 			info.text = XPERL_MINIMENU_RAIDBUFF
@@ -1006,7 +1006,7 @@ function XPerl_MinimapMenu_Initialize(self, level)
 			info.text = BINDING_NAME_TOGGLEBUFFTYPE
 			info.func = XPerl_ToggleRaidBuffs
 			UIDropDownMenu_AddButton(info, level)
-		--[[elseif (UIDROPDOWNMENU_MENU_VALUE == "raidsort") then
+		elseif (UIDROPDOWNMENU_MENU_VALUE == "raidsort") then
 			info = UIDropDownMenu_CreateInfo()
 			info.isTitle = 1
 			info.text = XPERL_MINIMENU_RAIDSORT
@@ -1026,8 +1026,8 @@ function XPerl_MinimapMenu_Initialize(self, level)
 			info.func = function()
 				XPerl_ToggleRaidSort(0)
 			end
-			UIDropDownMenu_AddButton(info, level)]]
-		end
+			UIDropDownMenu_AddButton(info, level)
+		end]]
 		return
 	end
 
@@ -1042,14 +1042,14 @@ function XPerl_MinimapMenu_Initialize(self, level)
 	info.text = XPERL_MINIMENU_OPTIONS
 	UIDropDownMenu_AddButton(info)
 
-	if (XPerl_ToggleRaidBuffs) then
+	--[[if (XPerl_ToggleRaidBuffs) then
 		info = UIDropDownMenu_CreateInfo()
 		info.notCheckable = 1
 		info.text = XPERL_MINIMENU_RAIDBUFF
 		info.hasArrow = 1
 		info.value = "raidbuffs"
 		UIDropDownMenu_AddButton(info)
-	end
+	end]]
 
 	--[[if (XPerl_ToggleRaidSort) then
 		info = UIDropDownMenu_CreateInfo()
@@ -2356,7 +2356,7 @@ end
 
 -- unitmenuOnPostClick
 local function unitmenuOnPostClick(self)
-	if (UIDROPDOWNMENU_OPEN_MENU == self.dropdownMenu and DropDownList1:IsShown())   then
+	if (UIDROPDOWNMENU_OPEN_MENU == self.dropdownMenu and DropDownList1:IsShown()) then
 		local parent = self
 		if (self:GetParent() and self:GetParent().nameFrame == self) then
 			parent = self:GetParent()

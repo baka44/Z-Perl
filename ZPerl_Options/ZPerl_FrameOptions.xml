@@ -4869,7 +4869,8 @@
 						</Anchors>
 						<Scripts>
 							<OnLoad>
-								if (select(2, UnitClass("player")) ~= "DRUID") then
+								local _, class = UnitClass("player")
+								if (class ~= "DRUID") then
 									self:Hide()
 								end
 
@@ -5396,10 +5397,11 @@
 					<Frame name="$parent_Totems">
 						<Scripts>
 							<OnLoad>
-								class = select(2, UnitClass("player"))
-								self:Hide()
-								if ((class == "SHAMAN") or (class == "DRUID") or (class == "MAGE")) then
+								local _, class = UnitClass("player")
+								if (class == "SHAMAN" or class == "DRUID" or class == "MAGE" or class == "MONK" or class == "PRIEST" or class == "WARRIOR") then
 									self:Show()
+								else
+									self:Hide()
 								end
 							</OnLoad>
 						</Scripts>
@@ -5441,7 +5443,9 @@
 										XPerl_OptionsSetMyText(self, "XPERL_CONF_PLAYER_TOTEMS_ENABLE")
 										self.configBase = "XPerlDB.player.totems"
 										self.configIndex = "enable"
-										self.configClick = function() TotemFrame_Update() end
+										self.configClick = function()
+											TotemFrame_Update()
+										end
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
@@ -5455,9 +5459,11 @@
 								<Scripts>
 									<OnLoad>
 										XPerl_Options_RegisterProtected(self)
-										self:SetMinMaxValues(-1100, 1100)
+										self:SetMinMaxValues(-1000, 1000)
 										self:SetValueStep(1)
 										self:SetObeyStepOnDrag(true)
+										_G[self:GetName().."Low"]:SetText(-1000)
+										_G[self:GetName().."High"]:SetText(1000)
 										XPerl_SliderSetup(self)
 										XPerl_OptionsSetMyText(self, "XPERL_CONF_PLAYER_TOTEM_OFFSETX")
 									</OnLoad>
@@ -5488,6 +5494,8 @@
 										self:SetMinMaxValues(-800, 800)
 										self:SetValueStep(1)
 										self:SetObeyStepOnDrag(true)
+										_G[self:GetName().."Low"]:SetText(-800)
+										_G[self:GetName().."High"]:SetText(800)
 										XPerl_SliderSetup(self)
 										XPerl_OptionsSetMyText(self, "XPERL_CONF_PLAYER_TOTEM_OFFSETY")
 									</OnLoad>
@@ -11038,9 +11046,12 @@
 
 					<Frame name="$parent_Custom">
 						<Scripts>
-							if (select(6, GetAddOnInfo("ZPerl_CustomHighlight")) == "MISSING") then
-								self:Hide()
-							end
+							<OnLoad>
+								local _, _, _, _, reason = GetAddOnInfo("ZPerl_CustomHighlight")
+								if (reason == "DISABLED" or reason == "MISSING") then
+									self:Hide()
+								end
+							</OnLoad>
 						</Scripts>
 						<Backdrop edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
 							<EdgeSize>
