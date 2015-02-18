@@ -22,7 +22,7 @@ XPerl_RequestConfig(function(new)
 	if (XPerl_PetTarget) then
 		XPerl_PetTarget.conf = conf.pettarget
 	end
-end, "$Revision: 906 $")
+end, "$Revision: 912 $")
 
 local percD = "%d"..PERCENT_SYMBOL
 local format = format
@@ -202,7 +202,17 @@ end
 
 -- GetComboColour
 local function GetComboColour(num)
-	if (num == 5) then
+	if (num == 10) then
+		return 0.3, 0, 1
+	elseif (num == 9) then
+		return 0.5, 0, 1
+	elseif (num == 8) then
+		return 0.7, 0, 1
+	elseif (num == 7) then
+		return 1, 0, 1
+	elseif (num == 6) then
+		return 1, 0, 0.5
+	elseif (num == 5) then
 		return 1, 0, 0
 	elseif (num == 4) then
 		return 1, 0.5, 0
@@ -218,12 +228,22 @@ end
 ---------------
 -- Combo Points
 ---------------
-local function XPerl_Target_UpdateCombo(self)
-	local combopoints = GetComboPoints(UnitHasVehicleUI("player") and "vehicle" or "player", self.partyid)
+function XPerl_Target_UpdateCombo(self)
+	-- Anticipation
+	local name = GetSpellInfo(115189)
+	local _, _, _, count = UnitAura("player", name)
+	if not count then
+		count = 0
+	end
+	local combopoints = GetComboPoints(UnitHasVehicleUI("player") and "vehicle" or "player", self.partyid) + count
 	local r, g, b = GetComboColour(combopoints)
 	if (tconf.combo.enable) then
 		self.cpFrame:Hide()
-		self.nameFrame.cpMeter:SetValue(combopoints)
+		if combopoints > 5 then
+			self.nameFrame.cpMeter:SetValue(count)
+		else
+			self.nameFrame.cpMeter:SetValue(combopoints)
+		end
 		self.nameFrame.cpMeter:Show()
 		if (r) then
 			self.nameFrame.cpMeter:SetStatusBarColor(r, g, b, 0.7)
@@ -251,10 +271,10 @@ end
 ---------------------
 --Debuffs          --
 ---------------------
-local XPERL_SPELL_SUNDER	= GetSpellInfo(58567)		-- Sunder Armor
+--[[local XPERL_SPELL_SUNDER	= GetSpellInfo(58567)		-- Sunder Armorn
 local XPERL_SPELL_SHADOWV	= GetSpellInfo(15258)		-- Shadow Vulnerability
 local XPERL_SPELL_FIREV		= GetSpellInfo(22959)		-- Fire Vulnerability
-local XPERL_SPELL_WINTERCH	= GetSpellInfo(12579)		-- Winter's Chill
+local XPERL_SPELL_WINTERCH	= GetSpellInfo(12579)		-- Winter's Chill]]
 
 local function XPerl_Target_DebuffUpdate(self)
 	local partyid = self.partyid
@@ -883,7 +903,7 @@ local function XPerl_Target_UpdateLeader(self)
 		--	leader = UnitIsUnit(partyid, "party"..index)
 		--end
 		
-		leader = UnitIsGroupLeader(partyid);
+		leader = UnitIsGroupLeader(partyid)
 	end
 
 	if (leader) then
@@ -1012,7 +1032,7 @@ function XPerl_Target_UpdateDisplay(self)
 ]]
 
 		XPerl_Targets_BuffUpdate(self)
-		XPerl_Target_DebuffUpdate(self)
+		--XPerl_Target_DebuffUpdate(self)
 		XPerl_Target_CheckDebuffs(self)
 
 		XPerl_Target_UpdatePVP(self)
@@ -1136,7 +1156,7 @@ local function DoEvent(self, timestamp, event, srcGUID, srcName, srcFlags, dstGU
 			if (critical or crushing) then
 				fontHeight = fontHeight * 1.5
 			elseif (glancing) then
-				fontHeight = fontHeight * 0.75;
+				fontHeight = fontHeight * 0.75
 			end
 			if (event ~= "SWING_DAMAGE" and event ~= "RANGE_DAMAGE") then
 				b = 0
@@ -1340,7 +1360,7 @@ function XPerl_Target_Events:UNIT_AURA()
 	XPerl_Target_CheckDebuffs(self)
 
 	XPerl_Targets_BuffUpdate(self)
-	XPerl_Target_DebuffUpdate(self)
+	--XPerl_Target_DebuffUpdate(self)
 
 	if (select(2, UnitClass(self.partyid)) == "HUNTER") then
 		local f = UnitIsFeignDeath(self.partyid)
@@ -1579,37 +1599,37 @@ function XPerl_Target_Set_BlizzCPFrame(self)
 
 		function ComboFrame_Update()
 			local comboPoints = GetComboPoints(UnitHasVehicleUI("player") and "vehicle" or "player")
-			local comboPoint, comboPointHighlight, comboPointShine;
+			local comboPoint, comboPointHighlight, comboPointShine
 			if ( comboPoints > 0 ) then
 				if ( not ComboFrame:IsShown() ) then
-					ComboFrame:Show();
-					UIFrameFadeIn(ComboFrame, COMBOFRAME_FADE_IN);
+					ComboFrame:Show()
+					UIFrameFadeIn(ComboFrame, COMBOFRAME_FADE_IN)
 				end
 
-				local fadeInfo = {};
+				local fadeInfo = {}
 				for i=1, MAX_COMBO_POINTS do
-					comboPointHighlight = _G["ComboPoint"..i.."Highlight"];
-					comboPointShine = _G["ComboPoint"..i.."Shine"];
+					comboPointHighlight = _G["ComboPoint"..i.."Highlight"]
+					comboPointShine = _G["ComboPoint"..i.."Shine"]
 					if ( i <= comboPoints ) then
 						if ( i > COMBO_FRAME_LAST_NUM_POINTS ) then
 							-- Fade in the highlight and set a function that triggers when it is done fading
-							fadeInfo.mode = "IN";
-							fadeInfo.timeToFade = COMBOFRAME_HIGHLIGHT_FADE_IN;
-							fadeInfo.finishedFunc = ComboPointShineFadeIn;
-							fadeInfo.finishedArg1 = comboPointShine;
-							UIFrameFade(comboPointHighlight, fadeInfo);
+							fadeInfo.mode = "IN"
+							fadeInfo.timeToFade = COMBOFRAME_HIGHLIGHT_FADE_IN
+							fadeInfo.finishedFunc = ComboPointShineFadeIn
+							fadeInfo.finishedArg1 = comboPointShine
+							UIFrameFade(comboPointHighlight, fadeInfo)
 						end
 					else
-						comboPointHighlight:SetAlpha(0);
-						comboPointShine:SetAlpha(0);
+						comboPointHighlight:SetAlpha(0)
+						comboPointShine:SetAlpha(0)
 					end
 				end
 			else
-				ComboPoint1Highlight:SetAlpha(0);
-				ComboPoint1Shine:SetAlpha(0);
-				ComboFrame:Hide();
+				ComboPoint1Highlight:SetAlpha(0)
+				ComboPoint1Shine:SetAlpha(0)
+				ComboFrame:Hide()
 			end
-			COMBO_FRAME_LAST_NUM_POINTS = comboPoints;
+			COMBO_FRAME_LAST_NUM_POINTS = comboPoints
 		end
 	else
 		ComboFrame:Hide()

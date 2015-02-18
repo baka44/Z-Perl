@@ -6,7 +6,7 @@ local XPerl_Player_Events = {}
 local isOutOfControl = nil
 local playerClass, playerName
 local conf, pconf
-XPerl_RequestConfig(function(new) conf = new pconf = conf.player if (XPerl_Player) then XPerl_Player.conf = conf.player end end, "$Revision: 910 $")
+XPerl_RequestConfig(function(new) conf = new pconf = conf.player if (XPerl_Player) then XPerl_Player.conf = conf.player end end, "$Revision: 912 $")
 local perc1F = "%.1f"..PERCENT_SYMBOL
 local percD = "%.0f"..PERCENT_SYMBOL
 
@@ -1011,6 +1011,16 @@ end
 
 function XPerl_Player_Events:UNIT_AURA()
 	XPerl_Player_UpdateBuffs(self)
+	-- Anticipation
+	local name = GetSpellInfo(115189)
+	if UnitBuff("player", name) then
+		if XPerl_Target and XPerl_Target:IsVisible() then
+			XPerl_Target_UpdateCombo(XPerl_Target)
+		end
+		if XPerl_Focus  and XPerl_Focus:IsVisible() then
+			XPerl_Target_UpdateCombo(XPerl_Focus)
+		end
+	end
 end
 
 -- PLAYER_CONTROL_LOST

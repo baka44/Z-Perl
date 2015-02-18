@@ -2,7 +2,7 @@
 -- Author: Zek <Boodhoof-EU>
 -- License: GNU GPL v3, 29 June 2007 (see LICENSE.txt)
 
-XPerl_SetModuleRevision("$Revision: 903 $")
+XPerl_SetModuleRevision("$Revision: 912 $")
 
 local localGroups = LOCALIZED_CLASS_NAMES_MALE
 local WoWclassCount = 0
@@ -317,7 +317,7 @@ end
 local Sliders = {}
 function XPerl_Options_MaxScaleSet()
 
-	for i,slider in pairs(Sliders) do
+	for i, slider in pairs(Sliders) do
 		local old = slider:GetValue()
 		local min = slider.min or 50
 		local max = slider.max or floor(XPerlDB.maximumScale * 100 + 0.5)

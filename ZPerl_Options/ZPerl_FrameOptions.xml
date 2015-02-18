@@ -11113,7 +11113,7 @@
 						</Scripts>
 					</CheckButton>
 
-					<CheckButton name="$parent_Roles" inherits="XPerlCheckButtonTemplate">
+					<CheckButton name="$parent_Titles" inherits="XPerlCheckButtonTemplate">
 						<Anchors>
 							<Anchor point="TOP" relativeTo="$parent_AlignToRaid" relativePoint="BOTTOMLEFT">
 								<Offset>
@@ -11143,9 +11143,9 @@
 						</Scripts>
 					</CheckButton>
 
-					<CheckButton name="$parent_Titles" inherits="XPerlCheckButtonTemplate">
+					<CheckButton name="$parent_Roles" inherits="XPerlCheckButtonTemplate">
 						<Anchors>
-							<Anchor point="TOPLEFT" relativeTo="$parent_Roles" relativePoint="BOTTOMLEFT">
+							<Anchor point="TOPLEFT" relativeTo="$parent_Titles" relativePoint="BOTTOMLEFT">
 								<Offset>
 									<AbsDimension x="0" y="6"/>
 								</Offset>
@@ -11164,7 +11164,7 @@
 
 					<CheckButton name="$parent_HealthText" inherits="XPerlCheckButtonTemplate">
 						<Anchors>
-							<Anchor point="TOPLEFT" relativeTo="$parent_Titles" relativePoint="BOTTOMLEFT">
+							<Anchor point="TOPLEFT" relativeTo="$parent_Roles" relativePoint="BOTTOMLEFT">
 								<Offset>
 									<AbsDimension x="0" y="6"/>
 								</Offset>
@@ -11643,7 +11643,10 @@
 										self.tooltipText = XPERL_CONF_RAID_GROUP_DESC
 										self.configBase = "XPerlDB.raid.group"
 										self.configIndex = 1
-										self.configClick = function() XPerl_Raid_ChangeAttributes() XPerl_Raid_OptionActions() end
+										self.configClick = function()
+											XPerl_Raid_ChangeAttributes()
+											XPerl_Raid_OptionActions()
+										end
 										XPerl_Options_RegisterProtected(self)
 									</OnLoad>
 								</Scripts>
@@ -11662,7 +11665,10 @@
 										self.tooltipText = XPERL_CONF_RAID_GROUP_DESC
 										self.configBase = "XPerlDB.raid.group"
 										self.configIndex = 2
-										self.configClick = function() XPerl_Raid_ChangeAttributes() XPerl_Raid_OptionActions() end
+										self.configClick = function()
+											XPerl_Raid_ChangeAttributes()
+											XPerl_Raid_OptionActions()
+										end
 										XPerl_Options_RegisterProtected(self)
 									</OnLoad>
 								</Scripts>
@@ -11681,7 +11687,10 @@
 										self.tooltipText = XPERL_CONF_RAID_GROUP_DESC
 										self.configBase = "XPerlDB.raid.group"
 										self.configIndex = 3
-										self.configClick = function() XPerl_Raid_ChangeAttributes() XPerl_Raid_OptionActions() end
+										self.configClick = function()
+											XPerl_Raid_ChangeAttributes()
+											XPerl_Raid_OptionActions()
+										end
 										XPerl_Options_RegisterProtected(self)
 									</OnLoad>
 								</Scripts>
@@ -11700,7 +11709,10 @@
 										self.tooltipText = XPERL_CONF_RAID_GROUP_DESC
 										self.configBase = "XPerlDB.raid.group"
 										self.configIndex = 4
-										self.configClick = function() XPerl_Raid_ChangeAttributes() XPerl_Raid_OptionActions() end
+										self.configClick = function()
+											XPerl_Raid_ChangeAttributes()
+											XPerl_Raid_OptionActions()
+										end
 										XPerl_Options_RegisterProtected(self)
 									</OnLoad>
 								</Scripts>
@@ -11719,7 +11731,10 @@
 										self.tooltipText = XPERL_CONF_RAID_GROUP_DESC
 										self.configBase = "XPerlDB.raid.group"
 										self.configIndex = 5
-										self.configClick = function() XPerl_Raid_ChangeAttributes() XPerl_Raid_OptionActions() end
+										self.configClick = function()
+											XPerl_Raid_ChangeAttributes()
+											XPerl_Raid_OptionActions()
+										end
 										XPerl_Options_RegisterProtected(self)
 									</OnLoad>
 								</Scripts>
@@ -11738,7 +11753,10 @@
 										self.tooltipText = XPERL_CONF_RAID_GROUP_DESC
 										self.configBase = "XPerlDB.raid.group"
 										self.configIndex = 6
-										self.configClick = function() XPerl_Raid_ChangeAttributes() XPerl_Raid_OptionActions() end
+										self.configClick = function()
+											XPerl_Raid_ChangeAttributes()
+											XPerl_Raid_OptionActions()
+										end
 										XPerl_Options_RegisterProtected(self)
 									</OnLoad>
 								</Scripts>
@@ -11757,7 +11775,10 @@
 										self.tooltipText = XPERL_CONF_RAID_GROUP_DESC
 										self.configBase = "XPerlDB.raid.group"
 										self.configIndex = 7
-										self.configClick = function() XPerl_Raid_ChangeAttributes() XPerl_Raid_OptionActions() end
+										self.configClick = function()
+											XPerl_Raid_ChangeAttributes()
+											XPerl_Raid_OptionActions()
+										end
 										XPerl_Options_RegisterProtected(self)
 									</OnLoad>
 								</Scripts>
@@ -11776,7 +11797,10 @@
 										self.tooltipText = XPERL_CONF_RAID_GROUP_DESC
 										self.configBase = "XPerlDB.raid.group"
 										self.configIndex = 8
-										self.configClick = function() XPerl_Raid_ChangeAttributes() XPerl_Raid_OptionActions() end
+										self.configClick = function()
+											XPerl_Raid_ChangeAttributes()
+											XPerl_Raid_OptionActions()
+										end
 										XPerl_Options_RegisterProtected(self)
 									</OnLoad>
 								</Scripts>
@@ -11795,7 +11819,10 @@
 										self.tooltipText = XPERL_CONF_RAID_GROUP_DESC
 										self.configBase = "XPerlDB.raid.group"
 										self.configIndex = 9
-										self.configClick = function() XPerl_Raid_ChangeAttributes() XPerl_Raid_OptionActions() end
+										self.configClick = function()
+											XPerl_Raid_ChangeAttributes()
+											XPerl_Raid_OptionActions()
+										end
 										XPerl_Options_RegisterProtected(self)
 									</OnLoad>
 								</Scripts>
@@ -11814,7 +11841,10 @@
 										self.tooltipText = XPERL_CONF_RAID_GROUP_DESC
 										self.configBase = "XPerlDB.raid.group"
 										self.configIndex = 10
-										self.configClick = function() XPerl_Raid_ChangeAttributes() XPerl_Raid_OptionActions() end
+										self.configClick = function()
+											XPerl_Raid_ChangeAttributes()
+											XPerl_Raid_OptionActions()
+										end
 										XPerl_Options_RegisterProtected(self)
 									</OnLoad>
 								</Scripts>
@@ -11834,7 +11864,10 @@
 										self.tooltipText = XPERL_CONF_RAID_GROUP_DESC
 										self.configBase = "XPerlDB.raid.group"
 										self.configIndex = 11
-										self.configClick = function() XPerl_Raid_ChangeAttributes() XPerl_Raid_OptionActions() end
+										self.configClick = function()
+											XPerl_Raid_ChangeAttributes()
+											XPerl_Raid_OptionActions()
+										end
 										XPerl_Options_RegisterProtected(self)
 									</OnLoad>
 								</Scripts>
@@ -13062,9 +13095,9 @@
 										self:SetPoint("LEFT", t, "RIGHT", (t2:GetStringWidth() + 10) / 0.8, 0)
 										XPerl_SliderSetup(self)
 										XPerl_OptionsSetMyText(self, "XPERL_CONF_COLOUR_CLASSBARS_BRIGHT")
-										_G[self:GetName().."Low"]:SetText("0.5")
+										_G[self:GetName().."Low"]:SetText("0")
 										_G[self:GetName().."High"]:SetText("2")
-										self:SetMinMaxValues(5, 200)
+										self:SetMinMaxValues(0, 200)
 										self:SetValueStep(1)
 										self:SetObeyStepOnDrag(true)
 									</OnLoad>

@@ -51,7 +51,7 @@ local XPerl_ColourHealthBar = XPerl_ColourHealthBar
 -- TODO - Watch for:	 ERR_FRIEND_OFFLINE_S = "%s has gone offline."
 
 local conf, rconf
-XPerl_RequestConfig(function(newConf) conf = newConf rconf = conf.raid end, "$Revision: 911 $")
+XPerl_RequestConfig(function(newConf) conf = newConf rconf = conf.raid end, "$Revision: 912 $")
 
 XPERL_RAIDGRP_PREFIX = "XPerl_Raid_Grp"
 
@@ -1045,6 +1045,9 @@ local function XPerl_Raid_RaidTargetUpdate(self)
 end
 
 local function SetRoleIconTexture(texture, role)
+	if not rconf.role_icons then
+		return false
+	end
 	if (conf.xperlOldroleicons) then
 		if role == "TANK" then
 			texture:SetTexture("Interface\\GroupFrame\\UI-Group-MainTankIcon")
@@ -1071,7 +1074,7 @@ end
 
 -- XPerl_Raid_RoleUpdate
 local function XPerl_Raid_RoleUpdate(self, role)
-	if(not self) then
+	if not self then
 		return
 	end
 	local icon = self.nameFrame.roleIcon or nil
@@ -1087,7 +1090,8 @@ local function XPerl_Raid_RoleUpdate(self, role)
 
 		if (SetRoleIconTexture(icon, role)) then
 			icon:Show()
-			return
+		else
+			icon:Hide()
 		end
 	end
 end
@@ -1096,7 +1100,7 @@ end
 -- The Update Function --
 -------------------------
 function XPerl_Raid_UpdateDisplayAll()
-	for k,v in pairs(FrameArray) do
+	for k, v in pairs(FrameArray) do
 		if (v:IsShown()) then
 			XPerl_Raid_UpdateDisplay(v)
 		end
@@ -1110,9 +1114,7 @@ function XPerl_Raid_UpdateDisplay(self)
 		XPerl_Raid_UpdateManaType(self)
 		XPerl_Raid_UpdateMana(self)
 	end
-	if (rconf.role_icons) then
-		XPerl_Raid_RoleUpdate(self, UnitGroupRolesAssigned(self.partyid))
-	end
+	XPerl_Raid_RoleUpdate(self, UnitGroupRolesAssigned(self.partyid))
 	XPerl_Raid_UpdatePlayerFlags(self)
 	XPerl_Raid_UpdateHealth(self)		-- <<< -- AFTER MANA -- <<< --
 	XPerl_Raid_UpdateName(self)
@@ -1394,7 +1396,7 @@ end
 -- UnitGroupRolesAssigned function will return the oldRole if used in this event
 function XPerl_Raid_Events:ROLE_CHANGED_INFORM(targetUnit, sourceUnit, oldRole, newRole)
 	local id = RaidPositions[targetUnit]
-	if ( rconf.role_icons ) then
+	if (rconf.role_icons) then
 		if (id) then
 			XPerl_Raid_RoleUpdate(FrameArray[id], newRole)
 		end
@@ -1752,7 +1754,7 @@ function XPerl_RaidTitles()
 	end
 
 	local c
-	for i = 1,WoWclassCount do
+	for i = 1, WoWclassCount do
 		local confClass = rconf.class[i].name
 		local frame = _G["XPerl_Raid_Title"..i]
 		local titleFrame = frame.text
@@ -1819,7 +1821,17 @@ function XPerl_RaidTitles()
 
 				virtualFrame:SetBackdropColor(conf.colour.frame.r, conf.colour.frame.g, conf.colour.frame.b, conf.colour.frame.a)
 				virtualFrame:SetBackdropBorderColor(conf.colour.border.r, conf.colour.border.g, conf.colour.border.b, 1)
-				virtualFrame:Show()
+				if rconf.group[i] then
+					virtualFrame:Show()
+					--[[if rconf.titles then
+						titleFrame:Show()
+					else
+						titleFrame:Hide()
+					end]]
+				else
+					virtualFrame:Hide()
+					titleFrame:Hide()
+				end
 			else
 				virtualFrame:Hide()
 			end

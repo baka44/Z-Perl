@@ -6,8 +6,8 @@ local conf
 local percD	= "%d"..PERCENT_SYMBOL
 local perc1F = "%.1f"..PERCENT_SYMBOL
 
-XPerl_RequestConfig(function(New) conf = New end, "$Revision: 910 $")
-XPerl_SetModuleRevision("$Revision: 910 $")
+XPerl_RequestConfig(function(New) conf = New end, "$Revision: 912 $")
+XPerl_SetModuleRevision("$Revision: 912 $")
 
 -- Upvalus
 local _G = _G
@@ -746,7 +746,7 @@ function XPerl_ColourHealthBar(self, healthPct, partyid)
 		partyid = self.partyid
 	end
 	local bar = self.statsFrame.healthBar
-	if (conf.colour.classbar and UnitIsPlayer(partyid)) then
+	if (--[[string.find(partyid, "raid") and ]]conf.colour.classbar and UnitIsPlayer(partyid)) then
 		local class = select(2, UnitClass(partyid))
 		if (class) then
 			local c = barColours[class]
@@ -762,7 +762,7 @@ function XPerl_ColourHealthBar(self, healthPct, partyid)
 
 	XPerl_SetSmoothBarColor(bar, healthPct)
 end
-local XPerl_ColourHealthBar = XPerl_ColourHealthBar
+--local XPerl_ColourHealthBar = XPerl_ColourHealthBar
 
 -- XPerl_SetValuedText
 function XPerl_SetValuedText(self, current, Max, suffix)
@@ -2520,7 +2520,7 @@ function XPerl_GetBuffButton(self, buffnum, debuff, createIfAbsent, newID)
 		buffIconCount = buffIconCount + 1
 		button = CreateFrame("Button", "XPerlBuff"..buffIconCount, parent, format("XPerl_Cooldown_%sTemplate", buffType))
 		button:Hide()
-		button.cooldown.noCooldownCount = true -- OmniCC to NOT show cooldown
+		--button.cooldown.noCooldownCount = true -- OmniCC to NOT show cooldown
 
 		if (setup.rightClickable) then
 			button:RegisterForClicks("RightButtonUp")
