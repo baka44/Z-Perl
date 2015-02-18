@@ -39,7 +39,6 @@ local unpack = unpack
 local ArcaneExclusions = XPerl_ArcaneExclusions
 local CheckInteractDistance = CheckInteractDistance
 local DebuffTypeColor = DebuffTypeColor
-local GameTooltip_SetDefaultAnchor = GameTooltip_SetDefaultAnchor
 local GetAddOnCPUUsage = GetAddOnCPUUsage
 local GetAddOnMemoryUsage = GetAddOnMemoryUsage
 local GetCursorPosition = GetCursorPosition
@@ -2076,7 +2075,7 @@ end
 local function DebuffException(unit, start, flag, func, raidFrames)
 	local name, rank, buff, count, debuffType, dur, max, caster, isStealable, index
 	local valid = 0
-	for i = 1,1000 do
+	for i = 1, 1000 do
 		name, rank, buff, count, debuffType, dur, max, caster, isStealable, index = BuffException(unit, i, flag, func, DebuffExceptions, raidFrames)
 		if (not name) then
 			break

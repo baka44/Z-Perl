@@ -67,53 +67,52 @@ local function getRankAmount(self, spellId)
 end
 
 local absorbSpells = {
-	[GetSpellInfo(11426)] = {			-- Ice Barrier
+	-- Shield Barrier
+	[GetSpellInfo(174926)] = {
 		ranks = {
-			[11426]	= 3686--level 85 (3686 + $SPFR * 0.807)
+			[174926] = 4459 --level 85 (4459 + $SPFR * 0.807)
+		},
+		school = "PHYSICAL",
+		class = "WARRIOR",
+		GetModifier = getTalentModifier,
+		GetRankAmount = getRankAmount,
+	},
+	-- Ice Barrier
+	[GetSpellInfo(11426)] = {
+		ranks = {
+			[11426]	= 3686 --level 85 (3686 + $SPFR * 0.807)
 		},
 		school = "FROST",
 		class = "MAGE",
 		GetModifier = getTalentModifier,
 		GetRankAmount = getRankAmount,
 	},
-	[GetSpellInfo(1463)] = {			-- Mana Shield
+	-- Power Word: Shield
+	[GetSpellInfo(17)] = {
 		ranks = {
-			[1463]	= 1485--level 85 (1485 + 0.807 * $SPA)
-		},
-		class = "MAGE",
-		school = "ARCANE",
-		improved = {
-			name = GetSpellInfo(12605),
-			ranks = 2,
-			percentPerRank = 10,
-		},
-		GetModifier = getTalentModifier,
-		GetRankAmount = getRankAmount,
-	},
-	[GetSpellInfo(17)] = {				-- Power Word: Shield
-		ranks = {
-			[17]	= 3906--level 85 (3906 + ($SP * 0.418))
+			[17] = 3906 --level 85 (3906 + ($SP * 0.418))
 		},
 		class = "PRIEST",
 		targetable = true,
 		school = "HOLY",
-		improved = {
+		--[[improved = {
 			name = GetSpellInfo(14748),
 			ranks = 2,
 			percentPerRank = 5,
-		},
+		},]]
 		GetModifier = getTalentModifier,
 		GetRankAmount = getRankAmount,
 	},
 }
 
-local colours = {HOT = {r = 0.2, g = 0.4, b = 0.8, canFlash = true},
-		 POM = {r = 0.8, g = 0.6, b = 0.4},
-		 SHIELD = {r = 0.6, g = 0.1, b = 0.6, canFlash = true},
-		 AGGRO = {r = 0.8, g = 0, b = 0},
-		 HEAL = {r = 0.2, g = 0.8, b = 0.2},
-		 SEL = {r = 0.86, g = 0.82, b = 0.41},
-		 TARGET = {r = 0.7167, g = 0.6833, b = 0.31467}			-- Coloured so that colour * 1.2 == SEL colour
+local colours = {
+	HOT = {r = 0.2, g = 0.4, b = 0.8, canFlash = true},
+	POM = {r = 0.8, g = 0.6, b = 0.4},
+	SHIELD = {r = 0.6, g = 0.1, b = 0.6, canFlash = true},
+	AGGRO = {r = 0.8, g = 0, b = 0},
+	HEAL = {r = 0.2, g = 0.8, b = 0.2},
+	SEL = {r = 0.86, g = 0.82, b = 0.41},
+	TARGET = {r = 0.7167, g = 0.6833, b = 0.31467} -- Coloured so that colour * 1.2 == SEL colour
 }
 
 local xpHigh = CreateFrame("Frame", "XPerl_Highlight")
@@ -247,7 +246,7 @@ end
 function xpHigh:OnUpdate(elapsed)
 	if (self.rosterUpdate) then
 		self.rosterUpdate = nil
-		self:RefreshAllAuras()			-- New roster, get all
+		self:RefreshAllAuras() -- New roster, get all
 		if (not (conf.highlight.enable and (conf.highlight.HOT or conf.highlight.SHIELD or conf.highlight.HEAL))) then
 			self:SetScript("OnUpdate", nil)
 			return
@@ -270,11 +269,11 @@ function xpHigh:OnUpdate(elapsed)
 	end
 
 	-- We expire things 1 second early so people can cast in time for buff to expire
-	local now = GetTime()			--  + 1
+	local now = GetTime() --  + 1
 
 	for guid,list in pairs(self.list) do
 		local any
-		for k,v in pairs(list) do
+		for k, v in pairs(list) do
 			any = true
 			if (k ~= "HOTCOUNT") then
 				if (v > 0) then
@@ -523,7 +522,7 @@ end
 
 -- ShowHotBar
 function xpHigh:ShowShieldBar(frame, show)
-	local h = frame.highlight
+	--[[local h = frame.highlight
 	if (show and conf.highlight.SHIELD and conf.highlight.sparkles) then
 		local unit = SecureButton_GetUnit(frame)
 		local guid = unit and UnitGUID(unit)
@@ -547,7 +546,7 @@ function xpHigh:ShowShieldBar(frame, show)
 	if (h.shieldBar) then
 		h.shieldBar:Hide()
 		h.shieldBar:SetMinMaxValues(0, 0.1)
-	end
+	end]]
 end
 
 -- CreateShine
@@ -1320,7 +1319,7 @@ function xpHigh.clEvents:SPELL_CAST_SUCCESS(timestamp, event, srcGUID, srcName, 
 				end
 			elseif (shieldSpells[spellName]) then
 				if (conf.highlight.SHIELD) then
-					self:Add(dstGUID, "SHIELD", shieldSpells[spellName])
+					--self:Add(dstGUID, "SHIELD", shieldSpells[spellName])
 				end
 			elseif (pomSpells[spellName]) then
 				if (conf.highlight.POM) then
@@ -1444,9 +1443,9 @@ function xpHigh.clEvents:ENVIRONMENTAL_DAMAGE(timestamp, event, srcGUID, srcName
 end
 
 -- COMBATLOG:SPELL_AURA_APPLIED
-function xpHigh.clEvents:SPELL_AURA_APPLIED(timestamp, event, srcGUID, srcName, srcFlags, dstGUID, dstName, dstFlags, spellId, spellName, spellSchool, auraType)
+function xpHigh.clEvents:SPELL_AURA_APPLIED(timestamp, event, srcGUID, srcName, srcFlags, dstGUID, dstName, dstFlags, spellId, spellName, spellSchool, auraType, ...)
 	if (conf.highlight.SHIELD) then
-		if ((srcGUID == dstGUID or srcGUID == playerGUID or dstGUID == playerGUID) and self:checkEventFlags(dstFlags)) then
+		--[[if ((srcGUID == dstGUID or srcGUID == playerGUID or dstGUID == playerGUID) and self:checkEventFlags(dstFlags)) then
 			local def = absorbSpells[spellName]
 			if (not def) then
 				def = absorbSpells[spellId]
@@ -1480,7 +1479,7 @@ function xpHigh.clEvents:SPELL_AURA_APPLIED(timestamp, event, srcGUID, srcName, 
 					end
 				end
 			end
-		end
+		end]]
 	end
 end
 xpHigh.clEvents.SPELL_AURA_REFRESH = xpHigh.clEvents.SPELL_AURA_APPLIED
@@ -1488,7 +1487,7 @@ xpHigh.clEvents.SPELL_AURA_REFRESH = xpHigh.clEvents.SPELL_AURA_APPLIED
 -- COMBATLOG:SPELL_AURA_REMOVED
 function xpHigh.clEvents:SPELL_AURA_REMOVED(timestamp, event, srcGUID, srcName, srcFlags, dstGUID, dstName, dstFlags, spellId, spellName, spellSchool, auraType, ...)
 	if (conf.highlight.SHIELD) then
-		if (self:checkEventFlags(dstFlags)) then
+		--[[if (self:checkEventFlags(dstFlags)) then
 			local def = absorbSpells[spellName]
 			if (not def) then
 				def = absorbSpells[spellId]
@@ -1511,7 +1510,7 @@ function xpHigh.clEvents:SPELL_AURA_REMOVED(timestamp, event, srcGUID, srcName, 
 					end
 				end
 			end
-		end
+		end]]
 	end
 end
 
@@ -1553,7 +1552,7 @@ function xpHigh:UNIT_HEAL_PREDICTION(unit)
 		if (amount and amount > 0 and not UnitIsDeadOrGhost(unit)) then
 			local health, healthmax = UnitHealth(unit), UnitHealthMax(unit)
 			local missing = healthmax - health
-			if (missing > healthmax / 20) then			-- More than 5% to heal
+			if (missing > healthmax / 20) then -- More than 5% to heal
 				self:Add(guid, "HEAL", amount)
 				return
 			end
@@ -1564,7 +1563,7 @@ end
 
 -- xpHigh:HasMyPomPom(unit)
 function xpHigh:HasMyPomPom(unit)
-	for i = 1,40 do
+	for i = 1, 40 do
 		local name, rank, tex, count, buffType, dur, endTime, isMine = UnitBuff(unit, i, "PLAYER")
 		if (not name) then
 			break
@@ -1577,7 +1576,7 @@ end
 
 -- xpHigh:HasMyShield(unit)
 function xpHigh:HasMyShield(unit)
-	for i = 1,20 do
+	for i = 1, 40 do
 		local name, rank, tex, count, buffType, dur, endTime, isMine = UnitBuff(unit, i, "PLAYER")
 		if (not name) then
 			break
@@ -1662,7 +1661,7 @@ function xpHigh:UNIT_AURA(unit)
 
 	if (conf.highlight.HOTCOUNT) then
 		local hotCount = 0
-		for i = 1,40 do
+		for i = 1, 40 do
 			local buffName = UnitBuff(unit, i)
 			if (not buffName) then
 				break
@@ -1719,7 +1718,7 @@ function xpHigh:OptionChange()
 	_, playerClass = UnitClass("player")
 	playerName = UnitName("player")
 
-	if (conf.highlight.enable and (conf.highlight.HOT or conf.highlight.SHIELD or conf.highlight.HEAL)) then
+	if (conf.highlight.enable and (conf.highlight.HOT --[[or conf.highlight.SHIELD]] or conf.highlight.HEAL)) then
 		events = true
 		self:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 	else
@@ -1742,7 +1741,7 @@ function xpHigh:OptionChange()
 		self:ClearAll("HEAL")
 	end
 
-	if (conf.highlight.enable and (conf.highlight.HOTCOUNT or conf.highlight.HOT or conf.highlight.SHIELD)) then
+	if (conf.highlight.enable and (conf.highlight.HOTCOUNT or conf.highlight.HOT --[[or conf.highlight.SHIELD]])) then
 		events = true
 		self:RegisterEvent("UNIT_AURA")
 		self:RegisterEvent("GROUP_ROSTER_UPDATE")
@@ -1772,7 +1771,7 @@ function xpHigh:OptionChange()
 		self:SetScript("OnEvent", nil)
 	end
 
-	if (conf.highlight.enable and (conf.highlight.HOT or conf.highlight.SHIELD or conf.highlight.HEAL)) then
+	if (conf.highlight.enable and (conf.highlight.HOT --[[or conf.highlight.SHIELD]] or conf.highlight.HEAL)) then
 		self:SetScript("OnUpdate", self.OnUpdate)
 	else
 		self:SetScript("OnUpdate", nil)

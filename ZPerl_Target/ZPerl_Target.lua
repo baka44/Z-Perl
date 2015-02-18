@@ -2,7 +2,7 @@
 -- Author: Zek <Boodhoof-EU>
 -- License: GNU GPL v3, 29 June 2007 (see LICENSE.txt)
 
-local XPerl_Target_Events = {}
+local XPerl_Target_Events = { }
 local conf, tconf
 XPerl_RequestConfig(function(new)
 	conf = new
@@ -22,7 +22,7 @@ XPerl_RequestConfig(function(new)
 	if (XPerl_PetTarget) then
 		XPerl_PetTarget.conf = conf.pettarget
 	end
-end, "$Revision: 895 $")
+end, "$Revision: 896 $")
 
 local percD = "%d"..PERCENT_SYMBOL
 local format = format
@@ -55,10 +55,9 @@ function XPerl_Target_OnLoad(self, partyid)
 
 	self.hitIndicator.text:SetPoint("CENTER", self.portraitFrame, "CENTER", 0, 0)
 
-	local events = {"UNIT_COMBAT", "PLAYER_FLAGS_CHANGED",
-		"PARTY_MEMBER_DISABLE", "PARTY_MEMBER_ENABLE", "RAID_TARGET_UPDATE", "GROUP_ROSTER_UPDATE",
-		"PARTY_LEADER_CHANGED", "PARTY_LOOT_METHOD_CHANGED", "UNIT_THREAT_LIST_UPDATE","UNIT_SPELLMISS", "UNIT_FACTION", "UNIT_FLAGS",
-			"UNIT_CLASSIFICATION_CHANGED", "UNIT_PORTRAIT_UPDATE", "UNIT_AURA", "UNIT_HEALTH_FREQUENT","UNIT_POWER_FREQUENT", "UNIT_MAXPOWER", "UNIT_MAXHEALTH", "UNIT_LEVEL", "UNIT_DISPLAYPOWER", "UNIT_NAME_UPDATE", "PET_BATTLE_OPENING_START","PET_BATTLE_CLOSE"}
+	local events = {
+		"UNIT_COMBAT", "PLAYER_FLAGS_CHANGED", "PARTY_MEMBER_DISABLE", "PARTY_MEMBER_ENABLE", "RAID_TARGET_UPDATE", "GROUP_ROSTER_UPDATE", "PARTY_LEADER_CHANGED", "PARTY_LOOT_METHOD_CHANGED", "UNIT_THREAT_LIST_UPDATE","UNIT_SPELLMISS", "UNIT_FACTION", "UNIT_FLAGS", "UNIT_CLASSIFICATION_CHANGED", "UNIT_PORTRAIT_UPDATE", "UNIT_AURA", "UNIT_HEALTH_FREQUENT","UNIT_POWER_FREQUENT", "UNIT_MAXPOWER", "UNIT_MAXHEALTH", "UNIT_LEVEL", "UNIT_DISPLAYPOWER", "UNIT_NAME_UPDATE", "PET_BATTLE_OPENING_START", "PET_BATTLE_CLOSE"
+	}
 	for i, event in pairs(events) do
 		if string.find(event, "UNIT_") then
 			self:RegisterUnitEvent(event, "target", "focus")
@@ -323,7 +322,7 @@ local function XPerl_Target_UpdatePVP(self)
 		XPerl_SetUnitNameColor(self.nameFrame.text, partyid)
 	end
 
-		if (UnitIsVisible(partyid) and UnitIsCharmed(partyid)) then
+	if (UnitIsVisible(partyid) and UnitIsCharmed(partyid)) then
 		self.nameFrame.warningIcon:Show()
 	else
 		self.nameFrame.warningIcon:Hide()
@@ -1033,7 +1032,7 @@ function XPerl_Target_OnUpdate(self, elapsed)
 		if (self.deferring) then
 			self.deferring = nil
 			XPerl_Target_UpdateLeader(self)
-					XPerl_Target_Update_Combat(self)
+			XPerl_Target_Update_Combat(self)
 			XPerl_Target_UpdateCombo(self)
 			XPerl_Unit_UpdatePortrait(self)
 			RaidTargetUpdate(self)
@@ -1062,37 +1061,37 @@ function XPerl_Target_Events:PLAYER_REGEN_DISABLED()
 end
 
 function XPerl_Target_Events:PET_BATTLE_OPENING_START()
-	if(XPerl_Target) then
+	if (XPerl_Target) then
 		XPerl_Target:Hide()
 	end
-	if(XPerl_Focus) then
+	if (XPerl_Focus) then
 		XPerl_Focus:Hide()
 	end
-	if(XPerl_PetTarget) then
+	if (XPerl_PetTarget) then
 		XPerl_PetTarget:Hide()
 	end
-	if(XPerl_TargetTarget) then
+	if (XPerl_TargetTarget) then
 		XPerl_TargetTarget:Hide()
 	end
-	if(XPerl_FocusTarget) then
+	if (XPerl_FocusTarget) then
 		XPerl_FocusTarget:Hide()
 	end
 end
 
 function XPerl_Target_Events:PET_BATTLE_CLOSE()
-	if(XPerl_Target and UnitExists("target")) then
+	if (XPerl_Target and UnitExists("target")) then
 		XPerl_Target:Show()
 	end
-	if(XPerl_Focus and XPerl_Focus.conf.enable and UnitExists("focus")) then
+	if (XPerl_Focus and XPerl_Focus.conf.enable and UnitExists("focus")) then
 		XPerl_Focus:Show()
 	end
-	if(XPerl_PetTarget and UnitExists("pettarget")) then
+	if (XPerl_PetTarget and UnitExists("pettarget")) then
 		XPerl_PetTarget:Show()
 	end
-	if(XPerl_TargetTarget and XPerl_TargetTarget.conf.enable and UnitExists("targettarget")) then
+	if (XPerl_TargetTarget and XPerl_TargetTarget.conf.enable and UnitExists("targettarget")) then
 		XPerl_TargetTarget:Show()
 	end
-	if(XPerl_FocusTarget and XPerl_FocusTarget.conf.enable and UnitExists("focustarget")) then
+	if (XPerl_FocusTarget and XPerl_FocusTarget.conf.enable and UnitExists("focustarget")) then
 		XPerl_FocusTarget:Show()
 	end
 end
@@ -1295,7 +1294,7 @@ end
 
 -- UNIT_POWER / UNIT_MAXPOWER
 function XPerl_Target_Events:UNIT_POWER_FREQUENT()
-		XPerl_Target_SetMana(self)
+	XPerl_Target_SetMana(self)
 end
 
 XPerl_Target_Events.UNIT_MAXPOWER = XPerl_Target_Events.UNIT_POWER_FREQUENT
