@@ -13,6 +13,10 @@
 ## Author: Resike
 ## SavedVariablesPerCharacter: ZPerl_Admin, ZPerl_CheckItems
 ## RequiredDeps: ZPerl
+## X-Curse-Packaged-Version: r914
+## X-Curse-Project-Name: Z-Perl UnitFrames
+## X-Curse-Project-ID: zperl
+## X-Curse-Repository-ID: wow/zperl/mainline
 
 ZPerl_RaidAdmin.xml
 ZPerl_Check.xml

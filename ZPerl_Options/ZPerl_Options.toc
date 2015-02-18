@@ -12,5 +12,9 @@
 ## Author: Resike
 ## RequiredDeps: ZPerl
 ## LoadOnDemand: 1
+## X-Curse-Packaged-Version: r914
+## X-Curse-Project-Name: Z-Perl UnitFrames
+## X-Curse-Project-ID: zperl
+## X-Curse-Repository-ID: wow/zperl/mainline
 
 ZPerl_FrameOptions.xml

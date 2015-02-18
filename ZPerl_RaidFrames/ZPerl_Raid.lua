@@ -1874,7 +1874,7 @@ function XPerl_Raid_SetBuffTooltip(self)
 				return
 			end
 
-			GameTooltip:SetOwner(self,"ANCHOR_BOTTOMRIGHT",30,0)
+			GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT", 30, 0)
 
 			local show, cureCast = GetShowCast(parentUnit)
 			if (parentUnit.debuffsForced) then

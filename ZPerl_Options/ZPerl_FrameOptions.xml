@@ -3384,7 +3384,7 @@
 									XPerl_Options_EnableSibling(self,"HighBackground")
 									XPerl_Options_EnableSibling(self,"HighBorder")
 									XPerl_Options_EnableSibling(self,"HighBoth")
-									XPerl_Options_EnableSibling(self,"HighlightClass")
+									XPerl_Options_EnableSibling(self,"HighlightCurable")
 								end
 							</OnLoad>
 						</Scripts>
@@ -3394,7 +3394,7 @@
 						<Anchors>
 							<Anchor point="TOPLEFT" relativeTo="$parent_HighlightDebuffs" relativePoint="BOTTOMRIGHT">
 								<Offset>
-									<AbsDimension x="0" y="6"/>
+									<AbsDimension x="0" y="4"/>
 								</Offset>
 							</Anchor>
 						</Anchors>
@@ -3459,14 +3459,14 @@
 						</Scripts>
 					</CheckButton>
 
-					<CheckButton name="$parent_HighlightClass" inherits="XPerlCheckButtonTemplate">
+					<CheckButton name="$parent_HighlightCurable" inherits="XPerlCheckButtonTemplate">
 						<Size>
 							<AbsDimension x="26" y="26"/>
 						</Size>
 						<Anchors>
 							<Anchor point="TOP" relativeTo="$parent_HighBoth" relativePoint="BOTTOMLEFT">
 								<Offset>
-									<AbsDimension x="0" y="6"/>
+									<AbsDimension x="11" y="2"/>
 								</Offset>
 							</Anchor>
 						</Anchors>
@@ -3669,9 +3669,9 @@
 
 					<CheckButton name="$parent_Highlights" inherits="XPerlCheckButtonTemplate">
 						<Anchors>
-							<Anchor point="TOPRIGHT" relativeTo="$parent_HighlightClass" relativePoint="BOTTOM">
+							<Anchor point="TOP" relativeTo="$parent_HighlightDebuffs" relativePoint="BOTTOM">
 								<Offset>
-									<AbsDimension x="0" y="6"/>
+									<AbsDimension x="0" y="-72"/>
 								</Offset>
 							</Anchor>
 						</Anchors>
@@ -3694,15 +3694,15 @@
 									local _, class = UnitClass("player")
 									if (class ~= "DRUID" and class ~= "PRIEST" and class ~= "SHAMAN" and class ~= "MONK" and class ~= "PALADIN") then
 										--XPerlDB.highlight.HOT = nil
-										--XPerl_Options_EnableCheck(XPerl_Options_GetSibling("HighlightHoTs",self), false)
+										--XPerl_Options_EnableCheck(XPerl_Options_GetSibling("HighlightHoTs", self), false)
 									end
 									if (class ~= "PRIEST" and class ~= "SHAMAN" and class ~= "MAGE" and class ~= "PALADIN") then
 										--XPerlDB.highlight.SHIELD = nil
-										--XPerl_Options_EnableCheck(XPerl_Options_GetSibling("HighlightShields",self), false)
+										--XPerl_Options_EnableCheck(XPerl_Options_GetSibling("HighlightShields", self), false)
 									end
 									if (class ~= "PRIEST") then
 										XPerlDB.highlight.POM = nil
-										XPerl_Options_EnableCheck(XPerl_Options_GetSibling("HighlightMending",self), false)
+										XPerl_Options_EnableCheck(XPerl_Options_GetSibling("HighlightMending", self), false)
 									end
 								end
 							</OnLoad>
@@ -8561,7 +8561,7 @@
 				</Frames>
 			</Frame>
 
-			-- Focus Options
+			<!-- Focus Options -->
 			<Frame name="$parent_Focus_Options" hidden="true">
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeTo="XPerl_Options_Area_Tabs"/>
