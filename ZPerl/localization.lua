@@ -163,8 +163,8 @@ XPerl_DefaultRangeSpells = {
 	PRIEST	= {spell = GetSpellInfo(2061)},				-- Flash Heal
 	SHAMAN	= {spell = GetSpellInfo(331)},				-- Healing Wave
 	MAGE	= {spell = GetSpellInfo(475)},				-- Remove Lesser Curse
-	WARLOCK	= {spell = GetSpellInfo(5697)},				-- Underwater Breathing
-	ANY		= {item = GetItemInfo(21991)}				-- Heavy Netherweave Bandage
+	WARLOCK	= {spell = GetSpellInfo(5697)},				-- Unending Breath
+	ANY		= {item = GetItemInfo(111603)}				-- Antiseptic Bandage
 }
 
 -- Don't highlight these magical debuffs

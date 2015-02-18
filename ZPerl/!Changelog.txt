@@ -1,3 +1,14 @@
+**r922**
+* Focus can be set from raid frames taint free.
+* Raid pet frames target dropdown fix.
+* Raid pet frames can have target markers.
+* Some other smaller fixes.
+
+**r921**
+* Full raid update after leaving combat with tainted frames.
+* Reaction highlight enable/disable fix.
+* Added Monk's Resuscitate.
+
 **r920**
 * Version bump.
 

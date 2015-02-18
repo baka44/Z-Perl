@@ -6,8 +6,8 @@ local conf
 local percD	= "%d"..PERCENT_SYMBOL
 local perc1F = "%.1f"..PERCENT_SYMBOL
 
-XPerl_RequestConfig(function(New) conf = New end, "$Revision: 921 $")
-XPerl_SetModuleRevision("$Revision: 921 $")
+XPerl_RequestConfig(function(New) conf = New end, "$Revision: 922 $")
+XPerl_SetModuleRevision("$Revision: 922 $")
 
 -- Upvalus
 local _G = _G
@@ -2453,7 +2453,7 @@ function XPerl_GenericDropDown_Initialize()
 end
 
 -- Hide set focus from the raid dropdown
-local function HideSetFocus(param)
+--[[local function HideSetFocus(param)
 	local unit = UIDROPDOWNMENU_INIT_MENU.unit
 	if (unit and strsub(unit, 0, 4) == "raid") then
 		for index, value in ipairs(UnitPopupMenus[UIDROPDOWNMENU_INIT_MENU.which]) do
@@ -2466,7 +2466,7 @@ local function HideSetFocus(param)
 		end
 	end
 end
-hooksecurefunc("UnitPopup_HideButtons", HideSetFocus)
+hooksecurefunc("UnitPopup_HideButtons", HideSetFocus)]]
 
 -- XPerl_ShowGenericMenu
 -- self, unit, button are passed from secure template handler (SecureTemplates.lua, line 288 in SecureActionButton_OnClick)

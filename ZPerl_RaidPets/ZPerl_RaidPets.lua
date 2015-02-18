@@ -5,11 +5,13 @@
 local XPerl_RaidPets_Events = {}
 local RaidPetFrameArray = {}
 local conf, rconf, raidconf
-XPerl_RequestConfig(function(New) conf = New raidconf = New.raid rconf = New.raidpet end, "$Revision: 760 $")
+XPerl_RequestConfig(function(New) conf = New raidconf = New.raid rconf = New.raidpet end, "$Revision: 922 $")
 
 local new, del, copy = XPerl_GetReusableTable, XPerl_FreeTable, XPerl_CopyTable
 
 local GetNumGroupMembers = GetNumGroupMembers
+
+local taintFrames = {}
 
 -- XPerl_RaidPets_OnEvent
 local function XPerl_RaidPets_OnEvent(self, event, unit, ...)
@@ -32,7 +34,7 @@ end
 local function XPerl_RaidPets_OnUpdate(self, elapsed)
 	self.time = self.time + elapsed
 	if (self.time > 0.3) then
-		for unit,frame in pairs(RaidPetFrameArray) do
+		for unit, frame in pairs(RaidPetFrameArray) do
 			if (unit) then
 				XPerl_UpdateSpellRange(frame, unit, true)
 			end
@@ -93,8 +95,8 @@ function XPerl_RaidPets_OnLoad(self)
 	XPerl_RaidPets_OnLoad = nil
 end
 
--- XPerl_RaidPet_UpdateName
-local function XPerl_RaidPet_UpdateName(self)
+-- XPerl_RaidPets_UpdateName
+local function XPerl_RaidPets_UpdateName(self)
 	local partyid = SecureButton_GetUnit(self)
 	local name
 	if (self.ownerid and (UnitInVehicle(self.ownerid) or UnitHasVehicleUI(self.ownerid))) then
@@ -119,8 +121,8 @@ local function XPerl_RaidPet_UpdateName(self)
 	end
 end
 
--- XPerl_RaidPet_UpdateHealth
-local function XPerl_RaidPet_UpdateHealth(self)
+-- XPerl_RaidPets_UpdateHealth
+local function XPerl_RaidPets_UpdateHealth(self)
 	local partyid = SecureButton_GetUnit(self)
 	if (not partyid) then
 		self.healthBar:SetValue(0)
@@ -159,10 +161,34 @@ local function XPerl_RaidPet_UpdateHealth(self)
 	end
 end
 
+-- XPerl_RaidPets_RaidTargetUpdate
+local function XPerl_RaidPets_RaidTargetUpdate(self)
+	local icon = self.raidIcon
+	local raidIcon = GetRaidTargetIndex(self.partyid)
+
+
+	if (raidIcon) then
+		if (not icon) then
+			icon = self:CreateTexture(nil, "OVERLAY")
+			self.raidIcon = icon
+			icon:SetTexture("Interface\\TargetingFrame\\UI-RaidTargetingIcons")
+			icon:SetPoint("TOPLEFT")
+			icon:SetWidth(13)
+			icon:SetHeight(13)
+		else
+			icon:Show()
+		end
+		SetRaidTargetIconTexture(icon, raidIcon)
+	elseif (icon) then
+		icon:Hide()
+	end
+end
+
 -- XPerl_RaidPets_UpdateDisplay
 local function XPerl_RaidPets_UpdateDisplay(self)
-	XPerl_RaidPet_UpdateName(self)
-	XPerl_RaidPet_UpdateHealth(self)
+	XPerl_RaidPets_UpdateName(self)
+	XPerl_RaidPets_UpdateHealth(self)
+	XPerl_RaidPets_RaidTargetUpdate(self)
 	local unit = SecureButton_GetUnit(self)
 	if (unit) then
 		XPerl_Highlight:SetHighlight(self, UnitGUID(unit))
@@ -207,6 +233,40 @@ function XPerl_RaidPets_Events:PLAYER_ENTERING_WORLD()
 	TitlesUpdateFrame:Show()
 end
 
+local function taintable(self)
+	if(not self or type(self) == "number") then
+		return
+	end
+	self:SetAttribute("useparent-unit", true)
+	XPerl_SecureUnitButton_OnLoad(self, nil, nil, XPerl_ShowGenericMenu, true)
+end
+
+-- PLAYER_REGEN_ENABLED
+function XPerl_RaidPets_Events:PLAYER_REGEN_ENABLED()
+	-- Update all pet frame that would have tained
+	local tainted
+	if #taintFrames > 0 then
+		tainted = true
+	end
+	for i = 1, #taintFrames do
+		taintable(taintFrames[i])
+		taintFrames[i] = nil
+	end
+	if tainted then
+		XPerl_RaidPets_ChangeAttributes()
+		if (XPerl_RaidPets_OptionActions) then
+			XPerl_RaidPets_OptionActions()
+		end
+	end
+end
+
+-- RAID_TARGET_UPDATE
+function XPerl_RaidPets_Events:RAID_TARGET_UPDATE()
+	for i, frame in pairs(RaidPetFrameArray) do
+		XPerl_RaidPets_RaidTargetUpdate(frame)
+	end
+end
+
 -- UNIT_PET
 function XPerl_RaidPets_Events:UNIT_PET()
 	XPerl_RaidPet_UpdateGUIDs()
@@ -217,7 +277,7 @@ function XPerl_RaidPets_Events:UNIT_ENTERED_VEHICLE(unit)
 	local guid = UnitGUID(unit)
 	for u,frame in pairs(RaidPetFrameArray) do
 		if (frame.ownerid and UnitGUID(frame.ownerid) == guid) then
-			XPerl_RaidPet_UpdateName(frame)
+			XPerl_RaidPets_UpdateName(frame)
 		end
 	end
 	TitlesUpdateFrame:Show()
@@ -236,7 +296,7 @@ XPerl_RaidPets_Events.GROUP_ROSTER_UPDATE= XPerl_RaidPets_Events.GROUP_ROSTER_UP
 
 -- UNIT_HEALTH
 function XPerl_RaidPets_Events:UNIT_HEALTH()
-	XPerl_RaidPet_UpdateHealth(self)
+	XPerl_RaidPets_UpdateHealth(self)
 end
 
 -- UNIT_HEALTHMAX
@@ -245,7 +305,7 @@ XPerl_RaidPets_Events.UNIT_MAXHEALTH = XPerl_RaidPets_Events.UNIT_HEALTH
 -- UNIT_NAME_UPDATE
 function XPerl_RaidPets_Events:UNIT_NAME_UPDATE()
 	XPerl_RaidPet_UpdateGUIDs()
-	XPerl_RaidPet_UpdateName(self)
+	XPerl_RaidPets_UpdateName(self)
 end
 
 function XPerl_RaidPets_Events:UNIT_AURA()
@@ -301,6 +361,13 @@ function XPerl_RaidPet_Single_OnLoad(self)
 	self.FlashFrames = {self}
 
 	self:SetScript("OnShow", XPerl_RaidPets_UpdateDisplay)
+
+	if (InCombatLockdown()) then
+		tinsert(taintFrames, self)
+		return
+	else
+		taintable(self)
+	end
 end
 
 -- initialConfigFunction
@@ -432,8 +499,8 @@ end
 function XPerl_RaidPets_OptionActions()
 	SetMainHeaderAttributes(XPerl_Raid_GrpPets)
 
-	local events = {"PLAYER_ENTERING_WORLD", "VARIABLES_LOADED", "GROUP_ROSTER_UPDATE", "UNIT_PET", "UNIT_ENTERED_VEHICLE", "UNIT_EXITED_VEHICLE","PET_BATTLE_OPENING_START","PET_BATTLE_CLOSE"}
-	for i,event in pairs(events) do
+	local events = {"PLAYER_ENTERING_WORLD", "PLAYER_REGEN_ENABLED", "RAID_TARGET_UPDATE", "VARIABLES_LOADED", "GROUP_ROSTER_UPDATE", "UNIT_PET", "UNIT_ENTERED_VEHICLE", "UNIT_EXITED_VEHICLE","PET_BATTLE_OPENING_START","PET_BATTLE_CLOSE"}
+	for i, event in pairs(events) do
 		if (rconf.enable) then
 			XPerl_RaidPets_Frame:RegisterEvent(event)
 		else
