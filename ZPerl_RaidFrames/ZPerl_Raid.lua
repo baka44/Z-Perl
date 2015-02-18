@@ -51,7 +51,7 @@ local XPerl_ColourHealthBar = XPerl_ColourHealthBar
 -- TODO - Watch for:	 ERR_FRIEND_OFFLINE_S = "%s has gone offline."
 
 local conf, rconf
-XPerl_RequestConfig(function(newConf) conf = newConf rconf = conf.raid end, "$Revision: 902 $")
+XPerl_RequestConfig(function(newConf) conf = newConf rconf = conf.raid end, "$Revision: 903 $")
 
 XPERL_RAIDGRP_PREFIX	= "XPerl_Raid_Grp"
 
@@ -942,12 +942,15 @@ end
 -- XPerl_Raid_OnUpdate
 function XPerl_Raid_OnUpdate(self, elapsed)
 	if (rosterUpdated) then
+		if (not ZPerl_Custom) then
+			LoadAddOn("ZPerl_CustomHighlight")
+		end
 		rosterUpdated = nil
 		if (not InCombatLockdown()) then
 			XPerl_Raid_Position(self)
 		end
-		if (XPerl_Custom) then
-			XPerl_Custom:UpdateUnits()
+		if (ZPerl_Custom) then
+			ZPerl_Custom:UpdateUnits()
 		end
 		if (not IsInRaid()) then
 			ResArray = {}
@@ -1212,7 +1215,8 @@ function XPerl_Raid_Events:PLAYER_ENTERING_WORLDsmall()
 	XPerl_Raid_UpdateDisplayAll()
 
 	if (IsInInstance()) then
-		LoadAddOn("XPerl_CustomHighlight")
+		ZPerl_CustomHighlight = true
+		LoadAddOn("ZPerl_CustomHighlight")
 	end
 end
 
@@ -1246,7 +1250,7 @@ function XPerl_Raid_Events:PLAYER_ENTERING_WORLD()
 	end
 
 	if (IsInInstance()) then
-		LoadAddOn("XPerl_CustomHighlight")
+		LoadAddOn("ZPerl_CustomHighlight")
 	end
 
 	XPerl_Raid_Events.PLAYER_ENTERING_WORLD = XPerl_Raid_Events.PLAYER_ENTERING_WORLDsmall

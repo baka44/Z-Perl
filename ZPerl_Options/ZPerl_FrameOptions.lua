@@ -2,7 +2,7 @@
 -- Author: Zek <Boodhoof-EU>
 -- License: GNU GPL v3, 29 June 2007 (see LICENSE.txt)
 
-XPerl_SetModuleRevision("$Revision: 879 $")
+XPerl_SetModuleRevision("$Revision: 903 $")
 
 local localGroups = LOCALIZED_CLASS_NAMES_MALE
 local WoWclassCount = 0
@@ -2566,11 +2566,11 @@ function XPerl_Custom_Config_OnShow(self)
 		}
 	end
 	if (not XPerlDB.custom.zones) then
-		if (not XPerl_Custom) then
-			LoadAddOn("XPerl_CustomHighlight")
+		if (not ZPerl_Custom) then
+			LoadAddOn("ZPerl_CustomHighlight")
 		end
-		if (XPerl_Custom) then
-			XPerl_Custom:SetDefaultZoneData()
+		if (ZPerl_Custom) then
+			ZPerl_Custom:SetDefaultZoneData()
 		end
 	end
 
@@ -2860,13 +2860,13 @@ function XPerl_Options_Custom_ScanForIcons(self)
 									if (not zones[zone]) then
 										zones[zone] = {}
 									end
-									zones[zone][self.spellid] = true
+									XPerlDB.custom.zones[zone][self.spellid]=true
 									XPerl_Custom_ConfigNew:Hide()
 									XPerl_Custom_Config.listzone:FillList()
 									XPerl_Custom_Config.listdebuff:FillList()
 
-									if (XPerl_Custom) then
-										XPerl_Custom:PLAYER_ENTERING_WORLD()
+									if (ZPerl_Custom) then
+										ZPerl_Custom:PLAYER_ENTERING_WORLD()
 									end
 								end
 							end
@@ -2960,8 +2960,9 @@ end
 -- XPerl_Options_Custom_SelectedZone
 function XPerl_Options_Custom_SelectedZone(self)
 	local sel = self.listzone.selection
+	local start = self.listzone.start
 	if (sel) then
-		local row = self.listzone.line[sel]
+		local row = self.listzone.line[sel-start+1]
 		if (row) then
 			return row:GetText()
 		end

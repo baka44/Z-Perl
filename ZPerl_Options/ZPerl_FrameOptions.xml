@@ -11038,7 +11038,7 @@
 
 					<Frame name="$parent_Custom">
 						<Scripts>
-							if (select(6, GetAddOnInfo("XPerl_CustomHighlight")) == "MISSING") then
+							if (select(6, GetAddOnInfo("ZPerl_CustomHighlight")) == "MISSING") then
 								self:Hide()
 							end
 						</Scripts>
@@ -11068,8 +11068,8 @@
 										self.configBase = "XPerlDB.custom"
 										self.configIndex = "enable"
 										self.configClick = function()
-											if (XPerl_Custom) then
-												XPerl_Custom:PLAYER_ENTERING_WORLD()
+											if (ZPerl_Custom) then
+												ZPerl_Custom:PLAYER_ENTERING_WORLD()
 											end
 										end
 										self.Validate = function()
@@ -14349,11 +14349,11 @@
 								XPerl_OptionsSetMyText(self, "XPERL_CONF_RAID_CUSTOM_DEFAULTS")
 							</OnLoad>
 							<OnClick>
-								if (not XPerl_Custom) then
-									LoadAddOn("XPerl_CustomHighlight")
+								if (not ZPerl_Custom) then
+									LoadAddOn("ZPerl_CustomHighlight")
 								end
-								if (XPerl_Custom) then
-									XPerl_Custom:SetDefaults()
+								if (ZPerl_Custom) then
+									ZPerl_Custom:SetDefaults()
 									XPerl_Custom_Config.listzone:FillList()
 									XPerl_Custom_Config.listdebuff:FillList()
 								end

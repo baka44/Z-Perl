@@ -7,9 +7,9 @@ if (not XPerl_RequestConfig) then
 end
 
 local conf
-XPerl_RequestConfig(function(new) conf = new.custom end, "$Revision: 637 $")
+XPerl_RequestConfig(function(new) conf = new.custom end, "$Revision: 903 $")
 
-local ch = CreateFrame("Frame", "XPerl_Custom")
+local ch = CreateFrame("Frame", "ZPerl_Custom")
 ch.active = {}
 ch:RegisterEvent("PLAYER_ENTERING_WORLD")
 ch:RegisterEvent("UNIT_AURA")
@@ -312,13 +312,14 @@ function ch:DefaultZoneData()
 				[106730] = true,							-- Tetanus (Madness of Deathwing)
 				[108649] = true,							-- Parasite (Madness of Deathwing Heroic)
 			},
-		}
+	}
 end
 
 -- SetDefaultZoneData
 function ch:SetDefaultZoneData()
 	if (conf) then
 		conf.zones = self:DefaultZoneData()
+		XPerlDB.custom.zones = conf.zones
 		self:PLAYER_ENTERING_WORLD()
 	end
 end
@@ -476,7 +477,7 @@ function ch:Check(frame, unit)
 			end
 		end
 
-		for i = 1,40 do
+		for i = 1, 40 do
 			local name, _, icon = UnitDebuff(unit, i)
 			if (not name) then
 				break
