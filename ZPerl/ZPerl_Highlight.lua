@@ -4,7 +4,7 @@
 
 local playerClass, playerName, playerGUID
 local conf
-XPerl_RequestConfig(function(new) conf = new end, "$Revision: 900 $")
+XPerl_RequestConfig(function(new) conf = new end, "$Revision: 901 $")
 
 local GetNumSubgroupMembers = GetNumSubgroupMembers
 local GetNumGroupMembers = GetNumGroupMembers
@@ -1318,7 +1318,7 @@ function xpHigh.clEvents:SPELL_CAST_SUCCESS(timestamp, event, srcGUID, srcName, 
 				end
 			elseif (shieldSpells[spellName]) then
 				if (conf.highlight.SHIELD) then
-					--self:Add(dstGUID, "SHIELD", shieldSpells[spellName])
+					self:Add(dstGUID, "SHIELD", shieldSpells[spellName])
 				end
 			elseif (pomSpells[spellName]) then
 				if (conf.highlight.POM) then
