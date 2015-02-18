@@ -4,7 +4,7 @@
 
 local init_done, gradient, conf, doneOptions
 local errorCount = 0
-XPerl_RequestConfig(function(new) conf = new end, "$Revision: 761 $")
+XPerl_RequestConfig(function(new) conf = new end, "$Revision: 911 $")
 
 local GetNumSubgroupMembers = GetNumSubgroupMembers
 local GetNumGroupMembers = GetNumGroupMembers
@@ -108,8 +108,7 @@ local function SetupUnitFrameList(frame, subList)
 			o = "VERTICAL"
 		end
 
-		gradient = {o, conf.colour.gradient.e.r, conf.colour.gradient.e.g, conf.colour.gradient.e.b, conf.colour.gradient.e.a,
-				conf.colour.gradient.s.r, conf.colour.gradient.s.g, conf.colour.gradient.s.b, conf.colour.gradient.s.a}
+		gradient = {o, conf.colour.gradient.e.r, conf.colour.gradient.e.g, conf.colour.gradient.e.b, conf.colour.gradient.e.a, conf.colour.gradient.s.r, conf.colour.gradient.s.g, conf.colour.gradient.s.b, conf.colour.gradient.s.a}
 	end
 
 	if (type(subList) == "table") then
@@ -685,7 +684,7 @@ function XPerl_OptionActions(which)
 
 	XPerl_pcall(XPerl_SetAllFrames)
 
-	for k,v in pairs(optionFuncs) do
+	for k, v in pairs(optionFuncs) do
 		XPerl_NoFadeBars(true)
 		XPerl_pcall(v.func, v.slf, which)
 	end
@@ -695,7 +694,7 @@ function XPerl_OptionActions(which)
 	doneOptions = true
 
 	-- Avoid tainting default blizzard buffs using cooldown options. Cooldowns won't show immediately atm.
-	--if (conf.buffs.blizzardCooldowns and BuffFrame and BuffFrame:IsShown()) then
-	--	securecall("BuffFrame_Update")
-	--end
+	--[[if (conf.buffs.blizzardCooldowns and BuffFrame and BuffFrame:IsShown()) then
+		securecall("BuffFrame_Update")
+	end]]
 end

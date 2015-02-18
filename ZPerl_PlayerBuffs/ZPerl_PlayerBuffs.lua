@@ -3,9 +3,9 @@
 -- License: GNU GPL v3, 29 June 2007 (see LICENSE.txt)
 
 local conf, pconf
-XPerl_RequestConfig(function(new) conf = new pconf = new.player end, "$Revision: 900 $")
+XPerl_RequestConfig(function(new) conf = new pconf = new.player end, "$Revision: 911 $")
 
-local playerClass
+--local playerClass
 
 --[===[@debug@
 local function d(fmt, ...)
@@ -89,18 +89,6 @@ function XPerl_Player_BuffSetup(self)
 	if (not self) then
 		return
 	end
-	if (not pconf.buffs.enable) then
-		if (self.buffFrame) then
-			self.buffFrame:Hide()
-			self.debuffFrame:Hide()
-
-			BuffFrame:Show()
-			BuffFrame:RegisterEvent("UNIT_AURA")
-			TemporaryEnchantFrame:Show()
-		end
-		return
-	end
-
 	if (not self.buffFrame) then
 		self.buffFrame = CreateFrame("Frame", self:GetName().."buffFrame", self, "SecureAuraHeaderTemplate")
 		self.debuffFrame = CreateFrame("Frame", self:GetName().."debuffFrame", self.buffFrame, "SecureAuraHeaderTemplate")
@@ -121,7 +109,34 @@ function XPerl_Player_BuffSetup(self)
 		--end
 		--self.debuffFrame.initialConfigFunction = self.buffFrame.initialConfigFunction
 	end
-		
+	if (self.buffFrame) then
+		if pconf.buffs.enable then
+			setCommon(self.buffFrame, "HELPFUL", "XPerl_Secure_BuffTemplate")
+			self.buffFrame:Show()
+		else
+			self.buffFrame:Hide()
+		end
+	end
+	if (self.debuffFrame) then
+		if pconf.buffs.enable and pconf.debuffs.enable then
+			setCommon(self.debuffFrame, "HARMFUL", "XPerl_Secure_BuffTemplate")
+			self.debuffFrame:Show()
+		else
+			self.debuffFrame:Hide()
+		end
+	end
+	XPerl_Player_Buffs_Position(self)
+	if (not pconf.buffs.enable) then
+		if (self.buffFrame) then
+			self.buffFrame:Hide()
+			self.debuffFrame:Hide()
+
+			BuffFrame:Show()
+			BuffFrame:RegisterEvent("UNIT_AURA")
+			TemporaryEnchantFrame:Show()
+		end
+		return
+	end
 	if (pconf.buffs.hideBlizzard) then
 		BuffFrame:UnregisterEvent("UNIT_AURA")
 		BuffFrame:Hide()
@@ -135,7 +150,7 @@ end
 
 
 local function XPerl_Player_Buffs_Set_Bits(self)
-	playerClass = select(2, UnitClass("player"))
+	--playerClass = select(2, UnitClass("player"))
 
 	XPerl_Player_BuffSetup(self)
 

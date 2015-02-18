@@ -51,9 +51,9 @@ local XPerl_ColourHealthBar = XPerl_ColourHealthBar
 -- TODO - Watch for:	 ERR_FRIEND_OFFLINE_S = "%s has gone offline."
 
 local conf, rconf
-XPerl_RequestConfig(function(newConf) conf = newConf rconf = conf.raid end, "$Revision: 906 $")
+XPerl_RequestConfig(function(newConf) conf = newConf rconf = conf.raid end, "$Revision: 911 $")
 
-XPERL_RAIDGRP_PREFIX	= "XPerl_Raid_Grp"
+XPERL_RAIDGRP_PREFIX = "XPerl_Raid_Grp"
 
 -- Hold some raid roster information (AFK, DND etc.)
 -- Is also stored between sessions to maintain timers and flags
@@ -622,7 +622,6 @@ function XPerl_Raid_Single_OnLoad(self)
 	else
 		taintable(self)
 	end
-
 end
 
 -- XPerl_Raid_CombatFlash
@@ -2192,7 +2191,7 @@ function XPerl_Raid_ChangeAttributes()
 			end
 
 			local invalid
-			for i = 1,WoWclassCount do
+			for i = 1, WoWclassCount do
 				if (not rconf.class[i]) then
 					invalid = true
 				end
@@ -2201,8 +2200,7 @@ function XPerl_Raid_ChangeAttributes()
 				rconf.class = DefaultRaidClasses()
 			end
 
-			for i = 1,WoWclassCount do
-				
+			for i = 1, WoWclassCount do
 				if (rconf.class[i].enable) then
 					if (not f) then
 						f = rconf.class[i].name
@@ -2215,7 +2213,7 @@ function XPerl_Raid_ChangeAttributes()
 		end
 	end
 
-	for i = 1,rconf.sortByClass and WoWclassCount or 11 do
+	for i = 1, rconf.sortByClass and WoWclassCount or 11 do
 		local groupHeader = raidHeaders[i]
 
 		-- Hide this when we change attributes, so the whole re-calc is only done once, instead of for every attribute change
@@ -2224,7 +2222,7 @@ function XPerl_Raid_ChangeAttributes()
 		if rconf.sortByRole then
 			groupHeader:SetAttribute("groupBy", "ASSIGNEDROLE")
 			groupHeader:SetAttribute("groupingOrder", "TANK,HEALER,DAMAGER,NONE")
-			groupHeader:SetAttribute("startingIndex", (i-1)*5+1)
+			groupHeader:SetAttribute("startingIndex", (i - 1) * 5 + 1)
 			groupHeader:SetAttribute("unitsPerColumn", 5)
 			groupHeader:SetAttribute("strictFiltering", nil)
 			groupHeader:SetAttribute("groupFilter", nil)

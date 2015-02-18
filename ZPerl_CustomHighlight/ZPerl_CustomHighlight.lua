@@ -7,7 +7,7 @@ if (not XPerl_RequestConfig) then
 end
 
 local conf
-XPerl_RequestConfig(function(new) conf = new.custom end, "$Revision: 903 $")
+XPerl_RequestConfig(function(new) conf = new.custom end, "$Revision: 911 $")
 
 local ch = CreateFrame("Frame", "ZPerl_Custom")
 ch.active = {}
@@ -363,7 +363,7 @@ ch.MINIMAP_ZONE_CHANGED = ch.PLAYER_ENTERING_WORLD
 
 -- UpdateRoster
 function ch:UpdateUnits()
-	for unit,frame in pairs(self.RaidFrameArray) do
+	for unit, frame in pairs(self.RaidFrameArray) do
 		if (frame:IsShown()) then
 			self:Check(frame, unit)
 		end
@@ -373,10 +373,10 @@ end
 -- IconAcquire
 function ch:IconAcquire()
 	if (not self.icons) then
-		self.icons = {}
+		self.icons = { }
 	end
 	if (not self.usedIcons) then
-		self.usedIcons = {}
+		self.usedIcons = { }
 	end
 
 	local icon = self.icons[1]
@@ -408,7 +408,7 @@ function ch:Highlight(frame, mode, unit, debuff, buffIcon)
 		self.active[frame] = buffIcon
 		local c = frame.customHighlight
 		if (not c) then
-			c = {}
+			c = { }
 			frame.customHighlight = c
 		end
 		c.type = mode
