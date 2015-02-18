@@ -13,7 +13,7 @@ XPerl_RequestConfig(function(new)
 			for k,v in pairs(PartyFrames) do
 				v.conf = pconf
 			end
-		end, "$Revision: 860 $")
+		end, "$Revision: 913 $")
 
 local percD = "%d"..PERCENT_SYMBOL
 
@@ -428,6 +428,9 @@ end
 
 -- XPerl_Party_Buff_UpdateAll
 local function XPerl_Party_Buff_UpdateAll(self)
+	if not self:IsVisible() then
+		return
+	end
 	if (self.conf) then
 		if (not pconf.buffs.enable and not pconf.debuffs.enable) then
 			self.buffFrame:Hide()

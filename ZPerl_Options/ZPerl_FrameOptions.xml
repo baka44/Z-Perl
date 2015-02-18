@@ -1282,7 +1282,8 @@
 		</Size>
 		<Frames>
 			<CheckButton name="$parent_Enable" inherits="XPerlCheckButtonTemplate">
-				<Anchors><Anchor point="TOPLEFT"/></Anchors>
+				<Anchors>
+					<Anchor point="TOPLEFT"/></Anchors>
 				<Scripts>
 					<OnLoad>
 						self:SetID(self:GetParent():GetID())
@@ -2689,19 +2690,13 @@
 				</Frames>
 			</Frame>
 
-			-- Global Options
+			<!-- Global Options -->
 			<Frame name="$parent_Layout">
-				-- TODO LAYOUT STUFF HERE
-				<Anchors>
-					<Anchor point="TOPLEFT" relativeTo="XPerl_Options_Area_Global"/>
-					<Anchor point="BOTTOMRIGHT" relativeTo="XPerl_Options_Area_Global"/>
-				</Anchors>
-
 				<Scripts>
 					<OnLoad>
+						self:SetScale(0.9)
 						self.FillList = XPerl_Options_LayoutFill
 						self.GetLayout = XPerl_Options_GetLayout
-
 						self.scrollBar = XPerl_Options_Layout_ListScrollBar
 						self.scrollBar.bar = XPerl_Options_Layout_ListScrollBarScrollBar
 					</OnLoad>
@@ -2709,7 +2704,10 @@
 						self:FillList()
 					</OnShow>
 				</Scripts>
-
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="XPerl_Options_Area_Global"/>
+					<Anchor point="BOTTOMRIGHT" relativeTo="XPerl_Options_Area_Global"/>
+				</Anchors>
 				<Frames>
 					<Button name="$parent_Title">
 						<Size>
@@ -3163,8 +3161,13 @@
 				</Frames>
 			</Frame>
 
-			-- Main Options
+			<!-- Main Options -->
 			<Frame name="$parent_Global_Options">
+				<Scripts>
+					<OnLoad>
+						self:SetScale(0.9)
+					</OnLoad>
+				</Scripts>
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeTo="XPerl_Options_Area_Tabs"/>
 					<Anchor point="BOTTOMRIGHT" relativeTo="XPerl_Options_Area_Tabs"/>
@@ -3481,7 +3484,7 @@
 						<Anchors>
 							<Anchor point="TOPLEFT" relativeTo="$parent_Highlight" relativePoint="TOPRIGHT">
 								<Offset>
-									<AbsDimension x="120" y="0"/>
+									<AbsDimension x="248" y="0"/>
 								</Offset>
 							</Anchor>
 						</Anchors>
@@ -3506,7 +3509,7 @@
 							<AbsDimension x="26" y="26"/>
 						</Size>
 						<Anchors>
-							<Anchor point="TOPLEFT" relativeTo="$parent_BuffCooldown" relativePoint="TOPRIGHT">
+							<Anchor point="LEFT" relativeTo="$parent_BuffCooldown" relativePoint="RIGHT">
 								<Offset>
 									<AbsDimension x="90" y="0"/>
 								</Offset>
@@ -3552,7 +3555,7 @@
 							<AbsDimension x="26" y="26"/>
 						</Size>
 						<Anchors>
-							<Anchor point="TOPLEFT" relativeTo="$parent_BuffCountdown" relativePoint="TOPRIGHT">
+							<Anchor point="LEFT" relativeTo="$parent_BuffCountdown" relativePoint="RIGHT">
 								<Offset>
 									<AbsDimension x="90" y="0"/>
 								</Offset>
@@ -4791,7 +4794,7 @@
 				</Frames>
 			</Frame>
 
-			-- Player Options
+			<!-- Player Options -->
 			<Frame name="$parent_Player_Options" hidden="true">
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeTo="XPerl_Options_Area_Tabs"/>
@@ -4800,7 +4803,7 @@
 
 				<Scripts>
 					<OnLoad>
-						self:SetScale(0.95)
+						self:SetScale(0.9)
 					</OnLoad>
 					<OnShow>
 						if (not IsAddOnLoaded("ZPerl_ArcaneBar")) then
@@ -5401,6 +5404,9 @@
 							</Button>
 
 							<CheckButton name="$parent_PlayerBuffs" inherits="XPerlCheckButtonTemplate">
+								<Size>
+									<AbsDimension x="30" y="30"/>
+								</Size>
 								<Anchors>
 									<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" relativeTo="$parent_Title">
 										<Offset>
@@ -5873,8 +5879,13 @@
 				</Frames>
 			</Frame>
 
-			-- Pet Options
+			<!-- Pet Options -->
 			<Frame name="$parent_Pet_Options" hidden="true">
+				<Scripts>
+					<OnLoad>
+						self:SetScale(0.9)
+					</OnLoad>
+				</Scripts>
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeTo="XPerl_Options_Area_Tabs"/>
 					<Anchor point="BOTTOMRIGHT" relativeTo="XPerl_Options_Area_Tabs"/>
@@ -6165,9 +6176,6 @@
 
 					<Frame name="$parent_PetTarget">
 						<Scripts>
-							<OnLoad>
-								self:SetScale(0.9)
-							</OnLoad>
 							<OnShow>
 								if (not IsAddOnLoaded("ZPerl_TargetTarget")) then
 									self:Hide()
@@ -6216,6 +6224,9 @@
 							</Button>
 
 							<CheckButton name="$parent_PetsTarget" inherits="XPerlCheckButtonTemplate">
+								<Size>
+									<AbsDimension x="30" y="30"/>
+								</Size>
 								<Anchors>
 									<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" relativeTo="$parent_Title">
 										<Offset>
@@ -6841,7 +6852,7 @@
 				</Frames>
 			</Frame>
 
-			-- Target Options
+			<!-- Target Options -->
 			<Frame name="$parent_Target_Options" hidden="true">
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeTo="XPerl_Options_Area_Tabs"/>
@@ -6849,7 +6860,7 @@
 				</Anchors>
 				<Scripts>
 					<OnLoad>
-						self:SetScale(0.92)
+						self:SetScale(0.9)
 					</OnLoad>
 					<OnShow>
 						if (not IsAddOnLoaded("ZPerl_ArcaneBar")) then
@@ -8559,7 +8570,7 @@
 
 				<Scripts>
 					<OnLoad>
-						self:SetScale(0.92)
+						self:SetScale(0.9)
 					</OnLoad>
 					<OnShow>
 						if (not IsAddOnLoaded("ZPerl_ArcaneBar")) then
@@ -9935,6 +9946,9 @@
 				</Anchors>
 
 				<Scripts>
+					<OnLoad>
+						self:SetScale(0.9)
+					</OnLoad>
 					<OnShow>
 						if (not IsAddOnLoaded("ZPerl_ArcaneBar")) then
 							local n = self:GetName().."_"
@@ -10982,13 +10996,17 @@
 				</Frames>
 			</Frame>
 
-			-- Raid Options
+			<!-- Raid Options -->
 			<Frame name="$parent_Raid_Options" hidden="true">
+				<Scripts>
+					<OnLoad>
+						self:SetScale(0.9)
+					</OnLoad>
+				</Scripts>
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeTo="XPerl_Options_Area_Tabs"/>
 					<Anchor point="BOTTOMRIGHT" relativeTo="XPerl_Options_Area_Tabs"/>
 				</Anchors>
-
 				<Frames>
 					<CheckButton name="$parent_Enable" inherits="XPerlCheckButtonTemplate">
 						<Anchors>
@@ -12278,13 +12296,17 @@
 				</Frames>
 			</Frame>
 
-			-- All Options
+			<!-- All Options -->
 			<Frame name="$parent_All_Options" hidden="true">
+				<Scripts>
+					<OnLoad>
+						self:SetScale(0.9)
+					</OnLoad>
+				</Scripts>
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeTo="XPerl_Options_Area_Tabs"/>
 					<Anchor point="BOTTOMRIGHT" relativeTo="XPerl_Options_Area_Tabs"/>
 				</Anchors>
-
 				<Frames>
 					<CheckButton name="$parent_Portrait" inherits="XPerlCheckButtonTemplate">
 						<Anchors>
@@ -12535,6 +12557,11 @@
 					</Slider>
 
 					<Frame name="$parent_AddOns">
+						<Scripts>
+							<OnLoad>
+								self:SetScale(0.9)
+							</OnLoad>
+						</Scripts>
 						<Size>
 							<AbsDimension x="130" y="70"/>
 						</Size>
@@ -12966,11 +12993,15 @@
 
 			<!-- Color Options -->
 			<Frame name="$parent_Colour_Options" hidden="true">
+				<Scripts>
+					<OnLoad>
+						self:SetScale(0.9)
+					</OnLoad>
+				</Scripts>
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeTo="XPerl_Options_Area_Tabs"/>
 					<Anchor point="BOTTOMRIGHT" relativeTo="XPerl_Options_Area_Tabs"/>
 				</Anchors>
-
 				<Frames>
 					<Frame name="$parent_BarColours">
 						<Backdrop edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
@@ -14104,7 +14135,13 @@
 				</Frames>
 			</Frame>
 
+			<!-- Helper Options -->
 			<Frame name="$parent_Helper_Options" hidden="true">
+				<Scripts>
+					<OnLoad>
+						self:SetScale(0.9)
+					</OnLoad>
+				</Scripts>
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeTo="XPerl_Options_Area_Tabs"/>
 					<Anchor point="BOTTOMRIGHT" relativeTo="XPerl_Options_Area_Tabs"/>
@@ -14780,7 +14817,13 @@
 				</Frames>
 			</Frame>
 
+			<!-- Monitor Options -->
 			<Frame name="$parent_Monitor_Options" hidden="true">
+				<Scripts>
+					<OnLoad>
+						self:SetScale(0.9)
+					</OnLoad>
+				</Scripts>
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeTo="XPerl_Options_Area_Tabs"/>
 					<Anchor point="BOTTOMRIGHT" relativeTo="XPerl_Options_Area_Tabs"/>
@@ -14790,7 +14833,7 @@
 						<Anchors>
 							<Anchor point="TOPLEFT">
 								<Offset>
-									<AbsDimension x="5" y="-3"/>
+									<AbsDimension x="6" y="-3"/>
 								</Offset>
 							</Anchor>
 						</Anchors>
@@ -15371,7 +15414,13 @@
 				</Frames>
 			</Frame>
 
+			<!-- Admin Options -->
 			<Frame name="$parent_Admin_Options" hidden="true">
+				<Scripts>
+					<OnLoad>
+						self:SetScale(0.9)
+					</OnLoad>
+				</Scripts>
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeTo="XPerl_Options_Area_Tabs"/>
 					<Anchor point="BOTTOMRIGHT" relativeTo="XPerl_Options_Area_Tabs"/>
@@ -15381,7 +15430,7 @@
 						<Anchors>
 							<Anchor point="TOPLEFT">
 								<Offset>
-									<AbsDimension x="5" y="-3"/>
+									<AbsDimension x="6" y="-3"/>
 								</Offset>
 							</Anchor>
 						</Anchors>

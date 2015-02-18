@@ -22,7 +22,7 @@ XPerl_RequestConfig(function(new)
 	if (XPerl_PetTarget) then
 		XPerl_PetTarget.conf = conf.pettarget
 	end
-end, "$Revision: 912 $")
+end, "$Revision: 913 $")
 
 local percD = "%d"..PERCENT_SYMBOL
 local format = format
@@ -1255,6 +1255,12 @@ function XPerl_Target_Events:PLAYER_TARGET_CHANGED()
 		if (XPerl_FocusTarget) then
 			XPerl_TargetTarget_UpdateDisplay(XPerl_FocusTarget)
 		end
+	end
+
+	if (UnitIsUnit("target", "focus")) then
+		XPerl_Target.statsFrame.focusTarget:Show()
+	else
+		XPerl_Target.statsFrame.focusTarget:Hide()
 	end
 end
 

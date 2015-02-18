@@ -2,7 +2,7 @@
 -- Author: Zek <Boodhoof-EU>
 -- License: GNU GPL v3, 29 June 2007 (see LICENSE.txt)
 
-XPerl_SetModuleRevision("$Revision: 912 $")
+XPerl_SetModuleRevision("$Revision: 913 $")
 
 local localGroups = LOCALIZED_CLASS_NAMES_MALE
 local WoWclassCount = 0
@@ -170,12 +170,17 @@ function XPerl_Options_EnableSibling(self, sibling, check2nd, check3rd)
 		if ((siblingFrame.GetFrameType or siblingFrame.GetObjectType)(siblingFrame) == "Button") then
 			if (result) then
 				siblingFrame:Enable()
+				if siblingFrame == XPerl_Options_Colour_Options_FrameColours_Start or siblingFrame == XPerl_Options_Colour_Options_FrameColours_End then
+					_G[siblingFrame:GetName().."Text"]:SetTextColor(NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b)
+				end
 			else
 				siblingFrame:Disable()
+				if siblingFrame == XPerl_Options_Colour_Options_FrameColours_Start or siblingFrame == XPerl_Options_Colour_Options_FrameColours_End then
+					_G[siblingFrame:GetName().."Text"]:SetTextColor(0.5, 0.5, 0.5)
+				end
 			end
 		elseif ((siblingFrame.GetFrameType or siblingFrame.GetObjectType)(siblingFrame) == "CheckButton") then
 			XPerl_Options_EnableCheck(siblingFrame, result)
-
 		elseif ((siblingFrame.GetFrameType or siblingFrame.GetObjectType)(siblingFrame) == "Slider") then
 			if (result) then
 				siblingFrame:EnableSlider()
