@@ -8,12 +8,12 @@ local PartyFrames = {}
 local startupDone
 local conf, pconf
 XPerl_RequestConfig(function(new)
-			conf = new
-			pconf = new.party
-			for k,v in pairs(PartyFrames) do
-				v.conf = pconf
-			end
-		end, "$Revision: 913 $")
+	conf = new
+	pconf = new.party
+	for k,v in pairs(PartyFrames) do
+		v.conf = pconf
+	end
+end, "$Revision: 913 $")
 
 local percD = "%d"..PERCENT_SYMBOL
 
