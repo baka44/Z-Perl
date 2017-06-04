@@ -22,7 +22,7 @@ XPerl_RequestConfig(function(new)
 	if (XPerl_PetTarget) then
 		XPerl_PetTarget.conf = conf.pettarget
 	end
-end, "$Revision: 936 $")
+end, "$Revision: 937 $")
 
 local percD = "%d"..PERCENT_SYMBOL
 local format = format
@@ -122,7 +122,9 @@ function XPerl_Target_OnLoad(self, partyid)
 			updateTooltipDebuff = DebuffUpdateTooltip,
 			debuffParent = true,
 			debuffSizeMod = 0.2,
-			debuffAnchor1 = function(self, b) b:SetPoint("TOPLEFT", 0, 0) end,
+			debuffAnchor1 = function(self, b)
+				b:SetPoint("TOPLEFT", 0, 0)
+			end,
 		}
 		self.buffSetup.buffAnchor1 = self.buffSetup.debuffAnchor1
 		buffSetup = self.buffSetup
@@ -150,8 +152,7 @@ function XPerl_Target_OnLoad(self, partyid)
 	XPerl_RegisterHighlight(self.highlight, 3)
 	XPerl_RegisterPerlFrames(self, {self.nameFrame, self.statsFrame, self.levelFrame, self.portraitFrame, self.typeFramePlayer, self.creatureTypeFrame, self.bossFrame, self.cpFrame})
 
-	self.FlashFrames = {self.portraitFrame, self.nameFrame, self.levelFrame, self.statsFrame, self.bossFrame,
-				self.typeFramePlayer, self.typeFrame}
+	self.FlashFrames = {self.portraitFrame, self.nameFrame, self.levelFrame, self.statsFrame, self.bossFrame, self.typeFramePlayer, self.typeFrame}
 
 	if (XPerl_ArcaneBar_RegisterFrame) then
 		XPerl_ArcaneBar_RegisterFrame(self.nameFrame, partyid)

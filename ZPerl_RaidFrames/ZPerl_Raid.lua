@@ -8,12 +8,11 @@ local myGroup = 0
 local FrameArray = { }		-- List of raid frames indexed by raid ID
 local RaidPositions = { }	-- Back-matching of unit names to raid ID
 local ResArray = { }		-- List of currently active resserections in progress
-local buffUpdates = { }		-- Queue for buff updates after a roster change
+--local buffUpdates = { }		-- Queue for buff updates after a roster change
 local raidLoaded
 local rosterUpdated
 local percF = "%.1f"..PERCENT_SYMBOL
 local percD = "%d"..PERCENT_SYMBOL
-local lastNamesList, lastName, lastWith, lastNamesCount -- Stores with/without buff list (OnUpdate optimization)
 local fullyInitiallized
 
 local taintFrames = { }
@@ -22,7 +21,7 @@ local conf, rconf
 XPerl_RequestConfig(function(newConf)
 	conf = newConf
 	rconf = conf.raid
-end, "$Revision: 936 $")
+end, "$Revision: 937 $")
 
 if type(RegisterAddonMessagePrefix) == "function" then
 	RegisterAddonMessagePrefix("CTRA")
@@ -94,7 +93,7 @@ local raidHeaders = { }
 -- XPerl_Raid_OnLoad
 function XPerl_Raid_OnLoad(self)
 	local events = {
-		--[["CHAT_MSG_ADDON",]] "PLAYER_ENTERING_WORLD", "VARIABLES_LOADED", "GROUP_ROSTER_UPDATE", "UNIT_FLAGS", "UNIT_AURA", "UNIT_POWER", "UNIT_MAXPOWER", "UNIT_HEALTH_FREQUENT", "UNIT_MAXHEALTH", "UNIT_NAME_UPDATE", "PLAYER_FLAGS_CHANGED", --[["UNIT_COMBAT",]] "UNIT_SPELLCAST_START", "UNIT_SPELLCAST_STOP", "UNIT_SPELLCAST_FAILED", "UNIT_SPELLCAST_INTERRUPTED", "READY_CHECK", "READY_CHECK_CONFIRM", "READY_CHECK_FINISHED", "RAID_TARGET_UPDATE", "PLAYER_LOGIN", "ROLE_CHANGED_INFORM", "PET_BATTLE_OPENING_START", "PET_BATTLE_CLOSE", "UNIT_CONNECTION", "PLAYER_REGEN_ENABLED"
+		"CHAT_MSG_ADDON", "PLAYER_ENTERING_WORLD", "VARIABLES_LOADED", "GROUP_ROSTER_UPDATE", "UNIT_FLAGS", "UNIT_AURA", "UNIT_POWER", "UNIT_MAXPOWER", "UNIT_HEALTH_FREQUENT", "UNIT_MAXHEALTH", "UNIT_NAME_UPDATE", "PLAYER_FLAGS_CHANGED", "UNIT_COMBAT", "UNIT_SPELLCAST_START", "UNIT_SPELLCAST_STOP", "UNIT_SPELLCAST_FAILED", "UNIT_SPELLCAST_INTERRUPTED", "READY_CHECK", "READY_CHECK_CONFIRM", "READY_CHECK_FINISHED", "RAID_TARGET_UPDATE", "PLAYER_LOGIN", "ROLE_CHANGED_INFORM", "PET_BATTLE_OPENING_START", "PET_BATTLE_CLOSE", "UNIT_CONNECTION", "PLAYER_REGEN_ENABLED"
 	}
 
 	for i, event in pairs(events) do
@@ -110,15 +109,6 @@ function XPerl_Raid_OnLoad(self)
 
 	self.time = 0
 	self.Array = { }
-
-
-	--Disable the creation of blizz CompactRaidFrameX, theres an issue with taint due to dropdown with more 7 items
-	--From http://www.wowinterface.com/forums/showpost.php?p=261589&postcount=5
-	
-	if (rconf.enable and CompactUnitFrameProfiles) then
-		--CompactRaidFrameManager:SetParent(self)
-		--CompactUnitFrameProfiles:UnregisterAllEvents() -- This disables the creation of the blizzard raid frames
-	end
 	
 	XPerl_RegisterOptionChanger(function()
 		if (raidLoaded) then
@@ -133,12 +123,6 @@ function XPerl_Raid_OnLoad(self)
 			SkipHighlightUpdate = nil
 		end
 	end, "Raid")
-
-	--[[for i = 1, WoWclassCount do
-		for j = 1, 40 do
-			_G["XPerl_Raid_Grp"..i]:SetAttribute("child"..j, _G["XPerl_Raid_Grp"..i.."UnitButton"..j])
-		end
-	end]]
 
 	XPerl_Raid_OnLoad = nil
 end
@@ -432,12 +416,10 @@ function XPerl_Raid_UpdateHealth(self)
 				XPerl_Raid_UpdateName(self)
 			end
 			return
-
 		elseif (UnitBuff(partyid, spiritOfRedemption)) then
 			self.dead = true
 			XPerl_Raid_ShowFlags(self, XPERL_LOC_DEAD)
 			XPerl_Raid_UpdateName(self)
-
 		elseif (UnitIsDead(partyid) or (myRoster and myRoster.fd and conf.showFD)) then
 			if (myRoster and myRoster.fd) then
 				XPerl_NoFadeBars(true)
@@ -449,12 +431,10 @@ function XPerl_Raid_UpdateHealth(self)
 				XPerl_Raid_ShowFlags(self, XPERL_LOC_DEAD)
 				XPerl_Raid_UpdateName(self)
 			end
-
 		elseif (UnitIsGhost(partyid)) then
 			self.dead = true
 			XPerl_Raid_ShowFlags(self, XPERL_LOC_GHOST)
 			XPerl_Raid_UpdateName(self)
-
 		else
 			if (self.dead or (myRoster and ((myRoster.fd and conf.showFD) or myRoster.ressed))) then
 				XPerl_Raid_UpdateManaType(self, true)
@@ -566,7 +546,7 @@ local function onAttrChanged(self, name, value)
 				XPerl_Raid_UpdateDisplay(self)
 			end
 		else
-			buffUpdates[self] = nil
+			--buffUpdates[self] = nil
 			SetFrameArray(self)
 			self.lastID = nil
 			self.lastName = nil
@@ -589,9 +569,9 @@ local function taintable(self)
 	self.nameFrame:SetAttribute("useparent-unit", true)
 	--self.nameFrame:SetAttribute("*type1", "target")
 	--self.nameFrame:SetAttribute("type2", "menu")
-	--self.nameFrame.menu = XPerl_Raid_ShowPopup --Again, doesnt seem todo anything...
-	XPerl_SecureUnitButton_OnLoad(self.nameFrame, nil, nil, XPerl_ShowGenericMenu, true)
-	XPerl_SecureUnitButton_OnLoad(self, nil, nil, XPerl_ShowGenericMenu, true)
+	--self.nameFrame.menu = XPerl_Raid_ShowPopup -- Again, doesnt seem todo anything...
+	XPerl_SecureUnitButton_OnLoad(self.nameFrame, self.partyid, nil, TargetFrameDropDown, XPerl_ShowGenericMenu)
+	XPerl_SecureUnitButton_OnLoad(self, self.partyid, nil, TargetFrameDropDown, XPerl_ShowGenericMenu)
 end
 
 -- XPerl_Raid_Single_OnLoad
@@ -608,9 +588,9 @@ function XPerl_Raid_Single_OnLoad(self)
 	XPerl_RegisterHighlight(self.highlight, 2)
 
 	XPerl_RegisterPerlFrames(self, {self.nameFrame, self.statsFrame})
-	--self.FlashFrames = {self.nameFrame, self.statsFrame}
+	self.FlashFrames = {self.nameFrame, self.statsFrame}
 
-	--FIX FOR 4.0.1 raids
+	-- FIX FOR 4.0.1 raids
 	self:SetScript("OnAttributeChanged", onAttrChanged)
 	XPerl_RegisterClickCastFrame(self)
 	XPerl_RegisterClickCastFrame(self.nameFrame)
@@ -682,7 +662,6 @@ end
 
 local buffIconCount = 0
 local function GetBuffButton(self, buffnum, createIfAbsent)
-
 	local button = self.buffFrame.buff and self.buffFrame.buff[buffnum]
 
 	if (not button and createIfAbsent) then
@@ -702,7 +681,6 @@ local function GetBuffButton(self, buffnum, createIfAbsent)
 
 		button:SetScript("OnEnter", XPerl_Raid_SetBuffTooltip)
 		button:SetScript("OnLeave", function()
-			lastNamesList, lastName, lastWith = nil, nil, nil
 			XPerl_PlayerTipHide()
 		end)
 	end
@@ -728,7 +706,9 @@ local function UpdateBuffs(self)
 
 	local bf = self.buffFrame
 
-	--XPerl_CheckDebuffs(self, partyid)
+	if (conf.highlightDebuffs.enable) then
+		XPerl_CheckDebuffs(self, partyid)
+	end
 	XPerl_ColourFriendlyUnit(self.nameFrame.text, partyid)
 
 	local buffCount = 0
@@ -747,7 +727,7 @@ local function UpdateBuffs(self)
 			end
 		end
 
-		for buffnum = 1,maxBuff do
+		for buffnum = 1, maxBuff do
 			local name, rank, buff
 			if (show == "b") then
 				name, rank, buff = XPerl_UnitBuff(partyid, buffnum, cureCast, true)
@@ -770,7 +750,7 @@ local function UpdateBuffs(self)
 				end
 			end
 		end
-		for buffnum=maxBuff+1,8 do
+		for buffnum = maxBuff + 1, 8 do
 			local button = bf.buff and bf.buff[buffnum]
 			if (button) then
 				if (button:IsShown()) then
@@ -802,8 +782,10 @@ local function UpdateBuffs(self)
 
 			bf.buff[1]:ClearAllPoints()
 			bf.buff[1]:SetPoint("BOTTOMLEFT", 0, 0)
-			for i = 2,buffCount do
-				if (i > buffCount) then break end
+			for i = 2, buffCount do
+				if (i > buffCount) then
+					break
+				end
 
 				local buffI = bf.buff[i]
 				buffI:ClearAllPoints()
@@ -825,7 +807,7 @@ local function UpdateBuffs(self)
 			bf:SetPoint("TOPLEFT", self.statsFrame, "BOTTOMLEFT", 0, 1)
 
 			local prevBuff
-			for i = 1,buffCount do
+			for i = 1, buffCount do
 				local buff = bf.buff[i]
 				buff:ClearAllPoints()
 				if (prevBuff) then
@@ -845,7 +827,7 @@ local function UpdateBuffs(self)
 
 	local myRoster = ZPerl_Roster[UnitName(partyid)]
 	if (myRoster) then
-		local _,class = UnitClass(partyid)
+		local _, class = UnitClass(partyid)
 		if (class == "HUNTER") then
 			if (UnitIsFeignDeath(partyid)) then
 				if (not myRoster.fd) then
@@ -947,22 +929,23 @@ function XPerl_Raid_OnUpdate(self, elapsed)
 		if (not IsInRaid()) then
 			ResArray = { }
 			ZPerl_Roster = { }
-			buffUpdates = { }
+			--buffUpdates = { }
 			return
 		end
 	end
 
-	local updateHighlights, someUpdate
-	local enemyUnitList
-	self.time = self.time + elapsed
-	if (self.time >= 0.2) then
-		self.time = 0
-		someUpdate = true
+	--local updateHighlights, someUpdate
+	--local enemyUnitList
+	-- Throttling this will fuck up the animations, and create FPS decreases over time
+	--self.time = self.time + elapsed
+	--if (self.time >= 0.2) then
+		--self.time = 0
+		--someUpdate = true
 		for i, frame in pairs(FrameArray) do
 			if (frame:IsShown()) then
-				--[[if (frame.PlayerFlash) then
+				if (frame.PlayerFlash) then
 					XPerl_Raid_CombatFlash(frame, elapsed, false)
-				end]]
+				end
 
 				--[[if (someUpdate) then
 					local unit = frame.partyid -- frame:GetAttribute("unit")
@@ -993,7 +976,8 @@ function XPerl_Raid_OnUpdate(self, elapsed)
 			end
 		end
 
-		local i = 1
+		-- What the hell is this?
+		--[[local i = 1
 		for k, v in pairs(buffUpdates) do
 			UpdateBuffs(k)
 			buffUpdates[k] = nil
@@ -1001,8 +985,8 @@ function XPerl_Raid_OnUpdate(self, elapsed)
 			if (i > 5) then
 				break
 			end
-		end
-	end
+		end]]
+	--end
 	fullyInitiallized = true
 end
 
@@ -1106,7 +1090,7 @@ function XPerl_Raid_UpdateDisplay(self)
 	XPerl_Unit_UpdateReadyState(self)
 	XPerl_Raid_RaidTargetUpdate(self)
 
-	buffUpdates[self] = true -- UpdateBuffs(self)
+	--buffUpdates[self] = true -- UpdateBuffs(self)
 
 	if (not SkipHighlightUpdate) then
 		XPerl_Highlight:SetHighlight(self)
@@ -1335,12 +1319,13 @@ function XPerl_Raid_Events:UNIT_HEALTH_FREQUENT()
 end
 XPerl_Raid_Events.UNIT_MAXHEALTH = XPerl_Raid_Events.UNIT_HEALTH_FREQUENT
 
+-- UNIT_DISPLAYPOWER
 function XPerl_Raid_Events:UNIT_DISPLAYPOWER()
 	XPerl_Raid_UpdateManaType(self)
 	XPerl_Raid_UpdateMana(self)
 end
 
--- WoW 4.0 UNIT_POWER
+-- UNIT_POWER
 function XPerl_Raid_Events:UNIT_POWER()
 	if (rconf.mana) then
 		XPerl_Raid_UpdateMana(self)
@@ -1357,13 +1342,15 @@ end
 
 -- UNIT_AURA
 function XPerl_Raid_Events:UNIT_AURA()
-	lastNamesList, lastName, lastWith = nil, nil, nil
+	if (not conf.highlightDebuffs.enable and not conf.highlight.enable and not rconf.buffs.enable and not rconf.debuffs.enable) then
+		return
+	end
 	UpdateBuffs(self)
 end
 
 -- READY_CHECK
 function XPerl_Raid_Events:READY_CHECK(a, b, c)
-	for i,frame in pairs(FrameArray) do
+	for i, frame in pairs(FrameArray) do
 		if (frame.partyid) then
 			XPerl_Unit_UpdateReadyState(frame)
 		end
@@ -1902,7 +1889,6 @@ function XPerl_ToggleRaidBuffs(castable)
 			rconf.buffs.enable = nil
 			rconf.debuffs.enable = nil
 			XPerl_Notice(XPERL_KEY_NOTICE_RAID_NOBUFFS)
-
 		else
 			rconf.buffs.enable = 1
 			rconf.debuffs.enable = nil

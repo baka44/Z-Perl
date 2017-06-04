@@ -13,7 +13,7 @@ XPerl_RequestConfig(function(new)
 	for k,v in pairs(PartyFrames) do
 		v.conf = pconf
 	end
-end, "$Revision: 936 $")
+end, "$Revision: 937 $")
 
 local percD = "%d"..PERCENT_SYMBOL
 
@@ -184,8 +184,8 @@ function ZPerl_Party_OnLoad(self)
 	self.hitIndicator.text:SetPoint("CENTER", self.portraitFrame, "CENTER", 0, 0)
 	CombatFeedback_Initialize(self, self.hitIndicator.text, 30)
 
-	XPerl_SecureUnitButton_OnLoad(self, self.partyid, nil, getglobal("PartyMemberFrame"..self:GetID().."DropDown"), XPerl_ShowGenericMenu)				--getglobal("PartyMemberFrame" .. self:GetID()).menu)
-	XPerl_SecureUnitButton_OnLoad(self.nameFrame, self.partyid, nil, getglobal("PartyMemberFrame"..self:GetID().."DropDown"), XPerl_ShowGenericMenu)	--getglobal("PartyMemberFrame" .. self:GetID()).menu)
+	XPerl_SecureUnitButton_OnLoad(self, self.partyid, nil, _G["PartyMemberFrame"..self:GetID().."DropDown"], XPerl_ShowGenericMenu)				--getglobal("PartyMemberFrame" .. self:GetID()).menu)
+	XPerl_SecureUnitButton_OnLoad(self.nameFrame, self.partyid, nil, _G["PartyMemberFrame"..self:GetID().."DropDown"], XPerl_ShowGenericMenu)	--getglobal("PartyMemberFrame" .. self:GetID()).menu)
 
 	self.time = 0
 	self.flagsCheck = 0
@@ -198,7 +198,7 @@ function ZPerl_Party_OnLoad(self)
 
 	self:SetScript("OnUpdate", XPerl_Party_OnUpdate)
 	self:SetScript("OnAttributeChanged", onAttrChanged)
-	self:SetScript("OnShow", XPerl_Party_UpdateDisplay)		-- 	XPerl_Unit_UpdatePortrait)
+	self:SetScript("OnShow", XPerl_Party_UpdateDisplay) -- XPerl_Unit_UpdatePortrait)
 
 	self.targetFrame:SetScript("OnUpdate", XPerl_Party_Target_OnUpdate)
 

@@ -362,8 +362,14 @@ function XPerl_PlayerBuffs_Update(self)
 			end
 			-- TODO: Variable this
 			self.cooldown:SetDrawEdge(false)
+			-- Blizzard Cooldown Text Support
+			if not conf.buffs.blizzard then
+				self.cooldown:SetHideCountdownNumbers(true)
+			else
+				self.cooldown:SetHideCountdownNumbers(false)
+			end
+			-- OmniCC Support
 			if not conf.buffs.omnicc then
-				-- OmniCC to NOT show cooldown
 				self.cooldown.noCooldownCount = true
 			else
 				self.cooldown.noCooldownCount = nil

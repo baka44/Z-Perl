@@ -160,7 +160,7 @@
 						<AbsValue val="32"/>
 					</TileSize>
 					<BackgroundInsets>
-						<AbsInset left="3" right="4" top="3" bottom="4"/>
+						<AbsInset left="3" right="3" top="3" bottom="3"/>
 					</BackgroundInsets>
 				</Backdrop>
 			</Frame>
@@ -208,7 +208,7 @@
 						<AbsValue val="32"/>
 					</TileSize>
 					<BackgroundInsets>
-						<AbsInset left="3" right="4" top="3" bottom="3"/>
+						<AbsInset left="3" right="3" top="3" bottom="3"/>
 					</BackgroundInsets>
 				</Backdrop>
 				<Frames>
@@ -380,7 +380,7 @@
 						<AbsValue val="32"/>
 					</TileSize>
 					<BackgroundInsets>
-						<AbsInset left="3" right="4" top="3" bottom="3"/>
+						<AbsInset left="3" right="3" top="3" bottom="3"/>
 					</BackgroundInsets>
 				</Backdrop>
 				<Scripts>
@@ -422,7 +422,7 @@
 			<!-- Player Stats -->
 			<Frame name="$parentstatsFrame" inherits="XPerl_Stats_Template">
 				<Anchors>
-					<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" relativeTo="$parentnameFrame">
+					<Anchor point="TOP" relativePoint="BOTTOM" relativeTo="$parentnameFrame">
 						<Offset>
 							<AbsDimension x="0" y="2"/>
 						</Offset>
@@ -436,7 +436,7 @@
 						<AbsValue val="32"/>
 					</TileSize>
 					<BackgroundInsets>
-						<AbsInset left="3" right="4" top="3" bottom="4"/>
+						<AbsInset left="3" right="3" top="3" bottom="3"/>
 					</BackgroundInsets>
 				</Backdrop>
 			</Frame>

@@ -12,7 +12,7 @@ XPerl_RequestConfig(function(new)
 	if (XPerl_Player) then
 		XPerl_Player.conf = conf.player
 	end
-end, "$Revision: 936 $")
+end, "$Revision: 937 $")
 
 local perc1F = "%.1f"..PERCENT_SYMBOL
 local percD = "%.0f"..PERCENT_SYMBOL
@@ -107,8 +107,8 @@ function XPerl_Player_OnLoad(self)
 
 	local perlframes = {self.nameFrame, self.statsFrame, self.levelFrame, self.portraitFrame, self.groupFrame}
 	self.FlashFrames = {self.portraitFrame, self.nameFrame,self.levelFrame, self.statsFrame}
-		--Only Add deathknight to the flash frame list
-	--This resolves an issue with the backdrop being added constantly to the other special frames.
+	-- Only Add deathknight to the flash frame list
+	-- This resolves an issue with the backdrop being added constantly to the other special frames.
 	if (select(2, UnitClass("player")) == "DEATHKNIGHT") then
 		table.insert(self.FlashFrames, self.runes)
 		table.insert(perlframes, self.runes)
@@ -692,7 +692,10 @@ end
 
 -- XPerl_Player_UpdateBuffs
 local function XPerl_Player_UpdateBuffs(self)
-	XPerl_CheckDebuffs(self, self.partyid)
+	-- TODO: create a highlight handler for the player too
+	if (conf.highlightDebuffs.enable) then
+		XPerl_CheckDebuffs(self, self.partyid)
+	end
 
 	if (playerClass == "DRUID") then
 		XPerl_Player_UpdateMana(self)
@@ -1134,7 +1137,7 @@ function XPerl_Player_SetWidth(self)
 	local h = 40 + ((((self.statsFrame.druidBar and self.statsFrame.druidBar:IsShown()) and 1 or 0) + (pconf.repBar and 1 or 0) + (pconf.xpBar and 1 or 0)) * 10)
 	self.statsFrame:SetHeight(h)
 
-	self:SetWidth((pconf.portrait and 1 or 0) * 62 + (pconf.percent and 1 or 0) * 32 + 124 + pconf.size.width)
+	self:SetWidth((pconf.portrait and 1 or 0) * 62 + (pconf.percent and 1 or 0) * 32 + 126 + pconf.size.width)
 	self:SetScale(pconf.scale)
 
 	XPerl_StatsFrameSetup(self, {self.statsFrame.druidBar, self.statsFrame.xpBar, self.statsFrame.repBar})

@@ -5,7 +5,7 @@
 	<Button name="XPerl_TargetTemplate" inherits="SecureUnitButtonTemplate" virtual="true" clampedToScreen="true" frameStrata="LOW" movable="true" parent="UIParent" hidden="true">
 		<Size>
 			<!-- The size of this frame determines what can be clicked for the menu and moving, hence it is the same size as the name frame. -->
-			<AbsDimension x="220" y="60"/>
+			<AbsDimension x="220" y="62"/>
 		</Size>
 
 		<Scripts>
@@ -208,16 +208,16 @@
 					</Anchor>
 				</Anchors>
 				<Backdrop bgFile="Interface\Addons\ZPerl\Images\XPerl_FrameBack" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
-				<EdgeSize>
-					<AbsValue val="16"/>
-				</EdgeSize>
-				<TileSize>
-					<AbsValue val="32"/>
-				</TileSize>
-				<BackgroundInsets>
-					<AbsInset left="3" right="3" top="3" bottom="3"/>
-				</BackgroundInsets>
-			</Backdrop>
+					<EdgeSize>
+						<AbsValue val="16"/>
+					</EdgeSize>
+					<TileSize>
+						<AbsValue val="32"/>
+					</TileSize>
+					<BackgroundInsets>
+						<AbsInset left="3" right="3" top="3" bottom="3"/>
+					</BackgroundInsets>
+				</Backdrop>
 			</Frame>
 
 			<!--Level Frame-->
@@ -379,7 +379,7 @@
 						<AbsValue val="32"/>
 					</TileSize>
 					<BackgroundInsets>
-						<AbsInset left="4" right="3" top="3" bottom="3"/>
+						<AbsInset left="3" right="3" top="3" bottom="3"/>
 					</BackgroundInsets>
 				</Backdrop>
 			</Frame>

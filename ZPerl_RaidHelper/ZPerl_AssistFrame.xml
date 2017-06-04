@@ -39,7 +39,7 @@
 				<AbsValue val="32"/>
 			</TileSize>
 			<BackgroundInsets>
-				<AbsInset left="5" right="5" top="5" bottom="5"/>
+				<AbsInset left="3" right="3" top="3" bottom="3"/>
 			</BackgroundInsets>
 		</Backdrop>
 		<Frames>
@@ -209,7 +209,7 @@
 		</Scripts>
 	</Frame>
 
-	-- These two frames add to X-Perl UnitFrames. If X-Perl not loaded, then WoW will just ignore these without error
+	<!-- These two frames add to X-Perl UnitFrames. If X-Perl not loaded, then WoW will just ignore these without error -->
 	<Button name="XPerl_Player_TargettingFrame" parent="XPerl_Player" enableMouse="true" text="0" hidden="true">
 		<Size>
 			<AbsDimension x="27" y="20"/>
@@ -234,7 +234,7 @@
 				<AbsValue val="32"/>
 			</TileSize>
 			<BackgroundInsets>
-				<AbsInset left="3" right="4" top="3" bottom="3"/>
+				<AbsInset left="3" right="3" top="3" bottom="3"/>
 			</BackgroundInsets>
 		</Backdrop>
 		<Scripts>
@@ -296,7 +296,7 @@
 				<AbsValue val="32"/>
 			</TileSize>
 			<BackgroundInsets>
-				<AbsInset left="3" right="3" top="3" bottom="3"/>
+				<AbsInset left="3" right="4" top="3" bottom="3"/>
 			</BackgroundInsets>
 		</Backdrop>
 		<Scripts>

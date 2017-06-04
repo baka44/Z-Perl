@@ -1,3 +1,13 @@
+**r937**
+* Updated for 6.1.0.
+* Reenabled Combat Flashing Frames and Highlight Debuff support for raid and raid pet frames.
+* Combat Flashing Frames should no longer cause FPS issues while in bigger raid groups.
+* Combat Flashing Frames should work as intended for raid frames too.
+* Additional Combat Flashing Frame optimizations.
+* Raid buff/debuff optimizations.
+* Added an option to enable/disable "Blizzard Cooldown Text" support for buffs/debuffs.
+* Loads of other GUI tweaks for player, target, targettarget, targettargettarget, focus, focustarget, party, partytargets and raid frames.
+
 **r936**
 * Heal prediction fixes.
 * Some other smaller fixes.

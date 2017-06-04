@@ -3401,7 +3401,7 @@
 							<OnClick>
 								XPerlDB.highlightDebuffs.border = nil
 								XPerlDB.highlightDebuffs.frame = 1
-								XPerl_Options_CheckRadio(self,{"HighBackground", "HighBorder", "HighBoth"})
+								XPerl_Options_CheckRadio(self, {"HighBackground", "HighBorder", "HighBoth"})
 							</OnClick>
 						</Scripts>
 					</CheckButton>
@@ -3424,7 +3424,7 @@
 							<OnClick>
 								XPerlDB.highlightDebuffs.border = 1
 								XPerlDB.highlightDebuffs.frame = nil
-								XPerl_Options_CheckRadio(self,{"HighBackground", "HighBorder", "HighBoth"})
+								XPerl_Options_CheckRadio(self, {"HighBackground", "HighBorder", "HighBoth"})
 							</OnClick>
 						</Scripts>
 					</CheckButton>
@@ -3447,7 +3447,7 @@
 							<OnClick>
 								XPerlDB.highlightDebuffs.border = 1
 								XPerlDB.highlightDebuffs.frame = 1
-								XPerl_Options_CheckRadio(self,{"HighBackground", "HighBorder", "HighBoth"})
+								XPerl_Options_CheckRadio(self, {"HighBackground", "HighBorder", "HighBoth"})
 							</OnClick>
 						</Scripts>
 					</CheckButton>
@@ -3519,7 +3519,7 @@
 						</Scripts>
 					</CheckButton>
 
-					<CheckButton name="$parent_OmniCCSupport" inherits="XPerlCheckButtonTemplate">
+					<CheckButton name="$parent_BlizzardSupport" inherits="XPerlCheckButtonTemplate">
 						<Size>
 							<AbsDimension x="26" y="26"/>
 						</Size>
@@ -3527,6 +3527,27 @@
 							<Anchor point="TOP" relativeTo="$parent_BuffCooldown" relativePoint="BOTTOMRIGHT">
 								<Offset>
 									<AbsDimension x="6" y="6"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnLoad>
+								XPerl_OptionsSetMyText(self, "XPERL_CONF_BLIZZARDSUPPORT")
+								self.configBase = "XPerlDB.buffs"
+								self.configIndex = "blizzard"
+								self.configClick = XPerl_OptionActions
+							</OnLoad>
+						</Scripts>
+					</CheckButton>
+
+					<CheckButton name="$parent_OmniCCSupport" inherits="XPerlCheckButtonTemplate">
+						<Size>
+							<AbsDimension x="26" y="26"/>
+						</Size>
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="$parent_BlizzardSupport" relativePoint="BOTTOMLEFT">
+								<Offset>
+									<AbsDimension x="0" y="6"/>
 								</Offset>
 							</Anchor>
 						</Anchors>
@@ -3590,7 +3611,7 @@
 						<Anchors>
 							<Anchor point="TOPLEFT" relativeTo="$parent_BuffCooldown" relativePoint="BOTTOMLEFT">
 								<Offset>
-									<AbsDimension x="0" y="-60"/>
+									<AbsDimension x="0" y="-86"/>
 								</Offset>
 							</Anchor>
 						</Anchors>
@@ -8521,7 +8542,7 @@
 							</OnShow>
 							<OnClick>
 								XPerlDB.target.highlightDebuffs.who = 1
-								XPerl_Options_CheckRadio(self,{"All", "Friend", "Enemy"})
+								XPerl_Options_CheckRadio(self, {"All", "Friend", "Enemy"})
 							</OnClick>
 						</Scripts>
 					</CheckButton>
@@ -8543,7 +8564,7 @@
 							</OnShow>
 							<OnClick>
 								XPerlDB.target.highlightDebuffs.who = 2
-								XPerl_Options_CheckRadio(self,{"All", "Friend", "Enemy"})
+								XPerl_Options_CheckRadio(self, {"All", "Friend", "Enemy"})
 							</OnClick>
 						</Scripts>
 					</CheckButton>
@@ -8565,7 +8586,7 @@
 							</OnShow>
 							<OnClick>
 								XPerlDB.target.highlightDebuffs.who = 3
-								XPerl_Options_CheckRadio(self,{"All", "Friend", "Enemy"})
+								XPerl_Options_CheckRadio(self, {"All", "Friend", "Enemy"})
 							</OnClick>
 						</Scripts>
 					</CheckButton>

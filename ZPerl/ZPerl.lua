@@ -8,8 +8,8 @@ local perc1F = "%.1f"..PERCENT_SYMBOL
 
 XPerl_RequestConfig(function(New)
 	conf = New
-end, "$Revision: 936 $")
-XPerl_SetModuleRevision("$Revision: 936 $")
+end, "$Revision: 937 $")
+XPerl_SetModuleRevision("$Revision: 937 $")
 
 -- Upvalus
 local _G = _G
@@ -167,7 +167,7 @@ function XPerl_FreeTable(t, deep)
 		freed = freed + 1
 
 		FreeTables[t] = true
-		for k,v in pairs(t) do
+		for k, v in pairs(t) do
 			if (deep and type(v) == "table") then
 				XPerl_FreeTable(v, true)
 			end
@@ -182,7 +182,7 @@ function XPerl_TableStats()
 	return requested, freed
 end
 
-local new, del = XPerl_GetReusableTable, XPerl_FreeTable
+--local new, del = XPerl_GetReusableTable, XPerl_FreeTable
 
 local function rotate(angle)
 	local A = cos(angle)
@@ -1507,7 +1507,7 @@ end
 -- XPerl_SetUnitNameColor
 function XPerl_SetUnitNameColor(self, unit)
 	local color
-	if (UnitIsPlayer(unit) or not UnitIsVisible(unit)) then			-- Changed UnitPlayerControlled to UnitIsPlayer for 2.3.5
+	if (UnitIsPlayer(unit) or not UnitIsVisible(unit)) then -- Changed UnitPlayerControlled to UnitIsPlayer for 2.3.5
 		-- 1.8.3 - Changed to override pvp name colours
 		if (conf.colour.class) then
 			color = XPerl_GetClassColour(select(2, UnitClass(unit)))
@@ -1534,7 +1534,7 @@ function XPerl_CombatFlashSet(self, elapsed, argNew, argGreen)
 
 	if (self) then
 		if (argNew) then
-			self.PlayerFlash = 1.5
+			self.PlayerFlash = 1 -- Old value: 1.5
 			self.PlayerFlashGreen = argGreen
 		else
 			if (elapsed and self.PlayerFlash) then
@@ -1724,11 +1724,13 @@ function XPerl_CheckDebuffs(self, unit, resetBorders)
 		self.forcedColour = nil
 		bgDef.edgeFile = self.edgeFile or normalEdge
 		bgDef.edgeSize = self.edgeSize or 16
-		bgDef.insets.left = self.edgeInsets or 5
-		bgDef.insets.top = self.edgeInsets or 5
-		bgDef.insets.right = self.edgeInsets or 5
-		bgDef.insets.bottom = self.edgeInsets or 5
-		for i, f in pairs(self.FlashFrames) do
+		bgDef.insets.left = self.edgeInsets or 3
+		bgDef.insets.top = self.edgeInsets or 3
+		bgDef.insets.right = self.edgeInsets or 3
+		bgDef.insets.bottom = self.edgeInsets or 3
+		--for i, f in pairs(self.FlashFrames) do
+		for i = 1, #self.FlashFrames do
+			local f = self.FlashFrames[i]
 			f:SetBackdrop(bgDef)
 			f:SetBackdropColor(conf.colour.frame.r, conf.colour.frame.g, conf.colour.frame.b, conf.colour.frame.a)
 			f:SetBackdropBorderColor(conf.colour.border.r, conf.colour.border.g, conf.colour.border.b, conf.colour.border.a)
@@ -1750,7 +1752,7 @@ function XPerl_CheckDebuffs(self, unit, resetBorders)
 	local _, unitClass = UnitClass(unit)
 
 	for i = 1, 40 do
-		local debuffName,_, debuff, debuffStack, debuffType = UnitDebuff(unit, i)
+		local debuffName, _, debuff, debuffStack, debuffType = UnitDebuff(unit, i)
 		if (not debuff) then
 			break
 		end
@@ -1795,11 +1797,13 @@ function XPerl_CheckDebuffs(self, unit, resetBorders)
 		bgDef.edgeSize = self.edgeSize or 16
 		bgDef.insets.left = self.edgeInsets or 3
 		bgDef.insets.top = self.edgeInsets or 3
-		bgDef.insets.right = self.edgeInsets or 4
-		bgDef.insets.bottom = self.edgeInsets or 4
+		bgDef.insets.right = self.edgeInsets or 3
+		bgDef.insets.bottom = self.edgeInsets or 3
 	end
 
-	for i, f in pairs(self.FlashFrames) do
+	--for i, f in pairs(self.FlashFrames) do
+	for i = 1, #self.FlashFrames do
+		local f = self.FlashFrames[i]
 		if (not conf.highlightDebuffs.frame) then
 			colour = conf.colour.frame
 		end
@@ -2592,8 +2596,14 @@ function XPerl_GetBuffButton(self, buffnum, debuff, createIfAbsent, newID)
 	end
 	-- TODO: Variable this
 	button.cooldown:SetDrawEdge(false)
+	-- Blizzard Cooldown Text Support
+	if not conf.buffs.blizzard then
+		button.cooldown:SetHideCountdownNumbers(true)
+	else
+		button.cooldown:SetHideCountdownNumbers(false)
+	end
+	-- OmniCC Support
 	if not conf.buffs.omnicc then
-		-- OmniCC to NOT show cooldown
 		button.cooldown.noCooldownCount = true
 	else
 		button.cooldown.noCooldownCount = nil
