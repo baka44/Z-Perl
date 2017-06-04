@@ -75,15 +75,15 @@ if (GetLocale() == "deDE") then
 	XPERL_LOC_HUGENUMDIV				= 1000000
 	XPERL_LOC_HUGENUMTAG				= "M"
 
-	BINDING_HEADER_XPERL 				= XPerl_ProductName
-	BINDING_NAME_TOGGLERAID 			= "Schalter f\195\188r die Schlachtzugsfenster"
-	BINDING_NAME_TOGGLERAIDSORT 		= "Schalter f\195\188r Schlachtzug sortieren nach Klasse/Gruppe"
-	BINDING_NAME_TOGGLERAIDPETS 		= "Schalter f\195\188r Schlachtzugsbegleiter"
-	BINDING_NAME_TOGGLEOPTIONS 			= "Schalter f\195\188r das Optionenfenster"
-	BINDING_NAME_TOGGLEBUFFTYPE 		= "Schalter f\195\188r Buffs/Debuffs/Keine"
-	BINDING_NAME_TOGGLEBUFFCASTABLE 	= "Schalter f\195\188r Zauberbar/Heilbar"
-	BINDING_NAME_TEAMSPEAKMONITOR 		= "Teamspeak Monitor"
-	BINDING_NAME_TOGGLERANGEFINDER 		= "Schalter f\195\188r Reichweiten-Finder"
+	BINDING_HEADER_ZPERL 				= XPerl_ProductName
+	BINDING_NAME_ZPERL_TOGGLERAID 			= "Schalter f\195\188r die Schlachtzugsfenster"
+	BINDING_NAME_ZPERL_TOGGLERAIDSORT 		= "Schalter f\195\188r Schlachtzug sortieren nach Klasse/Gruppe"
+	BINDING_NAME_ZPERL_TOGGLERAIDPETS 		= "Schalter f\195\188r Schlachtzugsbegleiter"
+	BINDING_NAME_ZPERL_TOGGLEOPTIONS 		= "Schalter f\195\188r das Optionenfenster"
+	BINDING_NAME_ZPERL_TOGGLEBUFFTYPE 		= "Schalter f\195\188r Buffs/Debuffs/Keine"
+	BINDING_NAME_ZPERL_TOGGLEBUFFCASTABLE 	= "Schalter f\195\188r Zauberbar/Heilbar"
+	BINDING_NAME_ZPERL_TEAMSPEAKMONITOR 	= "Teamspeak Monitor"
+	BINDING_NAME_ZPERL_TOGGLERANGEFINDER 	= "Schalter f\195\188r Reichweiten-Finder"
 
 	XPERL_KEY_NOTICE_RAID_BUFFANY 		= "Alle Buffs/Debuffs anzeigen"
 	XPERL_KEY_NOTICE_RAID_BUFFCURECAST 	= "Nur zauberbare/heilbare Buffs oder Debuffs anzeigen"

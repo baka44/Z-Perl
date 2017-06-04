@@ -83,15 +83,15 @@ XPERL_LOC_LARGENUMTAG	= "K"
 XPERL_LOC_HUGENUMDIV	= 1000000
 XPERL_LOC_HUGENUMTAG	= "M"
 
-BINDING_HEADER_XPERL = XPerl_ProductName
-BINDING_NAME_TOGGLERAID = "Abilita/Disattiva Raid Windows"
-BINDING_NAME_TOGGLERAIDSORT = "Abilita/Disattiva riorganizzazione per classe/gruppo"
-BINDING_NAME_TOGGLERAIDPETS = "Abilita/Disattiva Raid Pets"
-BINDING_NAME_TOGGLEOPTIONS = "Abilita/Disattiva finestra opzioni"
-BINDING_NAME_TOGGLEBUFFTYPE = "Abilita/Disattiva Buffs/Debuffs/none"
-BINDING_NAME_TOGGLEBUFFCASTABLE = "Abilita/Disattiva Castable/Curable"
-BINDING_NAME_TEAMSPEAKMONITOR = "Teamspeak Monitor"
-BINDING_NAME_TOGGLERANGEFINDER = "Abilita/Disattiva Range Finder"
+BINDING_HEADER_ZPERL = XPerl_ProductName
+BINDING_NAME_ZPERL_TOGGLERAID = "Abilita/Disattiva Raid Windows"
+BINDING_NAME_ZPERL_TOGGLERAIDSORT = "Abilita/Disattiva riorganizzazione per classe/gruppo"
+BINDING_NAME_ZPERL_TOGGLERAIDPETS = "Abilita/Disattiva Raid Pets"
+BINDING_NAME_ZPERL_TOGGLEOPTIONS = "Abilita/Disattiva finestra opzioni"
+BINDING_NAME_ZPERL_TOGGLEBUFFTYPE = "Abilita/Disattiva Buffs/Debuffs/none"
+BINDING_NAME_ZPERL_TOGGLEBUFFCASTABLE = "Abilita/Disattiva Castable/Curable"
+BINDING_NAME_ZPERL_TEAMSPEAKMONITOR = "Teamspeak Monitor"
+BINDING_NAME_ZPERL_TOGGLERANGEFINDER = "Abilita/Disattiva Range Finder"
 
 XPERL_KEY_NOTICE_RAID_BUFFANY = "Visualizza tutti i benefici/penalità"
 XPERL_KEY_NOTICE_RAID_BUFFCURECAST = "Visualizza solo benefici lanciabili/curabili o penalità"

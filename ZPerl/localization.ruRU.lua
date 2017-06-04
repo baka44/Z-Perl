@@ -79,15 +79,15 @@ XPERL_LOC_ZONE_RUBY_SANCTUM = "Рубиновое святилище"
 	XPERL_LOC_HUGENUMDIV	= 1000000
 	XPERL_LOC_HUGENUMTAG	= "M"
 
-	BINDING_HEADER_XPERL = 	XPERL_ProductName
-	BINDING_NAME_TOGGLERAID = "Окна рейда"
-	BINDING_NAME_TOGGLERAIDSORT = "Сорт рейда по классам/группам"
-	BINDING_NAME_TOGGLERAIDPETS = "Питомцы рейда"
-	BINDING_NAME_TOGGLEOPTIONS = "Окно опций"
-	BINDING_NAME_TOGGLEBUFFTYPE = "Баффы/Дебаффы/пусто"
-	BINDING_NAME_TOGGLEBUFFCASTABLE = "Примен./Лечение"
-	BINDING_NAME_TEAMSPEAKMONITOR = "Монитор Teamspeak'a"
-	BINDING_NAME_TOGGLERANGEFINDER = "Определитель досягаемости"
+	BINDING_HEADER_ZPERL = 	XPERL_ProductName
+	BINDING_NAME_ZPERL_TOGGLERAID = "Окна рейда"
+	BINDING_NAME_ZPERL_TOGGLERAIDSORT = "Сорт рейда по классам/группам"
+	BINDING_NAME_ZPERL_TOGGLERAIDPETS = "Питомцы рейда"
+	BINDING_NAME_ZPERL_TOGGLEOPTIONS = "Окно опций"
+	BINDING_NAME_ZPERL_TOGGLEBUFFTYPE = "Баффы/Дебаффы/пусто"
+	BINDING_NAME_ZPERL_TOGGLEBUFFCASTABLE = "Примен./Лечение"
+	BINDING_NAME_ZPERL_TEAMSPEAKMONITOR = "Монитор Teamspeak'a"
+	BINDING_NAME_ZPERL_TOGGLERANGEFINDER = "Определитель досягаемости"
 
 	XPERL_KEY_NOTICE_RAID_BUFFANY = "Показ всех баффов/дебаффов"
 	XPERL_KEY_NOTICE_RAID_BUFFCURECAST = "Показ только читаемые/исцеляющие баффы или дебаффы"

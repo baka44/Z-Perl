@@ -6,8 +6,8 @@ local conf
 local percD	= "%d"..PERCENT_SYMBOL
 local perc1F = "%.1f"..PERCENT_SYMBOL
 
-XPerl_RequestConfig(function(New) conf = New end, "$Revision: 931 $")
-XPerl_SetModuleRevision("$Revision: 931 $")
+XPerl_RequestConfig(function(New) conf = New end, "$Revision: 932 $")
+XPerl_SetModuleRevision("$Revision: 932 $")
 
 -- Upvalus
 local _G = _G
@@ -189,7 +189,7 @@ local function rotate(angle)
 	local LLx, LLy = -0.5 * A - 0.5 * B, -0.5 * B + 0.5 * A
 	local URx, URy = 0.5 * A - -0.5 * B, 0.5 * B + -0.5 * A
 	local LRx, LRy = 0.5 * A - 0.5 * B, 0.5 * B + 0.5 * A
-	return ULx+0.5, ULy+0.5, LLx+0.5, LLy+0.5, URx+0.5, URy+0.5, LRx+0.5, LRy+0.5
+	return ULx + 0.5, ULy + 0.5, LLx + 0.5, LLy + 0.5, URx + 0.5, URy + 0.5, LRx + 0.5, LRy + 0.5
 end
 
 -- meta table for string based colours. Allows for other mods changing class colours and things all working
@@ -2695,7 +2695,8 @@ local function XPerl_Unit_BuffSpacing(self)
 		w = w - 2 + self.levelFrame:GetWidth()
 	end
 	if (not self.buffSpacing) then
-		self.buffSpacing = XPerl_GetReusableTable()
+		--self.buffSpacing = XPerl_GetReusableTable()
+		self.buffSpacing = { }
 	end
 	self.buffSpacing.rowWidth = w
 
@@ -3222,11 +3223,11 @@ end
 ------------------------------------------------------------------------------
 -- Flashing frames handler. Is hidden when there's nothing to do.
 local FlashFrame = CreateFrame("Frame", "XPerl_FlashFrame")
-FlashFrame.list = {}
+FlashFrame.list = { }
 
 -- XPerl_FrameFlash_OnUpdate(self, elapsed)
-function XPerl_FrameFlash_OnUpdate(self, elapsed)
-	for k,v in pairs(self.list) do
+local function XPerl_FrameFlash_OnUpdate(self, elapsed)
+	for k, v in pairs(self.list) do
 		if (k.frameFlash.out) then
 			k.frameFlash.alpha = k.frameFlash.alpha - elapsed
 			if (k.frameFlash.alpha < 0.2) then
@@ -3264,11 +3265,11 @@ function XPerl_FrameFlash(self)
 			error("X-Perl ["..self:GetName()..".frameFlash is set with no entry in FlashFrame.list]")
 		end
 
-		self.frameFlash = XPerl_GetReusableTable()
+		--[[self.frameFlash = XPerl_GetReusableTable()
 		self.frameFlash.out = true
 		self.frameFlash.alpha = 1
-		self.frameFlash.shown = self:IsShown()
-		--self.frameFlash = {out = true, alpha = 1, shown = self:IsShown()}
+		self.frameFlash.shown = self:IsShown()]]
+		self.frameFlash = {out = true, alpha = 1, shown = self:IsShown()}
 
 		FlashFrame.list[self] = true
 		FlashFrame:Show()
@@ -3296,7 +3297,7 @@ function XPerl_FrameFlashStop(self, method)
 		self:Hide()
 	end
 
-	XPerl_FreeTable(self.frameFlash)
+	--XPerl_FreeTable(self.frameFlash)
 	self.frameFlash = nil
 
 	self:SetAlpha(1)

@@ -1,3 +1,9 @@
+**r932**
+* More FPS fixes with the raid frames.
+* Keybinding options fixes.
+* Removed CTRA parser.
+* Removed some debug code.
+
 **r931**
 * Wake up the repo server.
 

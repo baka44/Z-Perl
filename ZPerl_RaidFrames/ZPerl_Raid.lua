@@ -22,7 +22,7 @@ local conf, rconf
 XPerl_RequestConfig(function(newConf)
 	conf = newConf
 	rconf = conf.raid
-end, "$Revision: 930 $")
+end, "$Revision: 932 $")
 
 if type(RegisterAddonMessagePrefix) == "function" then
 	RegisterAddonMessagePrefix("CTRA")
@@ -94,7 +94,7 @@ local raidHeaders = { }
 -- XPerl_Raid_OnLoad
 function XPerl_Raid_OnLoad(self)
 	local events = {
-		"CHAT_MSG_ADDON","PLAYER_ENTERING_WORLD", "VARIABLES_LOADED", "GROUP_ROSTER_UPDATE", "UNIT_FLAGS", "UNIT_AURA", "UNIT_POWER", "UNIT_MAXPOWER", "UNIT_HEALTH_FREQUENT", "UNIT_MAXHEALTH", "UNIT_NAME_UPDATE", "PLAYER_FLAGS_CHANGED", --[["UNIT_COMBAT",]] "UNIT_SPELLCAST_START", "UNIT_SPELLCAST_STOP", "UNIT_SPELLCAST_FAILED", "UNIT_SPELLCAST_INTERRUPTED", "READY_CHECK", "READY_CHECK_CONFIRM", "READY_CHECK_FINISHED", "RAID_TARGET_UPDATE", "PLAYER_LOGIN", "ROLE_CHANGED_INFORM", "PET_BATTLE_OPENING_START", "PET_BATTLE_CLOSE", "UNIT_CONNECTION", "PLAYER_REGEN_ENABLED"
+		--[["CHAT_MSG_ADDON",]] "PLAYER_ENTERING_WORLD", "VARIABLES_LOADED", "GROUP_ROSTER_UPDATE", "UNIT_FLAGS", "UNIT_AURA", "UNIT_POWER", "UNIT_MAXPOWER", "UNIT_HEALTH_FREQUENT", "UNIT_MAXHEALTH", "UNIT_NAME_UPDATE", "PLAYER_FLAGS_CHANGED", --[["UNIT_COMBAT",]] "UNIT_SPELLCAST_START", "UNIT_SPELLCAST_STOP", "UNIT_SPELLCAST_FAILED", "UNIT_SPELLCAST_INTERRUPTED", "READY_CHECK", "READY_CHECK_CONFIRM", "READY_CHECK_FINISHED", "RAID_TARGET_UPDATE", "PLAYER_LOGIN", "ROLE_CHANGED_INFORM", "PET_BATTLE_OPENING_START", "PET_BATTLE_CLOSE", "UNIT_CONNECTION", "PLAYER_REGEN_ENABLED"
 	}
 
 	for i, event in pairs(events) do
@@ -374,7 +374,7 @@ local function XPerl_Raid_ShowFlags(self, flags)
 	self.statsFrame.healthBar.text:SetText(flag)
 	self.statsFrame.healthBar.text:SetTextColor(r, g, b)
 	self.statsFrame.healthBar.text:Show()
-	del(flags)
+	--del(flags)
 end
 
 local spiritOfRedemption = GetSpellInfo(27827)
@@ -1270,7 +1270,7 @@ do
 
 	local function BuildGuidMap()
 		if (IsInRaid()) then
-			rosterGuids = new()
+			rosterGuids = { }
 			for i = 1, GetNumGroupMembers() do
 				local guid = UnitGUID("raid"..i)
 				if (guid) then
@@ -1278,7 +1278,7 @@ do
 				end
 			end
 		else
-			rosterGuids = del(rosterGuids)
+			rosterGuids = { }
 		end
 	end
 
@@ -1515,7 +1515,7 @@ do
 
 			tip:SetInventoryItem("player", i)
 
-			for j = 1,tip:NumLines() do
+			for j = 1, tip:NumLines() do
 				local line = _G[tip:GetName().."TextLeft"..j]
 				if (line) then
 					local text = line:GetText()
@@ -1637,10 +1637,10 @@ end
 -- XPerl_ParseCTRA
 function XPerl_ParseCTRA(sender, msg, func)
 	local arr = new(strsplit("#", msg))
-	for i,subMsg in pairs(arr) do
+	for i, subMsg in pairs(arr) do
 		func(sender, subMsg)
 	end
-	del(arr)
+	--del(arr)
 end
 
 -- CHAT_MSG_ADDON
@@ -1654,13 +1654,13 @@ end
 
 -- SetRaidRoster
 function SetRaidRoster()
-	local NewRoster = new()
+	local NewRoster = { }
 
-	del(RaidPositions)
-	RaidPositions = new()
+	--del(RaidPositions)
+	RaidPositions = { }
 
-	del(RaidGroupCounts)
-	RaidGroupCounts = new(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+	--del(RaidGroupCounts)
+	RaidGroupCounts = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 
 	for i = 1, GetNumGroupMembers() do
 		local name, rank, group, level, class, fileName = GetRaidRosterInfo(i)
@@ -1674,7 +1674,7 @@ function SetRaidRoster()
 			end
 
 			if (rconf.sortByClass) then
-				for j = 1,WoWclassCount do
+				for j = 1, WoWclassCount do
 					if (rconf.class[j].name == fileName and rconf.class[j].enable) then
 						RaidGroupCounts[j] = RaidGroupCounts[j] + 1
 						break
@@ -1691,7 +1691,7 @@ function SetRaidRoster()
 				r.afk = UnitIsAFK(unit) and GetTime() or nil
 				r.dnd = UnitIsDND(unit) and GetTime() or nil
 			else
-				NewRoster[name] = new()
+				NewRoster[name] = { }
 			end
 		end
 	end
@@ -1702,7 +1702,7 @@ function SetRaidRoster()
 		XPerl_Raid_Frame:Hide()
 	end
 
-	del(ZPerl_Roster, true)
+	--del(ZPerl_Roster, true)
 	ZPerl_Roster = NewRoster
 end
 
@@ -1965,7 +1965,7 @@ local function GetCombatRezzerList()
 
 	-- We only need to know about battle rezzers if any normal rezzers are in combat
 	if (anyCombat > 0 or anyAlive < 3) then
-		local ret = new()
+		local ret = { }
 		local t = GetTime()
 
 		for i = 1, GetNumGroupMembers() do
@@ -2000,7 +2000,9 @@ local function GetCombatRezzerList()
 		end
 
 		if (#ret > 0) then
-			sort(ret, function(a,b) return a.cd < b.cd end)
+			sort(ret, function(a,b)
+				return a.cd < b.cd
+			end)
 
 			local list = ""
 			for k,v in ipairs(ret) do
@@ -2016,10 +2018,10 @@ local function GetCombatRezzerList()
 					list = list..", "..name
 				end
 			end
-			del(ret)
+			--del(ret)
 			return list
 		else
-			del(ret)
+			--del(ret)
 			return "|c00FF0000"..NONE.."|r"
 		end
 	end

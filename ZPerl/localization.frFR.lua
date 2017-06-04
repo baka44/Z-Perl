@@ -55,14 +55,14 @@ if (GetLocale() == "frFR") then
 	XPERL_LOC_LARGENUMDIV = 1000
 	XPERL_LOC_LARGENUMTAG = "K"
 
-	BINDING_HEADER_XPERL = "X-Perl Key Bindings"
-	BINDING_NAME_TOGGLERAID = "D\195\169scriptif de raid"
-	BINDING_NAME_TOGGLERAIDSORT = "D\195\169scriptif de raid assorti par classe/groupe"
-	BINDING_NAME_TOGGLEOPTIONS = "Bascule de la fen\195\170tre d'options"
-	BINDING_NAME_TOGGLEBUFFTYPE = "Bascule aucun buffs/debuffs"
-	BINDING_NAME_TOGGLEBUFFCASTABLE = "Bascule lanceable/soignable"
-	BINDING_NAME_TEAMSPEAKMONITOR = "Moniteur Teamspeack"
-	BINDING_NAME_TOGGLERANGEFINDER = "Bascule du t\195\169l\195\169m\195\169tre"
+	BINDING_HEADER_ZPERL = "Z-Perl Key Bindings"
+	BINDING_NAME_ZPERL_TOGGLERAID = "D\195\169scriptif de raid"
+	BINDING_NAME_ZPERL_TOGGLERAIDSORT = "D\195\169scriptif de raid assorti par classe/groupe"
+	BINDING_NAME_ZPERL_TOGGLEOPTIONS = "Bascule de la fen\195\170tre d'options"
+	BINDING_NAME_ZPERL_TOGGLEBUFFTYPE = "Bascule aucun buffs/debuffs"
+	BINDING_NAME_ZPERL_TOGGLEBUFFCASTABLE = "Bascule lanceable/soignable"
+	BINDING_NAME_ZPERL_TEAMSPEAKMONITOR = "Moniteur Teamspeack"
+	BINDING_NAME_ZPERL_TOGGLERANGEFINDER = "Bascule du t\195\169l\195\169m\195\169tre"
 
 	XPERL_KEY_NOTICE_RAID_BUFFANY = "Montrer tout les buffs/debuffs"
 	XPERL_KEY_NOTICE_RAID_BUFFCURECAST = "Ne montrer que les Buffs/Debuffs que l'on peux soigner"
