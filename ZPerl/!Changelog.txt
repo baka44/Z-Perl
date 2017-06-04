@@ -1,3 +1,6 @@
+**r928**
+* Party event fixes.
+
 **r927**
 * Say goodbye to Secure Header taints.
 * Event fixes for target and focus frames.

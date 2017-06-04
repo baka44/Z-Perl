@@ -13,7 +13,7 @@ XPerl_RequestConfig(function(new)
 	for k,v in pairs(PartyFrames) do
 		v.conf = pconf
 	end
-end, "$Revision: 927 $")
+end, "$Revision: 928 $")
 
 local percD = "%d"..PERCENT_SYMBOL
 
@@ -46,11 +46,7 @@ function XPerl_Party_Events_OnLoad(self)
 		"PLAYER_ENTERING_WORLD", "PARTY_MEMBER_ENABLE", "PARTY_MEMBER_DISABLE", "GROUP_ROSTER_UPDATED", "UNIT_PHASE", "UNIT_COMBAT", "UNIT_SPELLMISS", "UNIT_FACTION", "UNIT_FLAGS", "UNIT_AURA", "UNIT_PORTRAIT_UPDATE", "UNIT_TARGET", "UNIT_POWER", "UNIT_MAXPOWER", "UNIT_HEALTH_FREQUENT", "UNIT_MAXHEALTH", "UNIT_LEVEL", "UNIT_DISPLAYPOWER", "UNIT_NAME_UPDATE", "PLAYER_FLAGS_CHANGED", "RAID_TARGET_UPDATE", "READY_CHECK", "READY_CHECK_CONFIRM", "READY_CHECK_FINISHED", "PLAYER_LOGIN", "UNIT_THREAT_LIST_UPDATE", "PLAYER_TARGET_CHANGED","PARTY_LOOT_METHOD_CHANGED", "PET_BATTLE_OPENING_START","PET_BATTLE_CLOSE"
 	}
 	for i, event in pairs(events) do
-		if string.find(event, "UNIT_") then
-			self:RegisterUnitEvent(event, "party1", "party2", "party3", "party4")
-		else
-			self:RegisterEvent(event)
-		end
+		self:RegisterEvent(event)
 	end
 
 	partyHeader:UnregisterEvent("UNIT_NAME_UPDATE") -- IMPORTANT! Fix for WoW 2.1 UNIT_NAME_UPDATE lockup issues
