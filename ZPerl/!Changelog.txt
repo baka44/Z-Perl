@@ -1,3 +1,9 @@
+**r929**
+* Fixed the FPS issues in combat.
+* Temporary disabled combat flashing for raid and raid pet frames.
+* Raid pet align fixes.
+* Some performance optimizations.
+
 **r928**
 * Party event fixes.
 

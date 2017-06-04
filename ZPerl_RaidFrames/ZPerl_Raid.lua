@@ -18,6 +18,12 @@ local fullyInitiallized
 
 local taintFrames = { }
 
+local conf, rconf
+XPerl_RequestConfig(function(newConf)
+	conf = newConf
+	rconf = conf.raid
+end, "$Revision: 929 $")
+
 if type(RegisterAddonMessagePrefix) == "function" then
 	RegisterAddonMessagePrefix("CTRA")
 end
@@ -50,12 +56,6 @@ local XPerl_ColourHealthBar = XPerl_ColourHealthBar
 
 -- TODO - Watch for:	 ERR_FRIEND_OFFLINE_S = "%s has gone offline."
 
-local conf, rconf
-XPerl_RequestConfig(function(newConf)
-	conf = newConf
-	rconf = conf.raid
-end, "$Revision: 927 $")
-
 XPERL_RAIDGRP_PREFIX = "XPerl_Raid_Grp"
 
 -- Hold some raid roster information (AFK, DND etc.)
@@ -69,7 +69,7 @@ ZPerl_Roster = { }
 
 local localGroups = LOCALIZED_CLASS_NAMES_MALE
 local WoWclassCount = 0
-for k, v in pairs(localGroups) do
+for i = 1, #localGroups do
 	WoWclassCount = WoWclassCount + 1
 end
 
@@ -94,7 +94,7 @@ local raidHeaders = { }
 -- XPerl_Raid_OnLoad
 function XPerl_Raid_OnLoad(self)
 	local events = {
-		"CHAT_MSG_ADDON","PLAYER_ENTERING_WORLD", "VARIABLES_LOADED", "GROUP_ROSTER_UPDATE", "UNIT_FLAGS", "UNIT_AURA", "UNIT_POWER", "UNIT_MAXPOWER", "UNIT_HEALTH_FREQUENT", "UNIT_MAXHEALTH", "UNIT_NAME_UPDATE", "PLAYER_FLAGS_CHANGED", "UNIT_COMBAT", "UNIT_SPELLCAST_START", "UNIT_SPELLCAST_STOP", "UNIT_SPELLCAST_FAILED", "UNIT_SPELLCAST_INTERRUPTED", "READY_CHECK", "READY_CHECK_CONFIRM", "READY_CHECK_FINISHED", "RAID_TARGET_UPDATE", "PLAYER_LOGIN", "ROLE_CHANGED_INFORM", "PET_BATTLE_OPENING_START", "PET_BATTLE_CLOSE", "UNIT_CONNECTION", "PLAYER_REGEN_ENABLED"
+		"CHAT_MSG_ADDON","PLAYER_ENTERING_WORLD", "VARIABLES_LOADED", "GROUP_ROSTER_UPDATE", "UNIT_FLAGS", "UNIT_AURA", "UNIT_POWER", "UNIT_MAXPOWER", "UNIT_HEALTH_FREQUENT", "UNIT_MAXHEALTH", "UNIT_NAME_UPDATE", "PLAYER_FLAGS_CHANGED", --[["UNIT_COMBAT",]] "UNIT_SPELLCAST_START", "UNIT_SPELLCAST_STOP", "UNIT_SPELLCAST_FAILED", "UNIT_SPELLCAST_INTERRUPTED", "READY_CHECK", "READY_CHECK_CONFIRM", "READY_CHECK_FINISHED", "RAID_TARGET_UPDATE", "PLAYER_LOGIN", "ROLE_CHANGED_INFORM", "PET_BATTLE_OPENING_START", "PET_BATTLE_CLOSE", "UNIT_CONNECTION", "PLAYER_REGEN_ENABLED"
 	}
 
 	for i, event in pairs(events) do
@@ -608,7 +608,7 @@ function XPerl_Raid_Single_OnLoad(self)
 	XPerl_RegisterHighlight(self.highlight, 2)
 
 	XPerl_RegisterPerlFrames(self, {self.nameFrame, self.statsFrame})
-	self.FlashFrames = {self.nameFrame, self.statsFrame}
+	--self.FlashFrames = {self.nameFrame, self.statsFrame}
 
 	--FIX FOR 4.0.1 raids
 	self:SetScript("OnAttributeChanged", onAttrChanged)
@@ -958,54 +958,51 @@ function XPerl_Raid_OnUpdate(self, elapsed)
 	if (self.time >= 0.2) then
 		self.time = 0
 		someUpdate = true
-	
+		for i, frame in pairs(FrameArray) do
+			if (frame:IsShown()) then
+				--[[if (frame.PlayerFlash) then
+					XPerl_Raid_CombatFlash(frame, elapsed, false)
+				end]]
 
-	for i, frame in pairs(FrameArray) do
-		if (frame:IsShown()) then
-			if (frame.PlayerFlash) then
-				XPerl_Raid_CombatFlash(frame, elapsed, false)
-			end
-
-			--[[if (someUpdate) then
-				local unit = frame.partyid -- frame:GetAttribute("unit")
-				if (unit) then
-					local name = UnitName(unit)
-					if (name) then
-						local myRoster = ZPerl_Roster[name]
-						if (myRoster) then
-							if (frame.statsFrame.greyMana) then
-								if (myRoster.offline and UnitIsConnected(unit)) then
-									XPerl_Raid_UpdateHealth(frame)
-								end
-							else
-								if (not myRoster.offline and not UnitIsConnected(unit)) then
-									XPerl_Raid_UpdateHealth(frame)
+				--[[if (someUpdate) then
+					local unit = frame.partyid -- frame:GetAttribute("unit")
+					if (unit) then
+						local name = UnitName(unit)
+						if (name) then
+							local myRoster = ZPerl_Roster[name]
+							if (myRoster) then
+								if (frame.statsFrame.greyMana) then
+									if (myRoster.offline and UnitIsConnected(unit)) then
+										XPerl_Raid_UpdateHealth(frame)
+									end
+								else
+									if (not myRoster.offline and not UnitIsConnected(unit)) then
+										XPerl_Raid_UpdateHealth(frame)
+									end
 								end
 							end
 						end
+
+						XPerl_UpdateSpellRange(frame, unit, true)
 					end
-
-					XPerl_UpdateSpellRange(frame, unit, true)
+				end]]--
+				
+				if (frame.partyid) then
+					XPerl_UpdateSpellRange(frame, frame.partyid, true)
 				end
-			end]]--
-			
-			if (frame.partyid) then
-				XPerl_UpdateSpellRange(frame, frame.partyid, true)
 			end
-			
 		end
-	end
 
-	local i = 1
-	for k, v in pairs(buffUpdates) do
-		UpdateBuffs(k)
-		buffUpdates[k] = nil
-		i = i + 1
-		if (i > 5) then
-			break
+		local i = 1
+		for k, v in pairs(buffUpdates) do
+			UpdateBuffs(k)
+			buffUpdates[k] = nil
+			i = i + 1
+			if (i > 5) then
+				break
+			end
 		end
 	end
-end
 	fullyInitiallized = true
 end
 
@@ -1322,9 +1319,7 @@ function XPerl_Raid_Events:UNIT_FACTION()
 end
 
 -- UNIT_COMBAT
-function XPerl_Raid_Events:UNIT_COMBAT(...)
-	local unitID, action, descriptor, damage, damageType = select(1, ...)
-
+function XPerl_Raid_Events:UNIT_COMBAT(unitID, action, descriptor, damage, damageType)
 	if (action == "HEAL") then
 		XPerl_Raid_CombatFlash(self, 0, true, true)
 	elseif (damage and damage > 0) then

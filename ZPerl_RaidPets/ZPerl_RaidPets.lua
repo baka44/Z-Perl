@@ -9,7 +9,7 @@ XPerl_RequestConfig(function(New)
 	conf = New
 	raidconf = New.raid
 	rconf = New.raidpet
-end, "$Revision: 927 $")
+end, "$Revision: 929 $")
 
 local new, del, copy = XPerl_GetReusableTable, XPerl_FreeTable, XPerl_CopyTable
 
@@ -53,7 +53,7 @@ do
 	function XPerl_RaidPet_UpdateGUIDs()
 		del(guids)
 		guids = new()
-		for i = 1,GetNumGroupMembers() do
+		for i = 1, GetNumGroupMembers() do
 			local id = "raidpet"..i
 			if (UnitExists(id)) then
 				guids[UnitGUID(id)] = RaidPetFrameArray[id]
@@ -365,7 +365,7 @@ function XPerl_RaidPet_Single_OnLoad(self)
 	self.edgeSize = 10
 	self.edgeInsets = 2
 
-	self.FlashFrames = {self}
+	--self.FlashFrames = {self}
 
 	self:SetScript("OnShow", XPerl_RaidPets_UpdateDisplay)
 
@@ -483,7 +483,7 @@ function XPerl_RaidPets_Align()
 		local counts = XPerl_RaidGroupCounts()
 		local lastUsed = 0
 		if (counts) then
-			for i = 1,9 do
+			for i = 1, 11 do
 				if (counts[i] > 0) then
 					lastUsed = i
 				end

@@ -6,8 +6,8 @@ local conf
 local percD	= "%d"..PERCENT_SYMBOL
 local perc1F = "%.1f"..PERCENT_SYMBOL
 
-XPerl_RequestConfig(function(New) conf = New end, "$Revision: 928 $")
-XPerl_SetModuleRevision("$Revision: 928 $")
+XPerl_RequestConfig(function(New) conf = New end, "$Revision: 929 $")
+XPerl_SetModuleRevision("$Revision: 929 $")
 
 -- Upvalus
 local _G = _G
@@ -1186,14 +1186,14 @@ end
 
 -- XPerl_MinimapButton_Dragging
 function XPerl_MinimapButton_Dragging(self, elapsed)
-	local xpos,ypos = GetCursorPosition()
-	local xmin,ymin = Minimap:GetLeft(), Minimap:GetBottom()
+	local xpos, ypos = GetCursorPosition()
+	local xmin, ymin = Minimap:GetLeft(), Minimap:GetBottom()
 
-	xpos = xmin-xpos/UIParent:GetScale()+70
-	ypos = ypos/UIParent:GetScale()-ymin-70
+	xpos = xmin - xpos / UIParent:GetScale() + 70
+	ypos = ypos / UIParent:GetScale() - ymin - 70
 
 	if (IsAltKeyDown()) then
-		local radius = (xpos^2 + ypos^2)^0.5
+		local radius = (xpos ^ 2 + ypos ^ 2) ^ 0.5
 		if (radius < 78) then
 			radius = 78
 		end
@@ -1556,7 +1556,7 @@ function XPerl_CombatFlashSetFrames(self)
 
 		local r, g, b, a
 		if (self.PlayerFlash > 0) then
-			local flashOffsetColour = min(self.PlayerFlash,1) / 2
+			local flashOffsetColour = min(self.PlayerFlash, 1) / 2
 			if (self.PlayerFlashGreen) then
 				r = min(1, max(0, baseColour.r - flashOffsetColour))
 				g = min(1, max(0, baseColour.g + flashOffsetColour))
@@ -1571,8 +1571,8 @@ function XPerl_CombatFlashSetFrames(self)
 			self.PlayerFlash = false
 		end
 
-		for i, frame in pairs(self.FlashFrames) do
-			frame:SetBackdropBorderColor(r, g, b, a)
+		for i = 1, #self.FlashFrames do
+			self.FlashFrames[i]:SetBackdropBorderColor(r, g, b, a)
 		end
 	end
 end
@@ -1584,8 +1584,8 @@ end
 }]]--
 
 local MagicCureTalents = {
-	["DRUID"] = 4,	--Resto
-	["PALADIN"] = 1,	 --Holy
+	["DRUID"] = 4, -- Resto
+	["PALADIN"] = 1, --Holy
 	["SHAMAN"] = 3, -- Resto
 	["MONK"] = 2, -- Mistweaver
 }
