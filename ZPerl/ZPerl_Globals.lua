@@ -2,7 +2,7 @@
 -- Author: Zek <Boodhoof-EU>
 -- License: GNU GPL v3, 29 June 2007 (see LICENSE.txt)
 
-XPerlLocked		= 1
+XPerlLocked = 1
 local conf
 local ConfigRequesters = {}
 XPerl_OutOfCombatQueue	= {}
@@ -29,7 +29,7 @@ function XPerl_SetModuleRevision(rev)
 end
 local AddRevision = XPerl_SetModuleRevision
 
-XPerl_SetModuleRevision("$Revision: 923 $")
+XPerl_SetModuleRevision("$Revision: 938 $")
 
 function XPerl_Notice(...)
 	if (DEFAULT_CHAT_FRAME) then
@@ -419,7 +419,7 @@ function ZPerl_ForceImportAll()
 			--XPerlConfigSavePerCharacter = nil
 		end
 		DisableAddOn("XPerl")
-		print("Z-Pearl: Profile importing done, please reload you UI for the process to complete.")
+		print("Z-Perl: Profile importing done, please reload you UI for the process to complete.")
 	else
 		print("X-Perl is not loaded. You must load it first, to access it's variables for the import.")
 	end
@@ -450,7 +450,7 @@ function XPerl_Globals_OnEvent(self, event, arg1, ...)
 			end
 			DisableAddOn("XPerl")
 			ZPerlImportDone = true
-			print("Z-Pearl: Profile importing done, please reload you UI for the process to complete.")
+			print("Z-Perl: Profile importing done, please reload you UI for the process to complete.")
 		end
 		if IsAddOnLoaded("XPerl") then
 			DisableAddOn("XPerl")

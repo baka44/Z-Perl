@@ -6,13 +6,14 @@ local XPerl_Party_Pet_Events = {}
 local conf, pconf, petconf
 XPerl_PartyPetFrames = {}
 local PartyPetFrames = XPerl_PartyPetFrames
-XPerl_RequestConfig(function(New) conf = New
+XPerl_RequestConfig(function(New)
+	conf = New
 	pconf = New.party
 	petconf = New.partypet
 	for k,v in pairs(PartyPetFrames) do
 		v.conf = pconf
 	end
-end, "$Revision: 936 $")
+end, "$Revision: 938 $")
 
 local new, del, copy = XPerl_GetReusableTable, XPerl_FreeTable, XPerl_CopyTable
 
@@ -237,7 +238,7 @@ function XPerl_Party_Pet_UpdateHealth(self)
 	self.statsFrame.healthBar:SetValue(Partypethealth)
 	XPerl_ColourHealthBar(self, healthPct)
 
-	XPerl_SetExpectedHealth(self)
+	--XPerl_Party_Pet_UpdateHealPrediction(self)
 
 	if (UnitIsDead(self.partyid)) then
 		self.statsFrame:SetGrey()
@@ -259,6 +260,15 @@ function XPerl_Party_Pet_UpdateHealth(self)
 			self.statsFrame.greyMana = nil
 			XPerl_SetManaBarType(self)
 		end
+	end
+end
+
+-- XPerl_Party_Pet_UpdateHealPrediction
+function XPerl_Party_Pet_UpdateHealPrediction(self)
+	if pconf.healprediction then
+		XPerl_SetExpectedHealth(self)
+	else
+		self.statsFrame.expectedHealth:Hide()
 	end
 end
 
@@ -582,11 +592,11 @@ function XPerl_Party_Pet_Set_Bits1(self)
 		end
 	end
 
-	--if (conf.highlight.enable and conf.highlight.HEAL) then
+	--[[if (pconf.healprediction) then
 		self:RegisterEvent("UNIT_HEAL_PREDICTION")
-	--else
-		--self:UnregisterEvent("UNIT_HEAL_PREDICTION")
-	--end
+	else
+		self:UnregisterEvent("UNIT_HEAL_PREDICTION")
+	end]]
 
 	SetAllBuffs(self.buffFrame, self.buffFrame.debuff)
 	SetAllBuffs(self.buffFrame, self.buffFrame.buff)
@@ -605,12 +615,12 @@ end
 
 -- XPerl_Party_Pet_Set_Bits
 function XPerl_Party_Pet_Set_Bits()
-	for k,v in pairs(AllPetFrames) do
+	for k, v in pairs(AllPetFrames) do
 		XPerl_Party_Pet_Set_Bits1(v)
 	end
 
 	local function RegisterEvents(self, enable, events)
-		for k,v in pairs(events) do
+		for k, v in pairs(events) do
 			if (enable) then
 				self:RegisterEvent(v)
 			else
@@ -619,8 +629,7 @@ function XPerl_Party_Pet_Set_Bits()
 		end
 	end
 
-	RegisterEvents(XPerl_Party_Pet_EventFrame, petconf.mana, {"UNIT_RAGE", "UNIT_MAXRAGE", "UNIT_ENERGY", "UNIT_MAXENERGY",
-										"UNIT_MANA", "UNIT_MAXMANA", "UNIT_DISPLAYPOWER"})
+	RegisterEvents(XPerl_Party_Pet_EventFrame, petconf.mana, {"UNIT_RAGE", "UNIT_MAXRAGE", "UNIT_ENERGY", "UNIT_MAXENERGY", "UNIT_MANA", "UNIT_MAXMANA", "UNIT_DISPLAYPOWER"})
 	RegisterEvents(XPerl_Party_Pet_EventFrame, petconf.name, {"UNIT_NAME_UPDATE"})
 	RegisterEvents(XPerl_Party_Pet_EventFrame, petconf.name and petconf.level, {"UNIT_LEVEL"})
 end

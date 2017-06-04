@@ -4,7 +4,6 @@ if (GetLocale() == "koKR") then
 	XPERL_ADMIN_TITLE	= XPerl_ShortProductName.." 공격대 관리자"
 
 	XPERL_MSG_PREFIX	= "|c00C05050X-Perl|r "
-	XPERL_COMMS_PREFIX	= "X-Perl"
 
 	-- Raid Admin
 	XPERL_BUTTON_ADMIN_PIN		= "창 고정"

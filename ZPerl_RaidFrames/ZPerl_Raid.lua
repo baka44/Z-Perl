@@ -21,7 +21,7 @@ local conf, rconf
 XPerl_RequestConfig(function(newConf)
 	conf = newConf
 	rconf = conf.raid
-end, "$Revision: 937 $")
+end, "$Revision: 938 $")
 
 if type(RegisterAddonMessagePrefix) == "function" then
 	RegisterAddonMessagePrefix("CTRA")
@@ -93,7 +93,7 @@ local raidHeaders = { }
 -- XPerl_Raid_OnLoad
 function XPerl_Raid_OnLoad(self)
 	local events = {
-		"CHAT_MSG_ADDON", "PLAYER_ENTERING_WORLD", "VARIABLES_LOADED", "GROUP_ROSTER_UPDATE", "UNIT_FLAGS", "UNIT_AURA", "UNIT_POWER", "UNIT_MAXPOWER", "UNIT_HEALTH_FREQUENT", "UNIT_MAXHEALTH", "UNIT_NAME_UPDATE", "PLAYER_FLAGS_CHANGED", "UNIT_COMBAT", "UNIT_SPELLCAST_START", "UNIT_SPELLCAST_STOP", "UNIT_SPELLCAST_FAILED", "UNIT_SPELLCAST_INTERRUPTED", "READY_CHECK", "READY_CHECK_CONFIRM", "READY_CHECK_FINISHED", "RAID_TARGET_UPDATE", "PLAYER_LOGIN", "ROLE_CHANGED_INFORM", "PET_BATTLE_OPENING_START", "PET_BATTLE_CLOSE", "UNIT_CONNECTION", "PLAYER_REGEN_ENABLED"
+		--[["CHAT_MSG_ADDON", ]]"PLAYER_ENTERING_WORLD", "VARIABLES_LOADED", "GROUP_ROSTER_UPDATE", "UNIT_FLAGS", "UNIT_AURA", "UNIT_POWER", "UNIT_MAXPOWER", "UNIT_HEALTH_FREQUENT", "UNIT_MAXHEALTH", "UNIT_NAME_UPDATE", "PLAYER_FLAGS_CHANGED", "UNIT_COMBAT", "UNIT_SPELLCAST_START", "UNIT_SPELLCAST_STOP", "UNIT_SPELLCAST_FAILED", "UNIT_SPELLCAST_INTERRUPTED", "READY_CHECK", "READY_CHECK_CONFIRM", "READY_CHECK_FINISHED", "RAID_TARGET_UPDATE", "PLAYER_LOGIN", "ROLE_CHANGED_INFORM", "PET_BATTLE_OPENING_START", "PET_BATTLE_CLOSE", "UNIT_CONNECTION", "PLAYER_REGEN_ENABLED"
 	}
 
 	for i, event in pairs(events) do
@@ -395,7 +395,7 @@ function XPerl_Raid_UpdateHealth(self)
 		end
 	end
 
-	XPerl_SetExpectedHealth(self)
+	XPerl_Raid_UpdateHealPrediction(self)
 
 	local name = UnitName(partyid)
 	local myRoster = ZPerl_Roster[name]
@@ -489,6 +489,15 @@ function XPerl_Raid_UpdateHealth(self)
 	end
 end
 
+-- XPerl_Raid_UpdateHealPrediction
+function XPerl_Raid_UpdateHealPrediction(self)
+	if rconf.healprediction then
+		XPerl_SetExpectedHealth(self)
+	else
+		self.statsFrame.expectedHealth:Hide()
+	end
+end
+
 -- XPerl_Raid_UpdateMana
 local function XPerl_Raid_UpdateMana(self)
 	if (rconf.mana) then
@@ -555,31 +564,20 @@ local function onAttrChanged(self, name, value)
 end
 
 local function taintable(self)
-	--self:SetAttribute("*type1", "target")
-	--self:SetAttribute("type2", "menu")
-	
-	--self.menu = XPerl_Raid_ShowPopup -- Wtf, doesnt seem todo anything....
-	
-	if(not self or type(self) == "number") then
+	if not self or type(self) == "number" then
 		return
 	end
-	
-	-- Does AllowAttributeChange work for children?
-	-- This taints the UI if done in combat. there a fix?
+	self:RegisterForClicks("AnyUp")
 	self.nameFrame:SetAttribute("useparent-unit", true)
-	--self.nameFrame:SetAttribute("*type1", "target")
-	--self.nameFrame:SetAttribute("type2", "menu")
-	--self.nameFrame.menu = XPerl_Raid_ShowPopup -- Again, doesnt seem todo anything...
-	XPerl_SecureUnitButton_OnLoad(self.nameFrame, self.partyid, nil, TargetFrameDropDown, XPerl_ShowGenericMenu)
-	XPerl_SecureUnitButton_OnLoad(self, self.partyid, nil, TargetFrameDropDown, XPerl_ShowGenericMenu)
+	self.nameFrame:SetAttribute("*type1", "target")
+	self.nameFrame:SetAttribute("type2", "togglemenu")
+	self:SetAttribute("*type1", "target")
+	self:SetAttribute("type2", "togglemenu")
 end
 
 -- XPerl_Raid_Single_OnLoad
 function XPerl_Raid_Single_OnLoad(self)
 	XPerl_SetChildMembers(self)
-	if not InCombatLockdown() then
-		self:RegisterForClicks("AnyUp")
-	end
 
 	self.edgeFile = "Interface\\Addons\\ZPerl\\Images\\XPerl_ThinEdge"
 	self.edgeSize = 10
@@ -1624,7 +1622,8 @@ end
 
 -- XPerl_ParseCTRA
 function XPerl_ParseCTRA(sender, msg, func)
-	local arr = new(strsplit("#", msg))
+	--local arr = new(strsplit("#", msg))
+	local arr = {strsplit("#", msg)}
 	for i, subMsg in pairs(arr) do
 		func(sender, subMsg)
 	end
@@ -1765,8 +1764,12 @@ function XPerl_RaidTitles()
 
 		if (XPerlLocked == 0 or (RaidGroupCounts[i] > 0 and enable and rconf.group[i] and not singleGroup)) then
 			if (XPerlLocked == 0 or rconf.titles) then
-				if (not titleFrame:IsShown()) then
-					titleFrame:Show()
+				if rconf.enable then
+					if (not titleFrame:IsShown()) then
+						titleFrame:Show()
+					end
+				else
+					titleFrame:Hide()
 				end
 			else
 				if (titleFrame:IsShown()) then
@@ -1801,7 +1804,11 @@ function XPerl_RaidTitles()
 				virtualFrame:SetBackdropColor(conf.colour.frame.r, conf.colour.frame.g, conf.colour.frame.b, conf.colour.frame.a)
 				virtualFrame:SetBackdropBorderColor(conf.colour.border.r, conf.colour.border.g, conf.colour.border.b, 1)
 				if rconf.group[i] then
-					virtualFrame:Show()
+					if rconf.enable then
+						virtualFrame:Show()
+					else
+						virtualFrame:Hide()
+					end
 					--[[if rconf.titles then
 						titleFrame:Show()
 					else
@@ -2285,11 +2292,11 @@ function XPerl_Raid_Set_Bits(self)
 	end
 	SkipHighlightUpdate = nil
 
-	--if (conf.highlight.enable and conf.highlight.HEAL) then
+	if (rconf.healprediction) then
 		self:RegisterEvent("UNIT_HEAL_PREDICTION")
-	--else
-		--self:UnregisterEvent("UNIT_HEAL_PREDICTION")
-	--end
+	else
+		self:UnregisterEvent("UNIT_HEAL_PREDICTION")
+	end
 
 	if (IsInRaid()) then
 		XPerl_Raid_Frame:Show()

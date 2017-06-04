@@ -4,7 +4,6 @@ if (GetLocale() == "itIT") then
 XPERL_ADMIN_TITLE	= XPerl_ShortProductName.." Amministrazione Raid"
 
 XPERL_MSG_PREFIX	= "|c00C05050X-Perl|r "
-XPERL_COMMS_PREFIX	= "X-Perl"
 
 -- Raid Admin
 XPERL_BUTTON_ADMIN_PIN		= "Blocca finestra"

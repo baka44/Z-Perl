@@ -10,7 +10,6 @@
 	<Script file="Localization.ruRU.lua"/>
 	<Script file="localization.itIT.lua"/>
 	<Script file="ZPerl_RaidAdmin.lua"/>
-	<Script file="..\ZPerl\ZPerl_Usage.lua"/>
 
 	<Button name="XPerlDiscButtonTemplate" virtual="true" inherits="XPerl_BasicButton">
 		<Size>

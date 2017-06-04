@@ -1,14 +1,13 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\FrameXML\UI.xsd">
-	<Script file="localization.enUS.lua"/>
+	<Script file="localization.lua"/>
 	<Script file="localization.deDE.lua"/>
-	<Script file="localization.frFR.lua"/>
 	<Script file="Localization.esES.lua"/>
-	<Script file="localization.zhCN.lua"/>
-	<Script file="localization.zhTW.lua"/>
+	<Script file="localization.frFR.lua"/>
+	<Script file="localization.itIT.lua"/>
 	<Script file="localization.koKR.lua"/>
 	<Script file="localization.ruRU.lua"/>
-	<Script file="localization.itIT.lua"/>
-	<Script file="localization.lua"/>
+	<Script file="localization.zhCN.lua"/>
+	<Script file="localization.zhTW.lua"/>
 	<Script file="ZPerl_Raid.lua"/>
 
 	<StatusBar name="XPerlRaidStatusBar" virtual="true">
@@ -468,7 +467,7 @@
 		</Anchors>
 	</Frame>
 	
-		<Frame name="XPerl_Raid_Title11" parent="UIParent" inherits="XPerl_Raid_TitleDragTemplate" id="11">
+	<Frame name="XPerl_Raid_Title11" parent="UIParent" inherits="XPerl_Raid_TitleDragTemplate" id="11">
 		<Anchors>
 			<Anchor point="TOPLEFT">
 				<Offset>

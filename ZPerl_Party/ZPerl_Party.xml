@@ -229,19 +229,6 @@
 							</Size>
 							<Color r="1.0" g="1.0" b="0"/>
 						</FontString>
-						<!-- Class Icon -->
-						<Texture name="$parentclassTexture" file="Interface\Glues\CharacterCreate\UI-CharacterCreate-Classes">
-							<Size>
-								<AbsDimension x="20" y="20"/>
-							</Size>
-							<Anchors>
-								<Anchor point="TOPLEFT" relativePoint="TOPLEFT">
-									<Offset>
-										<AbsDimension x="5" y="-5"/>
-									</Offset>
-								</Anchor>
-							</Anchors>
-						</Texture>
 					</Layer>
 				</Layers>
 				<Scripts>
@@ -249,6 +236,35 @@
 						XPerl_RegisterUnitText(_G[self:GetName().."text"])
 					</OnLoad>
 				</Scripts>
+			</Frame>
+			<!-- Class Icon -->
+			<Frame name="$parentclassFrame">
+				<Size>
+					<AbsDimension x="20" y="20"/>
+				</Size>
+				<Anchors>
+					<Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMLEFT" relativeTo="$parentportraitFrame">
+						<Offset>
+							<AbsDimension x="-1" y="2"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Layers>
+					<Layer level="OVERLAY">
+						<Texture name="$parenttex" file="Interface\Glues\CharacterCreate\UI-CharacterCreate-Classes" setAllPoints="true"/>
+					</Layer>
+				</Layers>
+				<Backdrop bgFile="" edgeFile="" tile="true">
+					<EdgeSize>
+						<AbsValue val="16"/>
+					</EdgeSize>
+					<TileSize>
+						<AbsValue val="32"/>
+					</TileSize>
+					<BackgroundInsets>
+						<AbsInset left="3" right="4" top="3" bottom="3"/>
+					</BackgroundInsets>
+				</Backdrop>
 			</Frame>
 			<!-- Party Stats -->
 			<Frame name="$parentstatsFrame" inherits="XPerl_Stats_Template">
@@ -526,13 +542,28 @@
 		<Anchors>
 			<Anchor point="TOPLEFT" relativeTo="XPerl_Party_Anchor" relativePoint="CENTER"/>
 		</Anchors>
-		<Attributes>
+		<!--<Attributes>
 			<Attribute name="template" type="string" value="XPerl_Party_FrameTemplate"/>
 			<Attribute name="templateType" type="string" value="Button"/>
 			<Attribute name="minWidth" type="number" value="80"/>
 			<Attribute name="minHeight" type="number" value="10"/>
 			<Attribute name="xOffset" type="number" value="0"/>
+		</Attributes>-->
+	</Frame>
+	<Frame name="ZPerl_Party_SecureState" inherits="SecureHandlerStateTemplate" parent="UIParent" protected="true">
+		<Attributes>
+			<Attribute name="_onstate-partymonitor" value="if not self:GetAttribute('partyEnabled') then self:GetFrameRef('partyHeader'):Hide() return end if newstate == 'nocombat' then return elseif newstate == 'raid1' and self:GetAttribute('partyInRaid') then if not self:GetFrameRef('partyHeader'):IsShown() then self:GetFrameRef('partyHeader'):Show() end elseif newstate == 'raid1' and self:GetAttribute('partySmallRaid') then if not self:GetFrameRef('partyHeader'):IsShown() then self:GetFrameRef('partyHeader'):Show() end elseif newstate == 'party1' then if not self:GetFrameRef('partyHeader'):IsShown() then self:GetFrameRef('partyHeader'):Show() end else if self:GetFrameRef('partyHeader'):IsShown() then self:GetFrameRef('partyHeader'):Hide() end end"/>
 		</Attributes>
+		<Scripts>
+			<OnLoad>
+				SecureHandler_OnLoad(self)
+				self:SetFrameRef("partyHeader", ZPerl_Party_SecureHeader)
+				self:SetAttribute("partyEnabled", XPerlDB.party.enable)
+				self:SetAttribute("partyInRaid", XPerlDB.party.inRaid)
+				self:SetAttribute("partySmallRaid", XPerlDB.party.smallRaid)
+				RegisterStateDriver(self, "partymonitor", "[nocombat] nocombat; [target=raid1, exists] raid1; [target=party1, exists] party1; hide")
+			</OnLoad>
+		</Scripts>
 	</Frame>
 	<!-- The Real Frames -->
 	<Button name="XPerl_party1" inherits="XPerl_Party_FrameTemplate" parent="ZPerl_Party_SecureHeader" id="1"/>

@@ -3,7 +3,6 @@
         XPERL_ADMIN_TITLE			= "X-Perl Raid Admin"
 
         XPERL_MSG_PREFIX	        	= "|c00C05050X-Perl|r "
-        XPERL_COMMS_PREFIX	        	= "X-Perl"
 
         -- Raid Admin
         XPERL_BUTTON_ADMIN_PIN			= "V\195\169rrou de fen\195\170tres"

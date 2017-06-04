@@ -8,8 +8,8 @@ local perc1F = "%.1f"..PERCENT_SYMBOL
 
 XPerl_RequestConfig(function(New)
 	conf = New
-end, "$Revision: 937 $")
-XPerl_SetModuleRevision("$Revision: 937 $")
+end, "$Revision: 938 $")
+XPerl_SetModuleRevision("$Revision: 938 $")
 
 -- Upvalus
 local _G = _G
@@ -22,8 +22,8 @@ local error = error
 local floor = floor
 local format = format
 local ipairs = ipairs
-local max = math.max
-local min = math.min
+local max = max
+local min = min
 local next = next
 local pairs = pairs
 local select = select
@@ -706,11 +706,11 @@ local function smoothColor(percentage)
 	local r, g, b
 	if (percentage < 0.5) then
 		r = 1
-		g = min(1, max(0, 2*percentage))
+		g = min(1, max(0, 2 * percentage))
 		b = 0
 	else
 		g = 1
-		r = min(1, max(0, 2*(1 - percentage)))
+		r = min(1, max(0, 2 * (1 - percentage)))
 		b = 0
 	end
 
@@ -876,7 +876,7 @@ function XPerl_SetHealthBar(self, hp, Max)
 			SetValuedText(hbt, hp, Max)
 		end
 	end
-	XPerl_SetExpectedHealth(self)
+	--XPerl_SetExpectedHealth(self)
 end
 
 ---------------------------------
@@ -1534,7 +1534,7 @@ function XPerl_CombatFlashSet(self, elapsed, argNew, argGreen)
 
 	if (self) then
 		if (argNew) then
-			self.PlayerFlash = 1 -- Old value: 1.5
+			self.PlayerFlash = 1.2 -- Old value: 1.5
 			self.PlayerFlashGreen = argGreen
 		else
 			if (elapsed and self.PlayerFlash) then
@@ -2369,7 +2369,7 @@ end
 -- XPerl_RegisterClickCastFrame
 function XPerl_RegisterClickCastFrame(self)
 	if (not ClickCastFrames) then
-		ClickCastFrames = {}
+		ClickCastFrames = { }
 	end
 	ClickCastFrames[self] = true
 end
@@ -2413,8 +2413,8 @@ function XPerl_SecureUnitButton_OnLoad(self, unit, menufunc, m1, m2, toggledisab
 		self:SetAttribute("unit", unit)
 	end
 
-	self.menu = menufunc
-	self.dropdownMenu = m1
+	--self.menu = menufunc
+	--self.dropdownMenu = m1
 	--self:SetAttribute("_menu", m2)
 	--self:SetScript("PostClick", unitmenuOnPostClick)
 

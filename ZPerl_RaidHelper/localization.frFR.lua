@@ -1,7 +1,6 @@
 if ( GetLocale() == "frFR" ) then
 
 	XPERL_MSG_PREFIX 		= "|c00C05050X-Perl|r "
-	XPERL_COMMS_PREFIX 		= "X-Perl"
 
 	XPERL_TOOLTIP_ASSISTING 	= "Assistance de joueurs"
 	XPERL_TOOLTIP_HEALERS 		= "Soigneurs me ciblant"

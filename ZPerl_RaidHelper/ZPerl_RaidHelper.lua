@@ -2,7 +2,7 @@
 -- Author: Zek <Boodhoof-EU>
 -- License: GNU GPL v3, 29 June 2007 (see LICENSE.txt)
 
-XPerl_SetModuleRevision("$Revision: 852 $")
+XPerl_SetModuleRevision("$Revision: 938 $")
 
 ZPerl_MainTanks = {}
 local MainTankCount, blizzMTanks, ctraTanks = 0, 0, 0
@@ -26,11 +26,13 @@ end
 local new, del = XPerl_GetReusableTable, XPerl_FreeTable
 
 -- Dup colours used to show which tanks have the same target
-local MTdupColours = {	{r = "0.8", g = "0.2", b = "0.2"},
-			{r = "0.2", g = "0.2", b = "0.8"},
-			{r = "0.8", g = "0.2", b = "0.8"},
-			{r = "0.2", g = "0.8", b = "0.2"},
-			{r = "0.2", g = "0.8", b = "0.8"}}
+local MTdupColours = {
+	{r = "0.8", g = "0.2", b = "0.2"},
+	{r = "0.2", g = "0.2", b = "0.8"},
+	{r = "0.8", g = "0.2", b = "0.8"},
+	{r = "0.2", g = "0.8", b = "0.2"},
+	{r = "0.2", g = "0.8", b = "0.8"}
+}
 
 local GAP_SPACING = 10
 XPERL_UNIT_HEIGHT_MIN = 17
@@ -531,8 +533,8 @@ function XPerl_SplitCTRAMessage(msg, char)
 	local arr = new()
 	while (strfind(msg, char) ) do
 		local iStart, iEnd = strfind(msg, char)
-		tinsert(arr, strsub(msg, 1, iStart-1))
-		msg = strsub(msg, iEnd+1, strlen(msg))
+		tinsert(arr, strsub(msg, 1, iStart - 1))
+		msg = strsub(msg, iEnd + 1, strlen(msg))
 	end
 	if ( strlen(msg) > 0 ) then
 		tinsert(arr, msg)
@@ -543,11 +545,12 @@ end
 -- XPerl_ParseCTRA
 function XPerl_ParseCTRA(nick, msg, func)
 	if (strfind(msg, "#")) then
-		local arr = XPerl_SplitCTRAMessage(msg, "#")
-		for i,subMsg in pairs(arr) do
+		--local arr = XPerl_SplitCTRAMessage(msg, "#")
+		local arr = {strsplit("#", msg)}
+		for i, subMsg in pairs(arr) do
 			func(nick, subMsg)
 		end
-		del(arr)
+		--del(arr)
 	else
 		func(nick, msg)
 	end
@@ -692,18 +695,20 @@ end
 
 -- Registration
 local function Registration()
-	local list = {	"UNIT_HEALTH",
-			"UNIT_MAXHEALTH",
-			"UNIT_TARGET",
-			"PLAYER_TARGET_CHANGED",
-			"PLAYER_REGEN_ENABLED",
-			"PLAYER_REGEN_DISABLED",
-			"PLAYER_ENTERING_WORLD",
-			"CHAT_MSG_ADDON",
-			"UNIT_FACTION",
-			"PLAYER_ROLES_ASSIGNED"}
+	local list = {
+		"UNIT_HEALTH",
+		"UNIT_MAXHEALTH",
+		"UNIT_TARGET",
+		"PLAYER_TARGET_CHANGED",
+		"PLAYER_REGEN_ENABLED",
+		"PLAYER_REGEN_DISABLED",
+		"PLAYER_ENTERING_WORLD",
+		--"CHAT_MSG_ADDON",
+		"UNIT_FACTION",
+		"PLAYER_ROLES_ASSIGNED"
+	}
 
-	for i,a in pairs(list) do
+	for i, a in pairs(list) do
 		if not conf then return end
 		if (conf.RaidHelper == 1) then
 			XPerl_Frame:RegisterEvent(a)

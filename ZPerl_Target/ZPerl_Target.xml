@@ -89,7 +89,7 @@
 					</StatusBar>
 				</Frames>
 				<Layers>
-					<Layer level="BORDER">
+					<Layer level="OVERLAY">
 						<!-- Combat Icon -->
 						<Texture name="$parentcombatIcon" file="Interface\CharacterFrame\UI-StateIcon" hidden="true">
 							<Size>

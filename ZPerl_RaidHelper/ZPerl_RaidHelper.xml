@@ -11,7 +11,6 @@
 	<Script file="localization.itIT.lua"/>
 	<Script file="ZPerl_Config.lua"/>
 	<Script file="ZPerl_RaidHelper.lua"/>
-	<Script file="..\ZPerl\ZPerl_Usage.lua"/>
 
 	<GameTooltip name="XPerl_BottomTip" frameStrata="LOW" parent="UIParent" inherits="GameTooltipTemplate"/>
 

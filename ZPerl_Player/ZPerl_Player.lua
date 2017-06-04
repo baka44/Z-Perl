@@ -12,7 +12,7 @@ XPerl_RequestConfig(function(new)
 	if (XPerl_Player) then
 		XPerl_Player.conf = conf.player
 	end
-end, "$Revision: 937 $")
+end, "$Revision: 938 $")
 
 local perc1F = "%.1f"..PERCENT_SYMBOL
 local percD = "%.0f"..PERCENT_SYMBOL
@@ -33,11 +33,7 @@ local UnitPower = UnitPower
 local UnitPowerMax = UnitPowerMax
 local UnitName = UnitName
 local UnitPower = UnitPower
-local XPerl_SetHealthBar = XPerl_SetHealthBar
-
-
 local UnitHealth = UnitHealth
-
 
 local XPerl_Player_InitDK
 local XPerl_Player_InitWarlock
@@ -59,15 +55,19 @@ function XPerl_Player_OnLoad(self)
 
 	CombatFeedback_Initialize(self, self.hitIndicator.text, 30)
 
-	XPerl_SecureUnitButton_OnLoad(self, "player", nil, PlayerFrameDropDown, XPerl_ShowGenericMenu)					--PlayerFrame.menu)
-	XPerl_SecureUnitButton_OnLoad(self.nameFrame, "player", nil, PlayerFrameDropDown, XPerl_ShowGenericMenu)		--PlayerFrame.menu)
+	self.nameFrame:SetAttribute("*type1", "target")
+	self.nameFrame:SetAttribute("type2", "togglemenu")
+	self.nameFrame:SetAttribute("unit", self.partyid)
+	self:SetAttribute("*type1", "target")
+	self:SetAttribute("type2", "togglemenu")
+	self:SetAttribute("unit", self.partyid)
 
 	self:RegisterEvent("VARIABLES_LOADED")
 	self:RegisterEvent("PLAYER_ENTERING_WORLD")
 	self:RegisterEvent("PLAYER_ALIVE")
 	
-	if(HealBot_Options_EnablePlayerFrame) then
-		HealBot_Options_EnablePlayerFrame = function () end
+	if (HealBot_Options_EnablePlayerFrame) then
+		HealBot_Options_EnablePlayerFrame = function() end
 	end
 
 	self.EnergyLast = 0
@@ -578,6 +578,7 @@ function XPerl_Player_UpdateHealth(self)
 	local playerhealth, playerhealthmax = UnitHealth(partyid), UnitHealthMax(partyid)
 
 	XPerl_SetHealthBar(self, playerhealth, playerhealthmax)
+	XPerl_Player_UpdateHealPrediction(self)
 
 	local greyMsg
 	if (UnitIsDead(partyid)) then
@@ -619,6 +620,15 @@ function XPerl_Player_UpdateHealth(self)
 	end
 
 	XPerl_PlayerStatus_OnUpdate(self, playerhealth, playerhealthmax)
+end
+
+-- XPerl_Player_UpdateHealPrediction
+function XPerl_Player_UpdateHealPrediction(self)
+	if pconf.healprediction then
+		XPerl_SetExpectedHealth(self)
+	else
+		self.statsFrame.expectedHealth:Hide()
+	end
 end
 
 -- XPerl_Player_UpdateLevel
@@ -1047,7 +1057,7 @@ end
 
 function XPerl_Player_Events:UNIT_HEAL_PREDICTION(unit)
 	-- Seems like unit is nil for the player
-	if (not unit or unit == self.partyid) then
+	if (pconf.healprediction and (not unit or unit == self.partyid)) then
 		XPerl_SetExpectedHealth(self)
 	end
 end
@@ -1249,11 +1259,11 @@ function XPerl_Player_Set_Bits(self)
 		end
 	end
 
-	--if (conf.highlight.enable and conf.highlight.HEAL) then
+	if (pconf.healprediction) then
 		self:RegisterEvent("UNIT_HEAL_PREDICTION")
-	--else
-		--self:UnregisterEvent("UNIT_HEAL_PREDICTION")
-	--end
+	else
+		self:UnregisterEvent("UNIT_HEAL_PREDICTION")
+	end
 
 	XPerl_Player_SetWidth(self)
 

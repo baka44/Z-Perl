@@ -9,7 +9,7 @@ XPerl_RequestConfig(function(New)
 	conf = New
 	raidconf = New.raid
 	rconf = New.raidpet
-end, "$Revision: 936 $")
+end, "$Revision: 938 $")
 
 --local new, del, copy = XPerl_GetReusableTable, XPerl_FreeTable, XPerl_CopyTable
 
@@ -161,6 +161,16 @@ local function XPerl_RaidPets_UpdateHealth(self)
 			self.healthBar.text:SetFormattedText("%.0f%%", health / healthmax * 100)
 		end
 	end
+	--XPerl_RaidPets_UpdateHealPrediction(self)
+end
+
+-- XPerl_RaidPets_UpdateHealPrediction
+function XPerl_RaidPets_UpdateHealPrediction(self)
+	if raidconf.healprediction then
+		XPerl_SetExpectedHealth(self)
+	else
+		self.statsFrame.expectedHealth:Hide()
+	end
 end
 
 -- XPerl_RaidPets_RaidTargetUpdate
@@ -246,11 +256,13 @@ function XPerl_RaidPets_Events:PLAYER_ENTERING_WORLD()
 end
 
 local function taintable(self)
-	if(not self or type(self) == "number") then
+	if not self or type(self) == "number" then
 		return
 	end
+	self:RegisterForClicks("AnyUp")
 	self:SetAttribute("useparent-unit", true)
-	XPerl_SecureUnitButton_OnLoad(self, nil, nil, XPerl_ShowGenericMenu, true)
+	self:SetAttribute("*type1", "target")
+	self:SetAttribute("type2", "togglemenu")
 end
 
 -- PLAYER_REGEN_ENABLED
@@ -359,7 +371,6 @@ end
 
 -- XPerl_RaidPet_Single_OnLoad
 function XPerl_RaidPet_Single_OnLoad(self)
-	self:RegisterForClicks("AnyUp")
 	XPerl_SetChildMembers(self)
 	XPerl_RegisterPerlFrames(self)
 	self:SetScript("OnAttributeChanged", onAttrChanged)
@@ -400,17 +411,6 @@ local function SetMainHeaderAttributes(self)
 		petsPerColumn = 6
 	end
 
-	-- Fix Secure Header taint in combat
-	local maxColumns = self:GetAttribute("maxColumns") or 1
-	local unitsPerColumn = self:GetAttribute("unitsPerColumn") or petsPerColumn
-	local startingIndex = self:GetAttribute("startingIndex")
-	local maxUnits = maxColumns * unitsPerColumn
-
-	self:Show()
-	self:SetAttribute("startingIndex", - maxUnits + 1)
-	self:SetAttribute("startingIndex", startingIndex)
-	self:Hide()
-
 	self:SetAttribute("filterOnPet", true)
 	self:SetAttribute("unitsPerColumn", petsPerColumn) -- Don't grow taller than a standard raid group
 	self:SetAttribute("maxColumns", 7)
@@ -440,6 +440,17 @@ local function SetMainHeaderAttributes(self)
 	end
 	self:SetAttribute("template", "XPerl_RaidPet_FrameTemplate")
 	self:SetAttribute("templateType", "Button")
+
+	-- Fix Secure Header taint in combat
+	local maxColumns = self:GetAttribute("maxColumns") or 1
+	local unitsPerColumn = self:GetAttribute("unitsPerColumn") or petsPerColumn
+	local startingIndex = self:GetAttribute("startingIndex")
+	local maxUnits = maxColumns * unitsPerColumn
+
+	self:Show()
+	self:SetAttribute("startingIndex", - maxUnits + 1)
+	self:SetAttribute("startingIndex", startingIndex)
+	self:Hide()
 
 	--self.initialConfigFunction = initialConfigFunction
 end
@@ -539,11 +550,11 @@ function XPerl_RaidPets_OptionActions()
 		end
 	end
 
-	--if (conf.highlight.enable and conf.highlight.HEAL) then
+	--[[if (raidconf.healprediction) then
 		XPerl_RaidPets_Frame:RegisterEvent("UNIT_HEAL_PREDICTION")
-	--else
-		--XPerl_RaidPets_Frame:UnregisterEvent("UNIT_HEAL_PREDICTION")
-	--end
+	else
+		XPerl_RaidPets_Frame:UnregisterEvent("UNIT_HEAL_PREDICTION")
+	end]]
 
 	XPerl_RaidPets_Titles()
 	XPerl_Raid_TitlePets:SetScale((conf.raid and conf.raid.scale) or 0.8)

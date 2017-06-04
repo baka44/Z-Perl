@@ -2,7 +2,7 @@
 -- Author: Zek <Boodhoof-EU>
 -- License: GNU GPL v3, 29 June 2007 (see LICENSE.txt)
 
-XPerl_SetModuleRevision("$Revision: 918 $")
+XPerl_SetModuleRevision("$Revision: 938 $")
 
 if type(RegisterAddonMessagePrefix) == "function" then
 	RegisterAddonMessagePrefix("CTRA")
@@ -38,7 +38,7 @@ function XPerl_CheckOnLoad(self)
 	self:SetScript("OnEvent", XPerl_CheckOnEvent)
 	self:SetScript("OnShow", XPerl_CheckOnShow)
 	self:SetScript("OnHide", XPerl_CheckOnHide)
-	self:RegisterEvent("CHAT_MSG_ADDON")
+	--self:RegisterEvent("CHAT_MSG_ADDON")
 
 	XPerl_CheckListItemsScrollBar.offset = 0
 	XPerl_CheckListPlayersScrollBar.offset = 0

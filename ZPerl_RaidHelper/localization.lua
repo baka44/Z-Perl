@@ -1,7 +1,5 @@
 ﻿
-
 XPERL_MSG_PREFIX	= "|c00C05050X-Perl|r "
-XPERL_COMMS_PREFIX	= "X-Perl"
 
 XPERL_TOOLTIP_ASSISTING	= "Players Assisting:"
 XPERL_TOOLTIP_HEALERS	= "Healers Targetting Me:"
@@ -38,10 +36,3 @@ XPERL_HELPER_FINDSET		= "Find set to %s. ('|c00007F00/xp find|r' to clear)."
 XPERL_AGGRO_PLAYER		= "- AGGRO -"
 XPERL_AGGRO_PET			= "- PET AGGRO -"
 XPERL_AGGRO_DRAGTIP		= "Move the location of the Aggro warning"
-
-if ( GetLocale() == "frFR" ) then
-	XPERL_LOC_DEAD = "Mort"
-
-elseif ( GetLocale() == "koKR" ) then
-	XPERL_LOC_DEAD = "죽음"
-end

@@ -1,3 +1,19 @@
+**r938**
+* Party frames can be securely shown/hidden while in combat too.
+* The addon usage information for tooltips should properly work again.
+* The class icon for the party frames from now can be disabled properly.
+* Added an option to toggle Heal Prediction bars for each frame.
+* Added an option to enable/disable party frames.
+* Enabling/disabling the party and raid frames should also show/hide their mover frame too.
+* Increased Combat Flashing Frame's flash time to 1.2 second.
+* The settings upgrade functions should properly work with global profiles too.
+* The 30 yard indicator icon for the target frame should be on a proper layer level.
+* Some raid pet fixes.
+* Removed all CTRA parser.
+* Fixed some leaks.
+* Localization updates.
+* A lot of other smaller fixes.
+
 **r937**
 * Updated for 6.1.0.
 * Reenabled Combat Flashing Frames and Highlight Debuff support for raid and raid pet frames.

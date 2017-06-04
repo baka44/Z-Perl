@@ -1,7 +1,6 @@
 ﻿
 if ( GetLocale() == "itIT" ) then
 XPERL_MSG_PREFIX	= "|c00C05050X-Perl|r "
-XPERL_COMMS_PREFIX	= "X-Perl"
 
 XPERL_TOOLTIP_ASSISTING	= "Giocatori che ti assistono:"
 XPERL_TOOLTIP_HEALERS	= "Curatori che ti bersagliano:"

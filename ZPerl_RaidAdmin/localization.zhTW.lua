@@ -3,7 +3,6 @@
 XPERL_ADMIN_TITLE	= "X-Perl 團隊管理介面"
 
 XPERL_MSG_PREFIX	= "|c00C05050X-Perl|r "
-XPERL_COMMS_PREFIX	= "X-Perl"
 
 -- 團隊管理
 XPERL_BUTTON_ADMIN_PIN		= "固定視窗位置"

@@ -639,13 +639,12 @@
 					else
 						XPerl_Options_SetIndex(self, nil)
 					end
-
 				elseif type(self.configSelection) == "table" then
 					if self.configIndex == nil then
 						error("No index for configSelection in "..self:GetName())
 					end
 
-					for k,v in pairs(self.configSelection) do
+					for k, v in pairs(self.configSelection) do
 						local table
 						if type(v) == "table" then
 							table = v
@@ -2129,7 +2128,7 @@
 				</Frames>
 			</Frame>
 
-			-- Party Frame Options
+			<!-- Party Frame Options -->
 			<Frame name="$parent_Party" hidden="true">
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeTo="XPerl_Options_Area_Align"/>
@@ -5136,9 +5135,28 @@
 						</Scripts>
 					</CheckButton>
 
-					<CheckButton name="$parent_PlayerXP" inherits="XPerlCheckButtonTemplate">
+					<CheckButton name="$parent_HealPrediction" inherits="XPerlCheckButtonTemplate">
 						<Anchors>
 							<Anchor point="TOPLEFT" relativeTo="$parent_PlayerLevel" relativePoint="BOTTOMLEFT">
+								<Offset>
+									<AbsDimension x="0" y="6"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnLoad>
+								XPerl_OptionsSetMyText(self, "XPERL_CONF_PLAYER_HEAL_PREDICTION")
+								self.configBase = "XPerlDB.player"
+								self.configIndex = "healprediction"
+								self.configClick = XPerl_Player_Reset
+								XPerl_Options_RegisterProtected(self)
+							</OnLoad>
+						</Scripts>
+					</CheckButton>
+
+					<CheckButton name="$parent_PlayerXP" inherits="XPerlCheckButtonTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="$parent_HealPrediction" relativePoint="BOTTOMLEFT">
 								<Offset>
 									<AbsDimension x="0" y="6"/>
 								</Offset>
@@ -7275,9 +7293,28 @@
 						</Scripts>
 					</CheckButton>
 
-					<CheckButton name="$parent_Values" inherits="XPerlCheckButtonTemplate">
+					<CheckButton name="$parent_HealPrediction" inherits="XPerlCheckButtonTemplate">
 						<Anchors>
 							<Anchor point="TOPLEFT" relativeTo="$parent_Level" relativePoint="BOTTOMLEFT">
+								<Offset>
+									<AbsDimension x="0" y="6"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnLoad>
+								XPerl_OptionsSetMyText(self, "XPERL_CONF_TARGET_HEAL_PREDICTION")
+								self.configBase = "XPerlDB.target"
+								self.configIndex = "healprediction"
+								self.configClick = XPerl_Target_Reset
+								XPerl_Options_RegisterProtected(self)
+							</OnLoad>
+						</Scripts>
+					</CheckButton>
+
+					<CheckButton name="$parent_Values" inherits="XPerlCheckButtonTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="$parent_HealPrediction" relativePoint="BOTTOMLEFT">
 								<Offset>
 									<AbsDimension x="0" y="6"/>
 								</Offset>
@@ -7953,6 +7990,25 @@
 								</Scripts>
 							</CheckButton>
 
+							<CheckButton name="$parent_HealPrediction" inherits="XPerlCheckButtonTemplate">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="$parent_Mana" relativePoint="TOPRIGHT">
+										<Offset>
+											<AbsDimension x="70" y="0"/>
+										</Offset>
+									</Anchor>
+								</Anchors>
+								<Scripts>
+									<OnLoad>
+										XPerl_OptionsSetMyText(self, "XPERL_CONF_TARGETTARGET_HEAL_PREDICTION")
+										self.configBase = "XPerlDB.targettarget"
+										self.configIndex = "healprediction"
+										self.configClick = XPerl_TargetTarget_Reset
+										XPerl_Options_RegisterProtected(self)
+									</OnLoad>
+								</Scripts>
+							</CheckButton>
+
 							<CheckButton name="$parent_Values" inherits="XPerlCheckButtonTemplate">
 								<Size>
 									<AbsDimension x="26" y="26"/>
@@ -8227,9 +8283,9 @@
 							<AbsDimension x="26" y="26"/>
 						</Size>
 						<Anchors>
-							<Anchor point="TOPLEFT" relativeTo="$parent_BigPet" relativePoint="BOTTOMLEFT">
+							<Anchor point="TOPLEFT" relativeTo="$parent_BigBuffs" relativePoint="BOTTOMLEFT">
 								<Offset>
-									<AbsDimension x="0" y="6"/>
+									<AbsDimension x="0" y="-14"/>
 								</Offset>
 							</Anchor>
 						</Anchors>
@@ -9014,9 +9070,28 @@
 						</Scripts>
 					</CheckButton>
 
-					<CheckButton name="$parent_Values" inherits="XPerlCheckButtonTemplate">
+					<CheckButton name="$parent_HealPrediction" inherits="XPerlCheckButtonTemplate">
 						<Anchors>
 							<Anchor point="TOPLEFT" relativeTo="$parent_Level" relativePoint="BOTTOMLEFT">
+								<Offset>
+									<AbsDimension x="0" y="6"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnLoad>
+								XPerl_OptionsSetMyText(self, "XPERL_CONF_FOCUS_HEAL_PREDICTION")
+								self.configBase = "XPerlDB.focus"
+								self.configIndex = "healprediction"
+								self.configClick = XPerl_Target_Reset
+								XPerl_Options_RegisterProtected(self)
+							</OnLoad>
+						</Scripts>
+					</CheckButton>
+
+					<CheckButton name="$parent_Values" inherits="XPerlCheckButtonTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="$parent_HealPrediction" relativePoint="BOTTOMLEFT">
 								<Offset>
 									<AbsDimension x="0" y="6"/>
 								</Offset>
@@ -9384,6 +9459,25 @@
 										self.configBase = "XPerlDB.focustarget"
 										self.configIndex = "mana"
 										self.configClick = XPerl_TargetTarget_Reset
+									</OnLoad>
+								</Scripts>
+							</CheckButton>
+
+							<CheckButton name="$parent_HealPrediction" inherits="XPerlCheckButtonTemplate">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="$parent_Mana" relativePoint="TOPRIGHT">
+										<Offset>
+											<AbsDimension x="70" y="0"/>
+										</Offset>
+									</Anchor>
+								</Anchors>
+								<Scripts>
+									<OnLoad>
+										XPerl_OptionsSetMyText(self, "XPERL_CONF_FOCUSTARGET_HEAL_PREDICTION")
+										self.configBase = "XPerlDB.focustarget"
+										self.configIndex = "healprediction"
+										self.configClick = XPerl_TargetTarget_Reset
+										XPerl_Options_RegisterProtected(self)
 									</OnLoad>
 								</Scripts>
 							</CheckButton>
@@ -9983,18 +10077,80 @@
 					</OnLoad>
 					<OnShow>
 						if (not IsAddOnLoaded("ZPerl_ArcaneBar")) then
-							local n = self:GetName().."_"
-							_G[n.."ArcaneBar"]:Disable()
+							_G[self:GetName().."_".."ArcaneBar"]:Disable()
 						end
 					</OnShow>
 				</Scripts>
 
 				<Frames>
-					<CheckButton name="$parent_Name" inherits="XPerlCheckButtonTemplate">
+					<CheckButton name="$parent_Enable" inherits="XPerlCheckButtonTemplate">
 						<Anchors>
 							<Anchor point="TOPLEFT">
 								<Offset>
 									<AbsDimension x="6" y="-3"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnLoad>
+								XPerl_OptionsSetMyText(self, "XPERL_CONF_PARTY_SHOW")
+								self.Validate = function()
+									XPerl_Options_EnableSibling(self, "Name")
+									XPerl_Options_EnableSibling(self, "Portrait")
+									XPerl_Options_EnableSibling(self, "Portrait3D")
+									XPerl_Options_EnableSibling(self, "HitIndicator")
+									XPerl_Options_EnableSibling(self, "Threat")
+									XPerl_Options_EnableSibling(self, "ThreatName")
+									XPerl_Options_EnableSibling(self, "ThreatPortrait")
+									XPerl_Options_EnableSibling(self, "ArcaneBar")
+									XPerl_Options_EnableSibling(self, "Level")
+									XPerl_Options_EnableSibling(self, "HealPrediction")
+									XPerl_Options_EnableSibling(self, "Target")
+									XPerl_Options_EnableSibling(self, "TargetLarge")
+									XPerl_Options_EnableSibling(self, "TargetSize")
+									XPerl_Options_EnableSibling(self, "Icon")
+									XPerl_Options_EnableSibling(self, "Values")
+									XPerl_Options_EnableSibling(self, "Percent")
+									XPerl_Options_EnableSibling(self, "InRaid")
+									XPerl_Options_EnableSibling(self, "PVPIcon")
+									XPerl_Options_EnableSibling(self, "SmallRaid")
+									XPerl_Options_EnableSibling(self, "30yd")
+									XPerl_Options_EnableSibling(self, "Healer_Healer")
+									XPerl_Options_EnableSibling(self, "Width")
+									XPerl_Options_EnableSibling(self, "Buffs")
+									XPerl_Options_EnableSibling(self, "Castable")
+									XPerl_Options_EnableSibling(self, "OnlyMyBuffs")
+									XPerl_Options_EnableSibling(self, "Debuffs")
+									XPerl_Options_EnableSibling(self, "Curable")
+									XPerl_Options_EnableSibling(self, "Below")
+									XPerl_Options_EnableSibling(self, "HalfSize")
+									XPerl_Options_EnableSibling(self, "BuffSize")
+									XPerl_Options_EnableSibling(self, "DebuffSize")
+									XPerl_Options_EnableSibling(self, "BuffWrap")
+									XPerl_Options_EnableSibling(self, "MaxRows")
+									XPerl_Options_EnableSibling(self, "BigBuffs")
+									XPerl_Options_EnableSibling(self, "BigPet")
+									XPerl_Options_EnableSibling(self, "PartyPets_Pets")
+									XPerl_Options_EnableSibling(self, "PartyPets_PetNames")
+									XPerl_Options_EnableSibling(self, "PartyPets_PetLevel")
+									XPerl_Options_EnableSibling(self, "PartyPets_PetMana")
+									XPerl_Options_EnableSibling(self, "PartyPets_PetBuffs")
+									XPerl_Options_EnableSibling(self, "PartyPets_BuffSize")
+									XPerl_Options_EnableSibling(self, "PartyPets_DebuffSize")
+								end
+								self.configBase = "XPerlDB.party"
+								self.configIndex = "enable"
+								self.configClick = XPerl_Party_Reset
+								XPerl_Options_RegisterProtected(self)
+							</OnLoad>
+						</Scripts>
+					</CheckButton>
+
+					<CheckButton name="$parent_Name" inherits="XPerlCheckButtonTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="$parent_Enable" relativePoint="BOTTOMLEFT">
+								<Offset>
+									<AbsDimension x="0" y="6"/>
 								</Offset>
 							</Anchor>
 						</Anchors>
@@ -10176,9 +10332,28 @@
 						</Scripts>
 					</CheckButton>
 
-					<CheckButton name="$parent_Target" inherits="XPerlCheckButtonTemplate">
+					<CheckButton name="$parent_HealPrediction" inherits="XPerlCheckButtonTemplate">
 						<Anchors>
 							<Anchor point="TOPLEFT" relativeTo="$parent_Level" relativePoint="BOTTOMLEFT">
+								<Offset>
+									<AbsDimension x="0" y="6"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnLoad>
+								XPerl_OptionsSetMyText(self, "XPERL_CONF_PARTY_HEAL_PREDICTION")
+								self.configBase = "XPerlDB.party"
+								self.configIndex = "healprediction"
+								self.configClick = XPerl_Party_Reset
+								XPerl_Options_RegisterProtected(self)
+							</OnLoad>
+						</Scripts>
+					</CheckButton>
+
+					<CheckButton name="$parent_Target" inherits="XPerlCheckButtonTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="$parent_HealPrediction" relativePoint="BOTTOMLEFT">
 								<Offset>
 									<AbsDimension x="0" y="6"/>
 								</Offset>
@@ -11058,12 +11233,18 @@
 								XPerl_OptionsSetMyText(self, "XPERL_CONF_RAID_SHOW")
 								self.Validate = function()
 									XPerl_Options_EnableSibling(self, "NotInBG")
+									XPerl_Options_EnableSibling(self, "RaidPets")
+									XPerl_Options_EnableSibling(self, "AlignToRaid")
 									XPerl_Options_EnableSibling(self, "Titles")
-									XPerl_Options_EnableSibling(self, "Mana")
-									XPerl_Options_EnableSibling(self, "ManaPercent", "Mana")
+									XPerl_Options_EnableSibling(self, "Roles")
 									XPerl_Options_EnableSibling(self, "HealthText")
 									XPerl_Options_EnableSibling(self, "Percent", "HealthText")
 									XPerl_Options_EnableSibling(self, "Values", "HealthText")
+									XPerl_Options_EnableSibling(self, "HealPrediction")
+									XPerl_Options_EnableSibling(self, "precisionPercent")
+									XPerl_Options_EnableSibling(self, "Mana")
+									XPerl_Options_EnableSibling(self, "ManaPercent", "Mana")
+									XPerl_Options_EnableSibling(self, "precisionManaPercent")
 									XPerl_Options_EnableSibling(self, "Buffs")
 									XPerl_Options_EnableSibling(self, "Debuffs")
 									XPerl_Options_EnableSibling(self, "Castable")
@@ -11076,7 +11257,7 @@
 									XPerl_Options_EnableSibling(self, "BuffHelperSortClass", "BuffTooltipHelper")
 									XPerl_Options_EnableSibling(self, "BuffTooltipHelperVis", "BuffTooltipHelper")
 									XPerl_Options_EnableSibling(self, "Healer")
-									for i = 1,WoWclassCount do
+									for i = 1, WoWclassCount do
 										XPerl_Options_EnableSibling(self, "Groups_Grp"..i)
 									end
 									for i = 1, WoWclassCount do
@@ -11087,8 +11268,14 @@
 									XPerl_Options_EnableSibling(self, "Groups_All")
 									XPerl_Options_EnableSibling(self, "Groups_None")
 									XPerl_Options_EnableSibling(self, "Groups_ByClass")
+									XPerl_Options_EnableSibling(self, "Groups_sortByRole")
 									XPerl_Options_EnableSibling(self, "Groups_Alphabetical")
 									XPerl_Options_EnableSibling(self, "Groups_VSpacing")
+									XPerl_Options_EnableSibling(self, "Custom_Enable")
+									XPerl_Options_EnableSibling(self, "Custom_Config")
+									XPerl_Options_EnableSibling(self, "Custom_Alpha")
+									XPerl_Options_EnableSibling(self, "Custom_Add")
+									XPerl_Options_EnableSibling(self, "Custom_Config")
 								end
 								self.configBase = "XPerlDB.raid"
 								self.configIndex = "enable"
@@ -11135,8 +11322,6 @@
 								self.configIndex = "enable"
 								self.configClick = XPerl_RaidPets_OptionActions
 								self.Validate = function()
-									--XPerl_Options_EnableSibling(self, "Huntards")
-									--XPerl_Options_EnableSibling(self, "Moredots")
 									XPerl_Options_EnableSibling(self, "AlignToRaid")
 								end
 								XPerl_Options_RegisterProtected(self)
@@ -11303,9 +11488,28 @@
 						</Scripts>
 					</CheckButton>
 
+					<CheckButton name="$parent_HealPrediction" inherits="XPerlCheckButtonTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="$parent_HealthText" relativePoint="BOTTOMLEFT">
+								<Offset>
+									<AbsDimension x="0" y="-26"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnLoad>
+								XPerl_OptionsSetMyText(self, "XPERL_CONF_RAID_HEAL_PREDICTION")
+								self.configBase = "XPerlDB.raid"
+								self.configIndex = "healprediction"
+								self.configClick = XPerl_Raid_OptionActions
+								XPerl_Options_RegisterProtected(self)
+							</OnLoad>
+						</Scripts>
+					</CheckButton>
+
 					<CheckButton name="$parent_Mana" inherits="XPerlCheckButtonTemplate">
 						<Anchors>
-							<Anchor point="TOPRIGHT" relativeTo="$parent_Values" relativePoint="BOTTOMLEFT">
+							<Anchor point="TOPLEFT" relativeTo="$parent_HealPrediction" relativePoint="BOTTOMLEFT">
 								<Offset>
 									<AbsDimension x="0" y="6"/>
 								</Offset>
@@ -12438,9 +12642,27 @@
 						</Scripts>
 					</CheckButton>
 
-					<CheckButton name="$parent_ClassIcon" inherits="XPerlCheckButtonTemplate">
+					<CheckButton name="$parent_HealPrediction" inherits="XPerlCheckButtonTemplate">
 						<Anchors>
 							<Anchor point="TOPLEFT" relativeTo="$parent_Level" relativePoint="BOTTOMLEFT">
+								<Offset>
+									<AbsDimension x="0" y="6"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnLoad>
+								XPerl_OptionsSetMyText(self, "XPERL_CONF_ALL_HEAL_PREDICTION")
+								self.configClick = XPerl_OptionActions
+								self.configSelection = {"XPerlDB.player", "XPerlDB.target", "XPerlDB.targettarget", "XPerlDB.focus", "XPerlDB.focustarget", "XPerlDB.party", "XPerlDB.raid"}
+								self.configIndex = "healprediction"
+							</OnLoad>
+						</Scripts>
+					</CheckButton>
+
+					<CheckButton name="$parent_ClassIcon" inherits="XPerlCheckButtonTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="$parent_HealPrediction" relativePoint="BOTTOMLEFT">
 								<Offset>
 									<AbsDimension x="0" y="6"/>
 								</Offset>

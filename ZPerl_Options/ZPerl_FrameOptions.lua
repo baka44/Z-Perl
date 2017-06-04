@@ -2,27 +2,29 @@
 -- Author: Zek <Boodhoof-EU>
 -- License: GNU GPL v3, 29 June 2007 (see LICENSE.txt)
 
-XPerl_SetModuleRevision("$Revision: 923 $")
+XPerl_SetModuleRevision("$Revision: 938 $")
 
 local localGroups = LOCALIZED_CLASS_NAMES_MALE
 local WoWclassCount = 0
-for k,v in pairs(localGroups) do WoWclassCount = WoWclassCount + 1 end
+for k, v in pairs(localGroups) do
+	WoWclassCount = WoWclassCount + 1
+end
 
 
 function XPerl_OptionsFrame_DisableSlider(slider)
-	local name = slider:GetName();
-	getmetatable(slider).__index.Disable(slider);
-	_G[name.."Text"]:SetVertexColor(GRAY_FONT_COLOR.r, GRAY_FONT_COLOR.g, GRAY_FONT_COLOR.b);
-	_G[name.."Low"]:SetVertexColor(GRAY_FONT_COLOR.r, GRAY_FONT_COLOR.g, GRAY_FONT_COLOR.b);
-	_G[name.."High"]:SetVertexColor(GRAY_FONT_COLOR.r, GRAY_FONT_COLOR.g, GRAY_FONT_COLOR.b);
+	local name = slider:GetName()
+	getmetatable(slider).__index.Disable(slider)
+	_G[name.."Text"]:SetVertexColor(GRAY_FONT_COLOR.r, GRAY_FONT_COLOR.g, GRAY_FONT_COLOR.b)
+	_G[name.."Low"]:SetVertexColor(GRAY_FONT_COLOR.r, GRAY_FONT_COLOR.g, GRAY_FONT_COLOR.b)
+	_G[name.."High"]:SetVertexColor(GRAY_FONT_COLOR.r, GRAY_FONT_COLOR.g, GRAY_FONT_COLOR.b)
 end
 
 function XPerl_OptionsFrame_EnableSlider(slider)
-	local name = slider:GetName();
-	getmetatable(slider).__index.Enable(slider);
-	_G[name.."Text"]:SetVertexColor(NORMAL_FONT_COLOR.r , NORMAL_FONT_COLOR.g , NORMAL_FONT_COLOR.b);
-	_G[name.."Low"]:SetVertexColor(HIGHLIGHT_FONT_COLOR.r, HIGHLIGHT_FONT_COLOR.g, HIGHLIGHT_FONT_COLOR.b);
-	_G[name.."High"]:SetVertexColor(HIGHLIGHT_FONT_COLOR.r, HIGHLIGHT_FONT_COLOR.g, HIGHLIGHT_FONT_COLOR.b);
+	local name = slider:GetName()
+	getmetatable(slider).__index.Enable(slider)
+	_G[name.."Text"]:SetVertexColor(NORMAL_FONT_COLOR.r , NORMAL_FONT_COLOR.g , NORMAL_FONT_COLOR.b)
+	_G[name.."Low"]:SetVertexColor(HIGHLIGHT_FONT_COLOR.r, HIGHLIGHT_FONT_COLOR.g, HIGHLIGHT_FONT_COLOR.b)
+	_G[name.."High"]:SetVertexColor(HIGHLIGHT_FONT_COLOR.r, HIGHLIGHT_FONT_COLOR.g, HIGHLIGHT_FONT_COLOR.b)
 end
 
 
@@ -93,7 +95,7 @@ function XPerl_Options_CheckButton_OnEnter(self)
 			array = self.flashFrame
 		end
 
-		for i,f in pairs(array) do
+		for i, f in pairs(array) do
 			if (f and f.GetName) then
 				if (f:IsShown()) then
 					XPerl_FrameFlash(f)
@@ -109,7 +111,7 @@ function XPerl_Options_CheckButton_OnEnter(self)
 			GameTooltip:SetText(title, 1, 1, 1)
 			GameTooltip:AddLine(self.tooltipText, nil, nil, nil, 1)
 		else
-			GameTooltip:SetText(self.tooltipText, nil, nil, nil, nil, true);
+			GameTooltip:SetText(self.tooltipText, nil, nil, nil, nil, true)
 		end
 		GameTooltip:Show()
 	end
@@ -126,8 +128,8 @@ function XPerl_GetCheck(f)
 	end
 end
 
--- XPerl_Options_GetSibling(sibling,self)
-function XPerl_Options_GetSibling(sibling,self)
+-- XPerl_Options_GetSibling
+function XPerl_Options_GetSibling(sibling, self)
 	return _G[self:GetParent():GetName().."_"..sibling]
 end
 
@@ -906,7 +908,7 @@ function XPerl_Options_DoRangeTooltip(self)
 	if (item) then
 		local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, invTexture = GetItemInfo(item)
 		if (itemName) then
-			local itemId = strmatch(itemLink, "item:(%d+):");
+			local itemId = strmatch(itemLink, "item:(%d+):")
 			if (itemId) then
 				local newLink = format("item:%d:0:0:0", itemId)
 				GameTooltip:SetHyperlink(newLink)
@@ -943,14 +945,16 @@ end
 
 -- ValidateClassNames
 local function ValidateClassNames(part)
+	if not part then
+		return
+	end
 	-- This should never happen, but I'm sure someone will find a way to break it
 
-	local list = {WARRIOR = false, MAGE = false, ROGUE = false, DRUID = false,
-				HUNTER = false, SHAMAN = false, PRIEST = false,	WARLOCK = false, PALADIN = false, DEATHKNIGHT = false, MONK = false}
+	local list = {WARRIOR = false, MAGE = false, ROGUE = false, DRUID = false, HUNTER = false, SHAMAN = false, PRIEST = false,	WARLOCK = false, PALADIN = false, DEATHKNIGHT = false, MONK = false}
 	local valid
 	if (part.class) then
 		local classCount = 0
-		for i,info in pairs(part.class) do
+		for i, info in pairs(part.class) do
 			if (type(info) == "table" and info.name) then
 				classCount = classCount + 1
 			end
@@ -960,7 +964,7 @@ local function ValidateClassNames(part)
 		end
 
 		if (valid) then
-			for i = 1,WoWclassCount do
+			for i = 1, WoWclassCount do
 				if (part.class[i]) then
 					list[part.class[i].name] = true
 				end
@@ -969,7 +973,7 @@ local function ValidateClassNames(part)
 	end
 
 	if (valid) then
-		for k,v in pairs(list) do
+		for k, v in pairs(list) do
 			if (not v) then
 				valid = nil
 			end
@@ -1072,14 +1076,11 @@ function XPerl_Options_SetupStatsFrames()
 	XPerl_StatsFrameSetup(XPerl_FocusTarget)
 	XPerl_StatsFrameSetup(XPerl_PetTarget)
 
-	for i = 1,4 do
+	for i = 1, 4 do
 		XPerl_StatsFrameSetup(_G["XPerl_party"..i])
 		XPerl_StatsFrameSetup(_G["XPerl_partypet"..i], nil, 2)
 	end
 end
-
-
-
 
 -- XPerl_Player_Reset()
 function XPerl_Player_Reset()
@@ -1147,9 +1148,6 @@ function XPerl_PartyPet_Reset()
 		XPerl_Party_Pet_UpdateDisplayAll()
 	end
 end
-
-
-
 
 -- Moving stuff
 function XPerl_Player_GetGap()
@@ -2250,6 +2248,7 @@ local function XPerl_Party_ConfigDefault(default)
 		},
 		spacing			= 23,
 		anchor			= "TOP",
+		enable			= 1,			-- 4.0.0
 		portrait		= 1,
 		portrait3D		= 1,
 		hitIndicator	= 1,			-- 2.1.7
@@ -3148,9 +3147,9 @@ if (XPerl_UpgradeSettings) then
 			end
 
 			if (oldVersion < "2.3.5") then
-				old.target.range30yard	= nil
-				old.focus.range30yard	= nil
-				old.party.range30yard	= nil
+				old.target.range30yard = nil
+				old.focus.range30yard = nil
+				old.party.range30yard = nil
 				old.raid.manaPercent = 1
 
 				old.highlight.MISSING = nil
@@ -3182,9 +3181,13 @@ if (XPerl_UpgradeSettings) then
 			end
 			
 			if (oldVersion < "3.7.5") then
-				old.targettargettarget.debuffs.enable = old.targettargettarget.buffs.enable;
-				old.pettarget.debuffs.enable = old.pettarget.buffs.enable;
-				old.focustarget.debuffs.enable = old.focustarget.buffs.enable;
+				old.targettargettarget.debuffs.enable = old.targettargettarget.buffs.enable
+				old.pettarget.debuffs.enable = old.pettarget.buffs.enable
+				old.focustarget.debuffs.enable = old.focustarget.buffs.enable
+			end
+
+			if (oldVersion < "4.0.1") then
+				old.party.enable = 1
 			end
 		end
 	end
@@ -3215,9 +3218,9 @@ if (XPerl_UpgradeSettings) then
 			end
 		end
 
-		for realmName,realmList in pairs(ZPerlConfigNew) do
+		for realmName, realmList in pairs(ZPerlConfigNew) do
 			if (type(realmList) == "table" and realmName ~= "global" and realmName ~= "savedPositions") then
-				for playerName,settings in pairs(realmList) do
+				for playerName, settings in pairs(realmList) do
 					if (playerName == "global") then
 						-- Fix global settings being put in with realms
 						if (not ZPerlConfigNew.global) then
@@ -3228,6 +3231,10 @@ if (XPerl_UpgradeSettings) then
 					else
 						UpgradeSettings(settings, oldVersion)
 					end
+				end
+			else
+				if (type(realmList) == "table" and realmName == "global" and realmName ~= "savedPositions") then
+					UpgradeSettings(realmList, oldVersion)
 				end
 			end
 		end

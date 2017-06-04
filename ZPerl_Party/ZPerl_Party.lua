@@ -2,18 +2,18 @@
 -- Author: Zek <Boodhoof-EU>
 -- License: GNU GPL v3, 29 June 2007 (see LICENSE.txt)
 
-local XPerl_Party_Events = {}
-local checkRaidNextUpdate
-local PartyFrames = {}
+local XPerl_Party_Events = { }
+--local checkRaidNextUpdate
+local PartyFrames = { }
 local startupDone
 local conf, pconf
 XPerl_RequestConfig(function(new)
 	conf = new
 	pconf = new.party
-	for k,v in pairs(PartyFrames) do
+	for k, v in pairs(PartyFrames) do
 		v.conf = pconf
 	end
-end, "$Revision: 937 $")
+end, "$Revision: 938 $")
 
 local percD = "%d"..PERCENT_SYMBOL
 
@@ -50,6 +50,7 @@ function XPerl_Party_Events_OnLoad(self)
 	end
 
 	partyHeader:UnregisterEvent("UNIT_NAME_UPDATE") -- IMPORTANT! Fix for WoW 2.1 UNIT_NAME_UPDATE lockup issues
+
 	UIParent:UnregisterEvent("GROUP_ROSTER_UPDATE") -- IMPORTANT! Stops raid framerate lagging when members join/leave/zone
 
 	
@@ -184,8 +185,11 @@ function ZPerl_Party_OnLoad(self)
 	self.hitIndicator.text:SetPoint("CENTER", self.portraitFrame, "CENTER", 0, 0)
 	CombatFeedback_Initialize(self, self.hitIndicator.text, 30)
 
-	XPerl_SecureUnitButton_OnLoad(self, self.partyid, nil, _G["PartyMemberFrame"..self:GetID().."DropDown"], XPerl_ShowGenericMenu)				--getglobal("PartyMemberFrame" .. self:GetID()).menu)
-	XPerl_SecureUnitButton_OnLoad(self.nameFrame, self.partyid, nil, _G["PartyMemberFrame"..self:GetID().."DropDown"], XPerl_ShowGenericMenu)	--getglobal("PartyMemberFrame" .. self:GetID()).menu)
+	self.nameFrame:SetAttribute("useparent-unit", true)
+	self.nameFrame:SetAttribute("*type1", "target")
+	self.nameFrame:SetAttribute("type2", "togglemenu")
+	self:SetAttribute("*type1", "target")
+	self:SetAttribute("type2", "togglemenu")
 
 	self.time = 0
 	self.flagsCheck = 0
@@ -208,9 +212,9 @@ function ZPerl_Party_OnLoad(self)
 
 	--XPerl_Party_Set_Bits1(self)
 
-	if (XPerl_party1 and XPerl_party2 and XPerl_party3 and XPerl_party4) then
+	--[[if (XPerl_party1 and XPerl_party2 and XPerl_party3 and XPerl_party4) then
 		ZPerl_Party_OnLoad = nil
-	end
+	end]]
 end
 
 -- ShowHideValues
@@ -242,6 +246,7 @@ function XPerl_Party_UpdateHealth(self)
 	end
 
 	XPerl_SetHealthBar(self, Partyhealth, Partyhealthmax)
+	XPerl_Party_UpdateHealPrediction(self)
 
 	if (not UnitIsConnected(partyid)) then
 		reason = XPERL_LOC_OFFLINE
@@ -258,7 +263,7 @@ function XPerl_Party_UpdateHealth(self)
 		elseif (UnitIsGhost(partyid)) then
 			reason = XPERL_LOC_GHOST
 
-		elseif ((Partyhealth==1) and (Partyhealthmax==1)) then
+		elseif ((Partyhealth == 1) and (Partyhealthmax == 1)) then
 			reason = XPERL_LOC_UPDATING
 
 		elseif (UnitBuff(partyid, spiritOfRedemption)) then
@@ -291,6 +296,15 @@ function XPerl_Party_UpdateHealth(self)
 			self.statsFrame.greyMana = nil
 			XPerl_SetManaBarType(self)
 		end
+	end
+end
+
+-- XPerl_Party_UpdateHealPrediction
+function XPerl_Party_UpdateHealPrediction(self)
+	if pconf.healprediction then
+		XPerl_SetExpectedHealth(self)
+	else
+		self.statsFrame.expectedHealth:Hide()
 	end
 end
 
@@ -439,7 +453,7 @@ local function XPerl_Party_Buff_UpdateAll(self)
 			XPerl_Unit_UpdateBuffs(self, nil, nil, pconf.buffs.castable, pconf.debuffs.curable)
 			XPerl_Party_BuffPositions(self)
 		end
-	
+
 		if (select(2, UnitClass(self.partyid)) == "HUNTER") then
 			local feigning = UnitIsFeignDeath(self.partyid)
 			if (feigning ~= self.feigning) then
@@ -447,8 +461,10 @@ local function XPerl_Party_Buff_UpdateAll(self)
 				XPerl_Party_UpdateHealth(self)
 			end
 		end
-	
-		XPerl_CheckDebuffs(self, self.partyid)
+
+		if (conf.highlightDebuffs.enable) then
+			XPerl_CheckDebuffs(self, self.partyid)
+		end
 	end
 end
 
@@ -512,38 +528,38 @@ local function UpdateAssignedRoles(self)
 	end
 
 	-- role icons option check by playerlin
-        if (conf and conf.xperlOldroleicons) then
-                if isTank then
-                        icon:SetTexture("Interface\\GroupFrame\\UI-Group-MainTankIcon")
-                        icon:Show()
-                elseif isHealer then
-                        icon:SetTexture("Interface\\Addons\\ZPerl\\Images\\XPerl_RoleHealer_old")
-                        icon:Show()
-                elseif isDamage then
-                        icon:SetTexture("Interface\\GroupFrame\\UI-Group-MainAssistIcon")
-                        icon:Show()
-                else
-                        icon:Hide()
-                end
-        else
-                if isTank then
-                        icon:SetTexture("Interface\\Addons\\ZPerl\\Images\\XPerl_RoleTank")
-                        icon:Show()
-                elseif isHealer then
-                        icon:SetTexture("Interface\\Addons\\ZPerl\\Images\\XPerl_RoleHealer")
-                        icon:Show()
-                elseif isDamage then
-                        icon:SetTexture("Interface\\Addons\\ZPerl\\Images\\XPerl_RoleDamage")
-                        icon:Show()
-                else
-                        icon:Hide()
-                end
-        end
+	if (conf and conf.xperlOldroleicons) then
+		if isTank then
+			icon:SetTexture("Interface\\GroupFrame\\UI-Group-MainTankIcon")
+			icon:Show()
+		elseif isHealer then
+			icon:SetTexture("Interface\\Addons\\ZPerl\\Images\\XPerl_RoleHealer_old")
+			icon:Show()
+		elseif isDamage then
+			icon:SetTexture("Interface\\GroupFrame\\UI-Group-MainAssistIcon")
+			icon:Show()
+		else
+			icon:Hide()
+		end
+	else
+		if isTank then
+			icon:SetTexture("Interface\\Addons\\ZPerl\\Images\\XPerl_RoleTank")
+			icon:Show()
+		elseif isHealer then
+			icon:SetTexture("Interface\\Addons\\ZPerl\\Images\\XPerl_RoleHealer")
+			icon:Show()
+		elseif isDamage then
+			icon:SetTexture("Interface\\Addons\\ZPerl\\Images\\XPerl_RoleDamage")
+			icon:Show()
+		else
+			icon:Hide()
+		end
+	end
 end
 
 -- UpdateAllAssignedRoles
 local function UpdateAllAssignedRoles()
-	for unit,frame in pairs(PartyFrames) do
+	for unit, frame in pairs(PartyFrames) do
 		if (frame:IsShown()) then
 			UpdateAssignedRoles(frame)
 		end
@@ -571,10 +587,7 @@ local function XPerl_Party_UpdateLeader(self)
 		self.nameFrame.leaderIcon:Hide()
 	end
 
-	
-	local lootMethod
-	local lootMaster
-	lootMethod, lootMaster, raidLootMaster = GetLootMethod()
+	local lootMethod, lootMaster, raidLootMaster = GetLootMethod()
 	
 	if (lootMethod == "master" and lootMaster) then
 		if (self.partyid == "party"..lootMaster) then
@@ -622,13 +635,13 @@ end
 local function XPerl_Party_UpdateClass(self)
 	if (UnitIsPlayer(self.partyid)) then
 		local l, r, t, b = XPerl_ClassPos(select(2, UnitClass(self.partyid)))
-		self.levelFrame.classTexture:SetTexCoord(l, r, t, b)
+		self.classFrame.tex:SetTexCoord(l, r, t, b)
 	end
 
 	if (pconf.classIcon) then
-		self.levelFrame.classTexture:Show()
+		self.classFrame:Show()
 	else
-		self.levelFrame.classTexture:Hide()
+		self.classFrame:Hide()
 	end
 end
 
@@ -654,8 +667,8 @@ local function XPerl_Party_UpdateMana(self)
 		percent = Partymana / Partymanamax--Everything is dandy, so just do it right way.
 	end
 	--end division by 0 check
---[[
-	if (Partymanamax == 1 and Partymana > Partymanamax) then
+
+	--[[if (Partymanamax == 1 and Partymana > Partymanamax) then
 		Partymanamax = Partymana
 	end--]]
 
@@ -668,11 +681,11 @@ local function XPerl_Party_UpdateMana(self)
 		self.statsFrame.manaBar.percent:SetFormattedText(percD, 100 * percent)
 	end
 
-	--if (pconf.values) then
-	--	self.statsFrame.manaBar.text:Show()
-	--else
-	--	self.statsFrame.manaBar.text:Hide()
-	--end
+	--[[if (pconf.values) then
+		self.statsFrame.manaBar.text:Show()
+	else
+		self.statsFrame.manaBar.text:Hide()
+	end]]
 
 	self.statsFrame.manaBar.text:SetFormattedText("%d/%d", Partymana, Partymanamax)
 
@@ -694,10 +707,10 @@ local function XPerl_Party_UpdateRange(self, overrideUnit)
 			self.nameFrame.rangeIcon:Show()
 			self.nameFrame.rangeIcon:SetAlpha(1)
 		end
-		--if (UnitInVehicle(self.partyid) and pconf.range30yard) then--Not sure if this is proper way to do it, so this pretty much forces anyone in a vehicle to show out of range.
-		--	self.nameFrame.rangeIcon:Show()
-		--	self.nameFrame.rangeIcon:SetAlpha(1)
-		--end
+		--[[if (UnitInVehicle(self.partyid) and pconf.range30yard) then -- Not sure if this is proper way to do it, so this pretty much forces anyone in a vehicle to show out of range.
+			self.nameFrame.rangeIcon:Show()
+			self.nameFrame.rangeIcon:SetAlpha(1)
+		end]]
 	end
 end
 
@@ -720,12 +733,19 @@ end
 local function CheckRaid()
 	if (InCombatLockdown()) then
 		XPerl_OutOfCombatQueue[CheckRaid] = false
+		return
 	else
+		if not pconf.enable then
+			if partyHeader:IsShown() then
+				partyHeader:Hide()
+			end
+			return
+		end
 		partyAnchor:StopMovingOrSizing()
 
 		local singleGroup = XPerl_Party_SingleGroup()
 		
-		if (not pconf or (pconf.inRaid or (pconf.smallRaid and singleGroup)  or (GetNumGroupMembers() > 0 and not IsInRaid() ))) then -- or GetNumGroupMembers() > 0
+		if (not pconf or ((pconf.inRaid and IsInRaid()) or (pconf.smallRaid and singleGroup) or (GetNumGroupMembers() > 0 and not IsInRaid()))) then -- or GetNumGroupMembers() > 0
 			if (not partyHeader:IsShown()) then
 				partyHeader:Show()
 			end
@@ -746,17 +766,17 @@ local function XPerl_Party_TargetUpdateHealth(self)
 
 	tf.healthBar:SetMinMaxValues(0, hpMax)
 	tf.healthBar:SetValue(hp)
-	--Begin 4.3 division by 0 work around to ensure we don't divide if max is 0
+	-- Begin 4.3 division by 0 work around to ensure we don't divide if max is 0
 	local percent
-	if UnitIsDeadOrGhost(self.targetid) or (hp == 0 and hpMax == 0) then--Probably dead target
-		percent = 0--So just automatically set percent to 0 and avoid division of 0/0 all together in this situation.
-	elseif hp > 0 and hpMax == 0 then--We have current ho but max hp failed.
-		hpMax = hp--Make max hp at least equal to current health
-		percent = 100--And percent 100% cause a number divided by itself is 1, duh.
+	if UnitIsDeadOrGhost(self.targetid) or (hp == 0 and hpMax == 0) then -- Probably dead target
+		percent = 0 -- So just automatically set percent to 0 and avoid division of 0/0 all together in this situation.
+	elseif hp > 0 and hpMax == 0 then -- We have current ho but max hp failed.
+		hpMax = hp -- Make max hp at least equal to current health
+		percent = 100 -- And percent 100% cause a number divided by itself is 1, duh.
 	else
 		percent = hp / hpMax--Everything is dandy, so just do it right way.
 	end
-	--end division by 0 check
+	-- end division by 0 check
 	tf.healthBar.text:SetFormattedText(percD, 100 * percent)	-- XPerl_Percent[floor(100 * hp / hpMax)])
 	tf.healthBar.text:Show()
 
@@ -774,10 +794,10 @@ local function XPerl_Party_TargetUpdateHealth(self)
 	end
 
 	if (UnitAffectingCombat(self.targetid)) then
-        tf.combatIcon:SetTexCoord(0.5, 1.0, 0.0, 0.5)
-        tf.combatIcon:Show()
+		tf.combatIcon:SetTexCoord(0.5, 1.0, 0.0, 0.5)
+		tf.combatIcon:Show()
 	else
-        tf.combatIcon:Hide()
+		tf.combatIcon:Hide()
 	end
 	
 	local pvp = pconf.pvpIcon and ((UnitIsPVPFreeForAll(self.targetid) and "FFA") or (UnitIsPVP(self.targetid) and (UnitFactionGroup(self.targetid) ~= "Neutral") and UnitFactionGroup(self.targetid)))
@@ -811,7 +831,7 @@ local function XPerl_Party_UpdateTarget(self)
 end
 
 -- XPerl_Party_OnUpdate
-function XPerl_Party_OnUpdate(self, elapsed, ...)
+function XPerl_Party_OnUpdate(self, elapsed)
 	if (not self.partyid) then
 		return
 	end
@@ -822,9 +842,9 @@ function XPerl_Party_OnUpdate(self, elapsed, ...)
 		XPerl_Party_CombatFlash(self, elapsed, false)
 	end
 
-	self.time = self.time + elapsed
-	if (self.time >= 0.2) then
-		self.time = 0
+	--self.time = self.time + elapsed
+	--if (self.time >= 0.2) then
+		--self.time = 0
 		local partyid = self.partyid
 
 		self.flagsCheck = self.flagsCheck + 1
@@ -845,7 +865,7 @@ function XPerl_Party_OnUpdate(self, elapsed, ...)
 		XPerl_UpdateSpellRange(self, partyid)
 		XPerl_UpdateSpellRange(self.targetFrame, self.targetid)
 
-		if (checkRaidNextUpdate) then
+		--[[if (checkRaidNextUpdate) then
 			checkRaidNextUpdate = checkRaidNextUpdate - 1
 			if (checkRaidNextUpdate <= 0) then
 				checkRaidNextUpdate = nil
@@ -854,14 +874,14 @@ function XPerl_Party_OnUpdate(self, elapsed, ...)
 				-- Due to a bug in the API (WoW 2.0.1), GetPartyLeaderIndex() can often claim
 				-- that party1 is the leader, even when they're not. So, we do a delayed check
 				-- after a party change
-				for i,frame in pairs(PartyFrames) do
+				for i, frame in pairs(PartyFrames) do
 					if (frame.partyid) then
 						XPerl_Party_UpdateLeader(frame)
 					end
 				end
 			end
-		end
-	end
+		end]] -- Do we really need this now?
+	--end
 end
 
 -- XPerl_Party_Target_OnUpdate
@@ -875,7 +895,7 @@ end
 
 -- XPerl_Party_UpdateDisplayAll
 function XPerl_Party_UpdateDisplayAll()
-	for i,frame in pairs(PartyFrames) do
+	for i, frame in pairs(PartyFrames) do
 		if (frame.partyid) then
 			XPerl_Party_UpdateDisplay(frame)
 		end
@@ -885,7 +905,7 @@ end
 -- XPerl_Party_UpdateDisplay
 function XPerl_Party_UpdateDisplay(self, less)
 	if (self.conf and self.partyid and UnitExists(self.partyid)) then
-		self.afk, self.dnd = nil,nil
+		self.afk, self.dnd = nil, nil
 		XPerl_Party_UpdateName(self)
 		XPerl_Party_TargetRaidIcon(self)
 		XPerl_Party_UpdateLeader(self)
@@ -901,7 +921,7 @@ function XPerl_Party_UpdateDisplay(self, less)
 		end
 
 		XPerl_Party_UpdatePlayerFlags(self)
-       	XPerl_Party_UpdateCombat(self)
+		XPerl_Party_UpdateCombat(self)
 		XPerl_Party_UpdatePVP(self)
 		XPerl_Unit_UpdatePortrait(self)
 		XPerl_Party_Buff_UpdateAll(self)
@@ -925,8 +945,6 @@ function XPerl_Party_OnEvent(self, event, unit, ...)
 		else
 			func(self, unit, ...)
 		end
-	else
-	--XPerl_ShowMessage("EXTRA EVENT")
 	end
 end
 
@@ -953,7 +971,7 @@ function XPerl_Party_Events:PARTY_LOOT_METHOD_CHANGED()
 	
 	if (lootMethod == "master") then
 	
-		for i,frame in pairs(PartyFrames) do
+		for i, frame in pairs(PartyFrames) do
 			if (frame.partyid) then
 			
 				if (rindex == nil) then
@@ -977,20 +995,20 @@ function XPerl_Party_Events:PARTY_LOOT_METHOD_CHANGED()
 end
 
 function XPerl_Party_Events:PET_BATTLE_OPENING_START()
-	for k,v in pairs(PartyFrames) do
+	for k, v in pairs(PartyFrames) do
 		v:Hide()
 	end
 end
 
 function XPerl_Party_Events:PET_BATTLE_CLOSE()
-	for k,v in pairs(PartyFrames) do
+	for k, v in pairs(PartyFrames) do
 		v:Show()
 	end
 end
 
 -- RAID_TARGET_UPDATE
 function XPerl_Party_Events:RAID_TARGET_UPDATE()
-	for i,frame in pairs(PartyFrames) do
+	for i, frame in pairs(PartyFrames) do
 		if (frame.partyid) then
 			XPerl_Party_TargetRaidIcon(frame)
 		end
@@ -999,7 +1017,7 @@ end
 
 -- READY_CHECK
 function XPerl_Party_Events:READY_CHECK(a, b, c)
-	for i,frame in pairs(PartyFrames) do
+	for i, frame in pairs(PartyFrames) do
 		if (frame.partyid) then
 			XPerl_Unit_UpdateReadyState(frame)
 		end
@@ -1046,7 +1064,7 @@ end
 function XPerl_Party_Events:PARTY_MEMBER_ENABLE()
 	XPerl_Party_UpdateDisplayAll()
 	--fix by Sontix this portion of code was a duplicate of UpdateDisplayAll()
-	--for k,v in pairs(PartyFrames) do
+	--for k, v in pairs(PartyFrames) do
 	--	if (v.partyid) then
 	--		XPerl_Party_UpdateDisplay(v)
 	--	end
@@ -1059,12 +1077,12 @@ XPerl_Party_Events.UNIT_PHASE = XPerl_Party_Events.PARTY_MEMBER_ENABLE
 -- UNIT_MAXHEALTH
 function XPerl_Party_Events:UNIT_MAXHEALTH()
 	XPerl_Party_UpdateHealth(self)
-	XPerl_Unit_UpdateLevel(self)	-- Level not available until we've received maxhealth
+	XPerl_Unit_UpdateLevel(self) -- Level not available until we've received maxhealth
 	XPerl_Party_UpdateClass(self)
 end
 
 local function updatePartyThreat(immediate)
-	for unitid,frame in pairs(PartyFrames) do
+	for unitid, frame in pairs(PartyFrames) do
 		if (frame:IsShown()) then
 			XPerl_Unit_ThreatStatus(frame, nil, immediate)
 		end
@@ -1083,7 +1101,7 @@ end
 
 -- PLAYER_ENTERING_WORLD
 function XPerl_Party_Events:PLAYER_ENTERING_WORLD()
-	UIParent:UnregisterEvent("GROUP_ROSTER_UPDATE")	-- Re-do, in case
+	UIParent:UnregisterEvent("GROUP_ROSTER_UPDATE") -- Re-do, in case
 	if (not startupDone) then
 		startupDone = true
 		XPerl_ProtectedCall(XPerl_Party_SetInitialAttributes)
@@ -1130,7 +1148,7 @@ do
 
 	function XPerl_Party_Events:GROUP_ROSTER_UPDATE()
 		BuildGuidMap()
-		checkRaidNextUpdate = 3
+		--checkRaidNextUpdate = 3
 		CheckRaid()
 		XPerl_SetHighlights()
 		XPerl_Party_UpdateDisplayAll()
@@ -1146,7 +1164,7 @@ end
 
 -- UNIT_POWER / UNIT_MAXPOWER
 function XPerl_Party_Events:UNIT_POWER()
-        XPerl_Party_UpdateMana(self)
+		XPerl_Party_UpdateMana(self)
 end
 
 XPerl_Party_Events.UNIT_MAXPOWER = XPerl_Party_Events.UNIT_POWER
@@ -1168,7 +1186,7 @@ end
 -- UNIT_NAME_UPDATE
 function XPerl_Party_Events:UNIT_NAME_UPDATE()
 	XPerl_Party_UpdateName(self)
-	XPerl_Party_UpdateHealth(self)		-- Flags, class etc. not available until the first UNIT_NAME_UPDATE
+	XPerl_Party_UpdateHealth(self) -- Flags, class etc. not available until the first UNIT_NAME_UPDATE
 	XPerl_Party_UpdateClass(self)
 end
 
@@ -1281,7 +1299,7 @@ function XPerl_Party_Set_Bits1(self)
 	self.nameFrame:ClearAllPoints()
 	self.levelFrame:ClearAllPoints()
 	self.statsFrame:ClearAllPoints()
-	self.levelFrame.classTexture:ClearAllPoints()
+	self.classFrame:ClearAllPoints()
 	self.levelFrame.text:ClearAllPoints()
 	self.highlight:ClearAllPoints()
 
@@ -1297,7 +1315,7 @@ function XPerl_Party_Set_Bits1(self)
 			self.statsFrame:SetPoint("TOPRIGHT", self.levelFrame, "TOPLEFT", 2, 0)
 
 			self.levelFrame.text:SetPoint("BOTTOM", self.levelFrame, "BOTTOM", 0, 4)
-			self.levelFrame.classTexture:SetPoint("TOPRIGHT", self.levelFrame, "TOPRIGHT", -5, -5)
+			self.classFrame:SetPoint("TOPRIGHT", self.levelFrame, "TOPRIGHT", -5, -5)
 
 			self.buffFrame:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", -2, 0)
 
@@ -1309,7 +1327,7 @@ function XPerl_Party_Set_Bits1(self)
 			self.statsFrame:SetPoint("TOPLEFT", self.levelFrame, "TOPRIGHT", -2, 0)
 
 			self.levelFrame.text:SetPoint("BOTTOM", self.levelFrame, "BOTTOM", 0, 4)
-			self.levelFrame.classTexture:SetPoint("TOPLEFT", self.levelFrame, "TOPLEFT", 5, -5)
+			self.classFrame:SetPoint("TOPLEFT", self.levelFrame, "TOPLEFT", 5, -5)
 
 			self.buffFrame:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 2, 0)
 
@@ -1329,7 +1347,7 @@ function XPerl_Party_Set_Bits1(self)
 			self.statsFrame:SetPoint("TOPRIGHT", self.nameFrame, "BOTTOMRIGHT", 0, 3)
 
 			self.levelFrame.text:SetPoint("CENTER", 0, 0)
-			self.levelFrame.classTexture:SetPoint("BOTTOMLEFT", self.portraitFrame, "BOTTOMRIGHT", 0, 3)
+			self.classFrame:SetPoint("BOTTOMLEFT", self.portraitFrame, "BOTTOMRIGHT", 0, 3)
 
 			self.buffFrame:SetPoint("TOPRIGHT", self, "BOTTOMRIGHT", -2, 0)
 
@@ -1342,7 +1360,7 @@ function XPerl_Party_Set_Bits1(self)
 			self.statsFrame:SetPoint("TOPLEFT", self.nameFrame, "BOTTOMLEFT", 0, 3)
 
 			self.levelFrame.text:SetPoint("CENTER", 0, 0)
-			self.levelFrame.classTexture:SetPoint("BOTTOMRIGHT", self.portraitFrame, "BOTTOMLEFT", 0, 3)
+			self.classFrame:SetPoint("BOTTOMRIGHT", self.portraitFrame, "BOTTOMLEFT", 0, 3)
 
 			self.buffFrame:SetPoint("TOPLEFT", self, "BOTTOMLEFT", 2, 0)
 
@@ -1362,11 +1380,12 @@ function XPerl_Party_Set_Bits1(self)
 		end
 	else
 		self.levelFrame.text:Hide()
+		self.levelFrame:Hide()
 	end
 
 	if (pconf.classIcon) then
-		self.levelFrame.classTexture:Show()
-		self.levelFrame:Show()
+		self.classFrame:Show()
+		--self.levelFrame:Show()
 
 		if (pconf.portrait) then
 			self.levelFrame:SetWidth(27)
@@ -1374,11 +1393,11 @@ function XPerl_Party_Set_Bits1(self)
 			self.levelFrame:SetWidth(30)
 		end
 	else
-		self.levelFrame.classTexture:Hide()
+		self.classFrame:Hide()
 
 		if (not pconf.level) then
 			self.levelFrame:SetWidth(2)
-			self.levelFrame:Hide()
+			--self.levelFrame:Hide()
 		end
 	end
 
@@ -1483,7 +1502,7 @@ function XPerl_Party_Set_Bits1(self)
 			self.petFrame = CreateFrame("Button", "XPerl_partypet"..self:GetID(), self, "XPerl_Party_Pet_FrameTemplate")
 	end]]
 
-	self.petFrame = getglobal("XPerl_partypet"..self:GetID())
+	self.petFrame = _G["XPerl_partypet"..self:GetID()]
 	if (self.petFrame) then
 		self.petFrame:ClearAllPoints()
 		if (pconf.flip) then
@@ -1501,26 +1520,27 @@ end
 -- XPerl_Party_SetInitialAttributes()
 function XPerl_Party_SetInitialAttributes()
 
-	--partyHeader.initialConfigFunction = function(self)
-	--	-- This is the only place we're allowed to set attributes whilst in combat
-	--
-	--	self:SetAttribute("*type1", "target")
-	--	self:SetAttribute("type2", "menu")
-	--	self.menu = XPerl_ShowGenericMenu
-	--	XPerl_RegisterClickCastFrame(self)
-	--
-	--	-- Does AllowAttributeChange work for children?
-	--	self.nameFrame:SetAttribute("useparent-unit", true)
-	--	self.nameFrame:SetAttribute("*type1", "target")
-	--	self.nameFrame:SetAttribute("type2", "menu")
-	--	self.nameFrame.menu = XPerl_ShowGenericMenu
-	--	XPerl_RegisterClickCastFrame(self.nameFrame)
-	--
-	--	--self:SetAttribute("initial-height", CalcHeight())
-	--	--self:SetAttribute("initial-width", CalcWidth())
-	--end
+	--[[partyHeader.initialConfigFunction = function(self)
+		-- This is the only place we're allowed to set attributes whilst in combat
+	
+		self:SetAttribute("*type1", "target")
+		self:SetAttribute("type2", "menu")
+		self.menu = XPerl_ShowGenericMenu
+		XPerl_RegisterClickCastFrame(self)
+	
+		-- Does AllowAttributeChange work for children?
+		self.nameFrame:SetAttribute("useparent-unit", true)
+		self.nameFrame:SetAttribute("*type1", "target")
+		self.nameFrame:SetAttribute("type2", "menu")
+		self.nameFrame.menu = XPerl_ShowGenericMenu
+		XPerl_RegisterClickCastFrame(self.nameFrame)
+	
+		--self:SetAttribute("initial-height", CalcHeight())
+		--self:SetAttribute("initial-width", CalcWidth())
+	end]]
 
 	partyHeader:Hide()
+
 	XPerl_Party_SetMainAttributes()
 	CheckRaid()
 end
@@ -1564,17 +1584,14 @@ function XPerl_Party_Virtual(on)
 			virtual:SetPoint("TOPLEFT", partyAnchor, "TOPLEFT", 0, 0)
 			virtual:SetHeight((h * 4) + (pconf.spacing * 3))
 			virtual:SetWidth(w)
-
 		elseif (pconf.anchor == "LEFT") then
 			virtual:SetPoint("TOPLEFT", partyAnchor, "TOPLEFT", 0, 0)
 			virtual:SetHeight(h)
 			virtual:SetWidth(w * 4 + (pconf.spacing * 3))
-
 		elseif (pconf.anchor == "BOTTOM") then
 			virtual:SetPoint("BOTTOMLEFT", partyAnchor, "BOTTOMLEFT", 0, 0)
 			virtual:SetHeight((h * 4) + (pconf.spacing * 3))
 			virtual:SetWidth(w)
-
 		elseif (pconf.anchor == "RIGHT") then
 			virtual:SetPoint("TOPRIGHT", partyAnchor, "TOPRIGHT", 0, 0)
 			virtual:SetHeight(h)
@@ -1584,9 +1601,21 @@ function XPerl_Party_Virtual(on)
 		virtual:SetBackdropColor(0, 0, 0, 1)
 		virtual:SetBackdropBorderColor(0.5, 0.5, 0.5, 1)
 		virtual:Lower()
-		virtual:Show()
+		if pconf.enable then
+			virtual:Show()
+		else
+			virtual:Hide()
+		end
 	else
-		virtual:Hide()
+		if XPerlLocked == 0 then
+			if pconf.enable then
+				virtual:Show()
+			else
+				virtual:Hide()
+			end
+		else
+			virtual:Hide()
+		end
 	end
 end
 
@@ -1600,6 +1629,10 @@ function XPerl_Party_Set_Bits()
 	partyAnchor:SetScale(pconf.scale)
 	XPerl_SavePosition(partyAnchor, true)
 
+	ZPerl_Party_SecureState:SetAttribute("partyEnabled", pconf.enable)
+	ZPerl_Party_SecureState:SetAttribute("partyInRaid", pconf.inRaid)
+	ZPerl_Party_SecureState:SetAttribute("partySmallRaid", pconf.smallRaid)
+
 	if (XPerlDB) then
 		conf = XPerlDB
 		pconf = XPerlDB.party
@@ -1609,7 +1642,7 @@ function XPerl_Party_Set_Bits()
 		end
 	end
 
-	if (conf.highlight.enable and conf.highlight.HEAL) then
+	if (pconf.enable) then
 		XPerl_Party_Events_Frame:RegisterEvent("UNIT_HEAL_PREDICTION")
 	else
 		XPerl_Party_Events_Frame:UnregisterEvent("UNIT_HEAL_PREDICTION")
@@ -1619,6 +1652,8 @@ function XPerl_Party_Set_Bits()
 
 	if (XPerl_Party_AnchorVirtual:IsShown()) then
 		XPerl_Party_Virtual(true)
+	else
+		XPerl_Party_Virtual()
 	end
 	UpdateAllAssignedRoles()
 end

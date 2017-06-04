@@ -31,7 +31,7 @@
 				<AbsValue val="256"/>
 			</TileSize>
 			<BackgroundInsets>
-				<AbsInset left="2" right="2" top="2" bottom="2"/>
+				<AbsInset left="1" right="2" top="1" bottom="1"/>
 			</BackgroundInsets>
 		</Backdrop>
 

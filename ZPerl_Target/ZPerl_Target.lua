@@ -3,10 +3,11 @@
 -- License: GNU GPL v3, 29 June 2007 (see LICENSE.txt)
 
 local XPerl_Target_Events = { }
-local conf, tconf
+local conf, tconf, fconf
 XPerl_RequestConfig(function(new)
 	conf = new
 	tconf = conf.target
+	fconf = conf.focus
 	if (XPerl_Target) then
 		XPerl_Target.conf = conf.target
 	end
@@ -22,7 +23,7 @@ XPerl_RequestConfig(function(new)
 	if (XPerl_PetTarget) then
 		XPerl_PetTarget.conf = conf.pettarget
 	end
-end, "$Revision: 937 $")
+end, "$Revision: 938 $")
 
 local percD = "%d"..PERCENT_SYMBOL
 local format = format
@@ -130,8 +131,15 @@ function XPerl_Target_OnLoad(self, partyid)
 		buffSetup = self.buffSetup
 	end
 
-	XPerl_SecureUnitButton_OnLoad(self.nameFrame, partyid, nil, TargetFrameDropDown, XPerl_ShowGenericMenu)		--TargetFrame.menu)
-	XPerl_SecureUnitButton_OnLoad(self, partyid, nil, TargetFrameDropDown, XPerl_ShowGenericMenu)				--TargetFrame.menu)
+	--XPerl_SecureUnitButton_OnLoad(self.nameFrame, partyid, nil, TargetFrameDropDown, XPerl_ShowGenericMenu)		--TargetFrame.menu)
+	--XPerl_SecureUnitButton_OnLoad(self, partyid, nil, TargetFrameDropDown, XPerl_ShowGenericMenu)				--TargetFrame.menu)
+	--self.nameFrame:SetAttribute("useparent-unit", true)
+	self.nameFrame:SetAttribute("*type1", "target")
+	self.nameFrame:SetAttribute("type2", "togglemenu")
+	self.nameFrame:SetAttribute("unit", partyid)
+	self:SetAttribute("*type1", "target")
+	self:SetAttribute("type2", "togglemenu")
+	self:SetAttribute("unit", partyid)
 
 	--RegisterUnitWatch(self)
 
@@ -557,8 +565,7 @@ do
 		end
 		LTQ:RegisterCallback("TalentQuery_Ready", TalentQuery_Ready)
 	else
-		hooksecurefunc("NotifyInspect",
-			function(unit)
+		hooksecurefunc("NotifyInspect", function(unit)
 				if (UnitIsUnit("player", unit) or UnitInVehicle(unit) or not (UnitExists(unit) and CanInspect(unit) and UnitIsVisible(unit) and UnitIsConnected(unit) and CheckInteractDistance(unit, 4))) then
 					return
 				end
@@ -606,12 +613,11 @@ do
 						inspectReady = nil
 					end
 
-					
 					if (name1) then
-							if (not cached) then
-								talentCache[name] = {name1, name2, name3, group}
-							end
-							ShowSpec(self, name1)
+						if (not cached) then
+							talentCache[name] = {name1, name2, name3, group}
+						end
+						ShowSpec(self, name1)
 					end
 
 					if (not cached) then
@@ -757,18 +763,7 @@ function XPerl_Target_SetMana(self)
 end
 
 -- XPerl_Target_UpdateHealth
-local function XPerl_Target_UpdateHealth(self)
-	XPerl_Target_SetHealth(self)
-end
-
--- XPerl_Target_GetHealth
-function XPerl_Target_GetHealth(self)
-	local hp, hpMax = XPerl_Unit_GetHealth(self)
-	return hp, hpMax, hpMax == 100
-end
-
--- XPerl_Target_SetHealth
-function XPerl_Target_SetHealth(self)
+function XPerl_Target_UpdateHealth(self)
 	local partyid = self.partyid
 
 	local hb = self.statsFrame.healthBar
@@ -791,6 +786,7 @@ function XPerl_Target_SetHealth(self)
 	end
 
 	XPerl_SetHealthBar(self, hp, hpMax)
+	XPerl_Target_UpdateHealPrediction(self)
 
 	if (percent) then
 		if UnitIsDeadOrGhost(partyid) or hpMax == 0 then -- 4.3+ fix so if for some dumb reason max HP is 0, prevent any division by 0.
@@ -860,6 +856,41 @@ function XPerl_Target_SetHealth(self)
 	else
 		self.statsFrame:SetGrey()
 	end
+end
+
+-- XPerl_Target_UpdateHealPrediction
+function XPerl_Target_UpdateHealPrediction(self)
+	if self == XPerl_Target then
+		if tconf.healprediction then
+			XPerl_SetExpectedHealth(self)
+		else
+			self.statsFrame.expectedHealth:Hide()
+		end
+	elseif self == XPerl_TargetTarget or self == XPerl_TargetTargetTarget then
+		if conf.targettarget.healprediction then
+			XPerl_SetExpectedHealth(self)
+		else
+			self.statsFrame.expectedHealth:Hide()
+		end
+	elseif self == XPerl_Focus then
+		if fconf.healprediction then
+			XPerl_SetExpectedHealth(self)
+		else
+			self.statsFrame.expectedHealth:Hide()
+		end
+	elseif self == XPerl_FocusTarget then
+		if conf.focustarget.healprediction then
+			XPerl_SetExpectedHealth(self)
+		else
+			self.statsFrame.expectedHealth:Hide()
+		end
+	end
+end
+
+-- XPerl_Target_GetHealth
+function XPerl_Target_GetHealth(self)
+	local hp, hpMax = XPerl_Unit_GetHealth(self)
+	return hp, hpMax, hpMax == 100
 end
 
 -- XPerl_Target_Update_Combat
@@ -1425,8 +1456,22 @@ function XPerl_Target_Events:UNIT_THREAT_LIST_UPDATE(unit)
 end
 
 function XPerl_Target_Events:UNIT_HEAL_PREDICTION(unit)
-	if (unit == self.partyid) then
-		XPerl_SetExpectedHealth(self)
+	if self == XPerl_Target then
+		if (tconf.healprediction and unit == self.partyid) then
+			XPerl_SetExpectedHealth(self)
+		end
+	elseif self == XPerl_TargetTarget or self == XPerl_TargetTargetTarget then
+		if (conf.targettarget.healprediction and unit == self.partyid) then
+			XPerl_SetExpectedHealth(self)
+		end
+	elseif self == XPerl_Focus then
+		if (fconf.healprediction and unit == self.partyid) then
+			XPerl_SetExpectedHealth(self)
+		end
+	elseif self == XPerl_FocusTarget then
+		if (conf.focustarget.healprediction and unit == self.partyid) then
+			XPerl_SetExpectedHealth(self)
+		end
 	end
 end
 
@@ -1506,11 +1551,11 @@ function XPerl_Target_Set_Bits(self)
 	self.conf.buffs.size = tonumber(self.conf.buffs.size) or 20
 	XPerl_SetBuffSize(self)
 
-	--if (conf.highlight.enable and conf.highlight.HEAL) then
+	if (tconf.healprediction) then
 		self:RegisterEvent("UNIT_HEAL_PREDICTION")
-	--else
-		--self:UnregisterEvent("UNIT_HEAL_PREDICTION")
-	--end
+	else
+		self:UnregisterEvent("UNIT_HEAL_PREDICTION")
+	end
 
 	XPerl_Target_SetWidth(self)
 

@@ -11,7 +11,6 @@ XPerl_Version			= XPerl_Description.." - "..XPerl_VersionNumber
 XPerl_LongDescription	= "Sostituzione dell'UnitFrame del Personaggio, Famiglio, Gruppo, Bersaglio, Bersaglio del Bersaglio, Focus e Incursioni"
 XPerl_ModMenuIcon		= "Interface\\Icons\\INV_Misc_Gem_Pearl_02"
 
-XPERL_COMMS_PREFIX		= "X-Perl"
 XPERL_MINIMAP_HELP1		= "|c00FFFFFFClick Sinistro|r per le opzioni (e per |c0000FF00sbloccare le finestre|r)"
 XPERL_MINIMAP_HELP2		= "|c00FFFFFFClick Destro|r per spostare questa icona"
 XPERL_MINIMAP_HELP3		= "\rMembri reali dell'incursione: |c00FFFF80%d|r\rMembri reali del gruppo: |c00FFFF80%d|r"
