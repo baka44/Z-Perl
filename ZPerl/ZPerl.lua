@@ -6,8 +6,8 @@ local conf
 local percD	= "%d"..PERCENT_SYMBOL
 local perc1F = "%.1f"..PERCENT_SYMBOL
 
-XPerl_RequestConfig(function(New) conf = New end, "$Revision: 932 $")
-XPerl_SetModuleRevision("$Revision: 932 $")
+XPerl_RequestConfig(function(New) conf = New end, "$Revision: 933 $")
+XPerl_SetModuleRevision("$Revision: 933 $")
 
 -- Upvalus
 local _G = _G
@@ -193,7 +193,7 @@ local function rotate(angle)
 end
 
 -- meta table for string based colours. Allows for other mods changing class colours and things all working
-XPerlColourTable = setmetatable({},{
+XPerlColourTable = setmetatable({ }, {
 	__index = function(self, class)
 		local c = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[strupper(class or "")]
 		if (c) then
@@ -740,16 +740,18 @@ end
 
 local barColours
 function XPerl_ResetBarColourCache()
-	barColours = setmetatable({}, {
+	barColours = setmetatable({ }, {
 		__index = function(self, k)
 			local c = (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[k]
 			if (c) then
 				if (not conf.colour.classbarBright) then
 					conf.colour.classbarBright = 1
 				end
-				self[k] = {	r = max(0, min(1, c.r * conf.colour.classbarBright)),
-						g = max(0, min(1, c.g * conf.colour.classbarBright)),
-						b = max(0, min(1, c.b * conf.colour.classbarBright))}
+				self[k] = {
+					r = max(0, min(1, c.r * conf.colour.classbarBright)),
+					g = max(0, min(1, c.g * conf.colour.classbarBright)),
+					b = max(0, min(1, c.b * conf.colour.classbarBright))
+				}
 				return self[k]
 			end
 		end
@@ -1706,7 +1708,8 @@ local normalEdge = "Interface\\Tooltips\\UI-Tooltip-Border"
 local curseEdge = "Interface\\Addons\\ZPerl\\Images\\XPerl_Curse"
 
 -- XPerl_CheckDebuffs
-local Curses = setmetatable({}, {__mode = "k"})		-- 2.2.6 - Now re-using static table to save garbage memory creation
+--local Curses = setmetatable({ }, {__mode = "k"})	-- 2.2.6 - Now re-using static table to save garbage memory creation
+local Curses = { }
 function XPerl_CheckDebuffs(self, unit, resetBorders)
 	if (not self.FlashFrames) then
 		return

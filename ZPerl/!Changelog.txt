@@ -1,3 +1,9 @@
+**r933**
+* Some more possible FPS related issue fixes.
+* Target Highlighting will only work on party and raid frames, as they should.
+* Force Death Knight rune frame creation.
+* Raid buff/debuff fix.
+
 **r932**
 * More FPS fixes with the raid frames.
 * Keybinding options fixes.

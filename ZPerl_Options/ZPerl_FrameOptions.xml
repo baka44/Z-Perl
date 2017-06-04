@@ -11366,7 +11366,7 @@
 								self.configClick = function()
 									if (XPerlDB.raid.buffs.enable) then
 										XPerlDB.raid.debuffs.enable = nil
-										--_G[self:GetParent():GetName().."_Debuffs"]:SetChecked(true)
+										_G[self:GetParent():GetName().."_Debuffs"]:SetChecked(false)
 									end
 									self.Validate()
 									XPerl_Raid_OptionActions()
@@ -11394,7 +11394,7 @@
 								self.configClick = function()
 									if (XPerlDB.raid.debuffs.enable) then
 										XPerlDB.raid.buffs.enable = nil
-										--_G[self:GetParent():GetName().."_Buffs"]:SetChecked(true)
+										_G[self:GetParent():GetName().."_Buffs"]:SetChecked(false)
 									end
 									self.Validate()
 									XPerl_Raid_OptionActions()

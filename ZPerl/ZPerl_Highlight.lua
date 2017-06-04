@@ -4,7 +4,9 @@
 
 local playerClass, playerName, playerGUID
 local conf
-XPerl_RequestConfig(function(new) conf = new end, "$Revision: 927 $")
+XPerl_RequestConfig(function(new)
+	conf = new
+end, "$Revision: 933 $")
 
 local GetNumSubgroupMembers = GetNumSubgroupMembers
 local GetNumGroupMembers = GetNumGroupMembers
@@ -132,7 +134,7 @@ local function rotate(angle)
 	local mhsin = -hsin
 	local ULx, ULy, LLx, LLy = hcos - mhsin, mhsin + hcos, hcos - hsin, mhsin + mhcos
 	local URx, URy, LRx, LRy = mhcos - mhsin, hsin + hcos, mhcos - hsin, hsin + mhcos
-	return ULx+0.5, ULy+0.5, LLx+0.5, LLy+0.5, URx+0.5, URy+0.5, LRx+0.5, LRy+0.5
+	return ULx + 0.5, ULy + 0.5, LLx + 0.5, LLy + 0.5, URx + 0.5, URy + 0.5, LRx + 0.5, LRy + 0.5
 end
 
 function xpHigh:Print(...)
@@ -323,7 +325,12 @@ function xpHigh:SetHighlight(frame, guid)
 		local r = self.list[guid]
 		if (r) then
 			local r1, g1, b1, r2, g2, b2, t1
-			for k,v in pairs(r) do
+			for k, v in pairs(r) do
+				if k == "TARGET" then
+					if frame == XPerl_Player or frame == XPerl_Target or frame == XPerl_TargetTarget or frame == XPerl_TargetTargetTarget or frame == XPerl_Focus or frame == XPerl_FocusTarget then
+						return
+					end
+				end
 				if (k == "POM" and conf.highlight.sparkles) then
 					pomActive = true
 				elseif (k == "HOTCOUNT") then
@@ -1269,7 +1276,7 @@ end
 
 -- xpHigh:Send
 function xpHigh:Send(guid)
-	for k,v in pairs(self.callbacks) do
+	for k, v in pairs(self.callbacks) do
 		v[1](v[2], guid)
 	end
 end

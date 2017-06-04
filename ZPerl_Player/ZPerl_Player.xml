@@ -123,8 +123,6 @@
 			</Anchor>
 		</Anchors>
 
-		<!-- Script Events -->
-
 		<Scripts>
 			<OnLoad>
 				self:RegisterForClicks("AnyUp")

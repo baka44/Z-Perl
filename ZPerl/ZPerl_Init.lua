@@ -4,7 +4,9 @@
 
 local init_done, gradient, conf, doneOptions
 local errorCount = 0
-XPerl_RequestConfig(function(new) conf = new end, "$Revision: 911 $")
+XPerl_RequestConfig(function(new)
+	conf = new
+end, "$Revision: 933 $")
 
 local GetNumSubgroupMembers = GetNumSubgroupMembers
 local GetNumGroupMembers = GetNumGroupMembers
@@ -14,10 +16,13 @@ local UnitIsGroupAssistant = UnitIsGroupAssistant;
 local classOrder = {"WARRIOR", "DEATHKNIGHT", "ROGUE", "HUNTER", "DRUID", "SHAMAN", "PALADIN", "PRIEST", "MAGE", "WARLOCK", "MONK"}
 
 -- SetTex
-local highlightPositions = {	{0, 0.25, 0, 0.5},
-				{0.25, 0.75, 0, 0.5},
-				{0, 1, 0.5, 1},
-				{0.75, 1, 0, 0.5}}
+local highlightPositions = {
+	{0, 0.25, 0, 0.5},
+	{0.25, 0.75, 0, 0.5},
+	{0, 1, 0.5, 1},
+	{0.75, 1, 0, 0.5}
+}
+
 local function SetTex(self, num)
 	local p = highlightPositions[num]
 	if ((self.GetFrameType or self.GetObjectType)(self) == "Button") then

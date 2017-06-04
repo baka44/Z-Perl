@@ -12,7 +12,7 @@ XPerl_RequestConfig(function(new)
 	if (XPerl_Player) then
 		XPerl_Player.conf = conf.player
 	end
-end, "$Revision: 927 $")
+end, "$Revision: 933 $")
 
 local perc1F = "%.1f"..PERCENT_SYMBOL
 local percD = "%.0f"..PERCENT_SYMBOL
@@ -43,9 +43,6 @@ local XPerl_Player_InitDK
 local XPerl_Player_InitWarlock
 local XPerl_Player_InitPaladin
 local XPerl_Player_InitMoonkin
-
-
-
 
 local XPerl_PlayerStatus_OnUpdate
 local XPerl_Player_HighlightCallback
@@ -749,9 +746,7 @@ end
 -- PLAYER_ENTERING_WORLD
 function XPerl_Player_Events:PLAYER_ENTERING_WORLD()
 	self.updateAFK = true
-	
-	--print("PLAYER_ENTERING_WORLD")
-	
+
 	if (UnitHasVehicleUI("player")) then
 		self.partyid = "vehicle"
 		self:SetAttribute("unit", "vehicle")
@@ -766,23 +761,11 @@ function XPerl_Player_Events:PLAYER_ENTERING_WORLD()
 		end
 	end
 
-	--[[local events = {"UNIT_HEALTH_FREQUENT", "UNIT_MAXHEALTH", "UNIT_LEVEL", "UNIT_DISPLAYPOWER", "UNIT_NAME_UPDATE",
-			"UNIT_SPELLMISS", "UNIT_FACTION", "UNIT_PORTRAIT_UPDATE", "UNIT_FLAGS", "PLAYER_FLAGS_CHANGED",
-			"UNIT_ENTERED_VEHICLE", "UNIT_EXITED_VEHICLE", "PLAYER_TALENT_UPDATE", "RAID_TARGET_UPDATE", "UPDATE_SHAPESHIFT_FORM",
-			"RUNE_TYPE_UPDATE", "RUNE_POWER_UPDATE","UNIT_POWER_FREQUENT"}
-
-
-	for i,e in pairs(events) do
-		self:RegisterEvent(e)
-	end
-	
-	]]--
-
 	XPerl_Player_UpdateDisplay(self)
 
-	--fix runes on player load
+	-- Fix runes on player load
 	if self.runes and self.runes.list then
-		for i = 1,6 do
+		for i = 1, 6 do
 			if self.runes.list[rune] then 
 				RuneButton_Update(self.runes.list[rune], rune, true)
 			end
@@ -820,7 +803,7 @@ function XPerl_Player_Events:UNIT_PORTRAIT_UPDATE()
 end
 
 -- VARIABLES_LOADED
-function XPerl_Player_Events:VARIABLES_LOADED(who, what)
+function XPerl_Player_Events:VARIABLES_LOADED()
 
 	self.doubleCheckAFK = 2 -- Check during 2nd UPDATE_FACTION, which are the last guarenteed events to come after logging in
 	self:UnregisterEvent("VARIABLES_LOADED")
@@ -828,6 +811,7 @@ function XPerl_Player_Events:VARIABLES_LOADED(who, what)
 	local events = {
 		"PLAYER_ENTERING_WORLD", "PARTY_LEADER_CHANGED", "PARTY_LOOT_METHOD_CHANGED", "GROUP_ROSTER_UPDATE", "PLAYER_UPDATE_RESTING", "PLAYER_REGEN_ENABLED", "PLAYER_REGEN_DISABLED", "PLAYER_ENTER_COMBAT", "PLAYER_LEAVE_COMBAT", "PLAYER_DEAD", "UPDATE_FACTION", "UNIT_AURA", "PLAYER_CONTROL_LOST", "PLAYER_CONTROL_GAINED", "UNIT_COMBAT","UNIT_POWER_FREQUENT","UNIT_MAXPOWER","UNIT_HEALTH_FREQUENT", "UNIT_MAXHEALTH", "UNIT_LEVEL", "UNIT_DISPLAYPOWER", "UNIT_NAME_UPDATE", "UNIT_SPELLMISS", "UNIT_FACTION", "UNIT_PORTRAIT_UPDATE", "UNIT_FLAGS", "PLAYER_FLAGS_CHANGED", "UNIT_ENTERED_VEHICLE", "UNIT_EXITED_VEHICLE", "PLAYER_TALENT_UPDATE", "RAID_TARGET_UPDATE", "UPDATE_SHAPESHIFT_FORM", "RUNE_TYPE_UPDATE", "RUNE_POWER_UPDATE","PLAYER_LEVEL_UP","UPDATE_EXHAUSTION","PET_BATTLE_OPENING_START","PET_BATTLE_CLOSE"
 	}
+
 	for i, event in pairs(events) do
 		if string.find(event, "UNIT_") then
 			self:RegisterUnitEvent(event, "player", "vehicle")
@@ -1097,13 +1081,10 @@ end
 
 -- RUNE_TYPE_UPDATE
 function XPerl_Player_Events:RUNE_TYPE_UPDATE(self, runeIndex)
-	
 	if runeIndex and runeIndex >= 1 and runeIndex <= 6 then
-		
 		RuneButton_Update(_G["XPerl_RuneButtonIndividual"..runeIndex], runeIndex)
 	end
 end
-
 
 -- XPerl_Player_Energy_TickWatch
 function XPerl_Player_Energy_OnUpdate(self, elapsed)
@@ -1297,7 +1278,6 @@ function XPerl_Player_Set_Bits(self)
 			self.runes:Hide()
 		end
 	end
-	
 
 	XPerl_Player_SetupDK(self)
 	XPerl_Player_InitPaladin(self)
@@ -1379,30 +1359,28 @@ local SPELL_POWER_HOLY_POWER = _G.SPELL_POWER_HOLY_POWER
 
 local specialframe
 
-local function MakeMoveable(what)
-		--self.runes:SetMovable(true)
-		
-		what:SetMovable(true)
-		--self.runes:RegisterForDrag("LeftButton")
-		what:RegisterForDrag("LeftButton")
-		--specialframe:SetMovable(true)
-		
-		what:SetScript("OnDragStart",
-			function(self)
-				if (not pconf.dockRunes) then
-					--specialframe:StartMoving()
-					self:StartMoving()
-				end
-			end)
-			--self.runes
-		what:SetScript("OnDragStop",
-			function(self)
-				if (not pconf.dockRunes) then
-					--specialframe:StopMovingOrSizing()
-					self:StopMovingOrSizing()
-					XPerl_SavePosition(self)
-				end
-			end)
+local function MakeMoveable(frame)
+	--self.runes:SetMovable(true)
+	
+	frame:SetMovable(true)
+	--self.runes:RegisterForDrag("LeftButton")
+	frame:RegisterForDrag("LeftButton")
+	--specialframe:SetMovable(true)
+	
+	frame:SetScript("OnDragStart", function(self)
+		if (not pconf.dockRunes) then
+			--specialframe:StartMoving()
+			self:StartMoving()
+		end
+	end)
+	--self.runes
+	frame:SetScript("OnDragStop", function(self)
+		if (not pconf.dockRunes) then
+			--specialframe:StopMovingOrSizing()
+			self:StopMovingOrSizing()
+			XPerl_SavePosition(self)
+		end
+	end)
 end
 
 
@@ -1509,7 +1487,7 @@ end
 -- XPerl_Player_InitDK
 function XPerl_Player_InitDK(self)
 	if (select(2, UnitClass("player")) == "DEATHKNIGHT") then
-		if (not RuneFrame or RuneFrame:GetParent() ~= PlayerFrame or not RuneFrame:IsShown()) then
+		--[[if (not RuneFrame or RuneFrame:GetParent() ~= PlayerFrame or not RuneFrame:IsShown()) then
 			-- Only hijack runes if not already done so by another mod
 			return
 		end
@@ -1518,7 +1496,7 @@ function XPerl_Player_InitDK(self)
 		if (f ~= PlayerFrame or p ~= "TOP" or r ~= "BOTTOM") then
 			-- More safety checking before we fudge it
 			return
-		end
+		end]]
 
 		self.runes = CreateFrame("Frame", "XPerl_Runes", self)
 		self.runes:SetPoint("TOPLEFT", self.portraitFrame, "BOTTOMLEFT", 0, 2)
@@ -1526,11 +1504,13 @@ function XPerl_Player_InitDK(self)
 
 		MakeMoveable(self.runes)
 
-		local bgDef = {bgFile = "Interface\\Addons\\ZPerl\\Images\\XPerl_FrameBack",
+		local bgDef = {
+			bgFile = "Interface\\Addons\\ZPerl\\Images\\XPerl_FrameBack",
 			edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
 			tile = true, tileSize = 32, edgeSize = 12,
 			insets = { left = 3, right = 3, top = 3, bottom = 3 }
 		}
+
 		self.runes:SetBackdrop(bgDef)
 		self.runes:SetBackdropColor(0, 0, 0, 0.8)
 		self.runes:SetBackdropBorderColor(1, 1, 1, 1)
@@ -1553,10 +1533,10 @@ function XPerl_Player_InitDK(self)
 		local idSwitch = {1, 2, 5, 6, 3, 4}	-- Non sequential rune IDs.. gg
 		for i = 1, 6 do
 			local rune = CreateFrame("Button", "XPerl_RuneButtonIndividual"..i, self.runes, "XPerl_RuneButtonIndividualTemplate")
-			self.runes.list[ idSwitch[i] ] = rune
+			self.runes.list[idSwitch[i]] = rune
 			rune:EnableMouse(false)
 
-			-- god only knows why blizzard did this...
+			-- God only knows why blizzard did this...
 			rune:SetID(i)
 
 			if (i > 1) then
@@ -1592,7 +1572,7 @@ function XPerl_Player_SetupDK(self)
 					XPerl_RestorePosition(self.runes)
 				end
 
-				for i = 1,6 do
+				for i = 1, 6 do
 					local rune = self.runes.list[i]
 					rune:ClearAllPoints()
 					rune:SetWidth(22)

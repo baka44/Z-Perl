@@ -22,7 +22,7 @@ local conf, rconf
 XPerl_RequestConfig(function(newConf)
 	conf = newConf
 	rconf = conf.raid
-end, "$Revision: 932 $")
+end, "$Revision: 933 $")
 
 if type(RegisterAddonMessagePrefix) == "function" then
 	RegisterAddonMessagePrefix("CTRA")
@@ -728,7 +728,7 @@ local function UpdateBuffs(self)
 
 	local bf = self.buffFrame
 
-	XPerl_CheckDebuffs(self, partyid)
+	--XPerl_CheckDebuffs(self, partyid)
 	XPerl_ColourFriendlyUnit(self.nameFrame.text, partyid)
 
 	local buffCount = 0
