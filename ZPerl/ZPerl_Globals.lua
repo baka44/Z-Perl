@@ -29,7 +29,7 @@ function XPerl_SetModuleRevision(rev)
 end
 local AddRevision = XPerl_SetModuleRevision
 
-XPerl_SetModuleRevision("$Revision: 791 $")
+XPerl_SetModuleRevision("$Revision: 923 $")
 
 function XPerl_Notice(...)
 	if (DEFAULT_CHAT_FRAME) then
@@ -322,7 +322,7 @@ local function onEventPostSetup(self, event, unit, ...)
 			XPerl_OutOfCombatOptionSet = nil
 			XPerl_OptionActions()
 		end
-		for func,arg in pairs(XPerl_OutOfCombatQueue) do
+		for func, arg in pairs(XPerl_OutOfCombatQueue) do
 			assert(type(func) == "function")
 			func(arg)
 			--print("out of combat magiczzz:" .. tostring(arg))

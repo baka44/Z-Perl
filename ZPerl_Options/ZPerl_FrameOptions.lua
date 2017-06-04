@@ -2,7 +2,7 @@
 -- Author: Zek <Boodhoof-EU>
 -- License: GNU GPL v3, 29 June 2007 (see LICENSE.txt)
 
-XPerl_SetModuleRevision("$Revision: 918 $")
+XPerl_SetModuleRevision("$Revision: 923 $")
 
 local localGroups = LOCALIZED_CLASS_NAMES_MALE
 local WoWclassCount = 0
@@ -299,7 +299,7 @@ function XPerl_Options_OnUpdate(self,arg1)
 			self.Fading = nil
 			self:Hide()
 		elseif (alpha == 1) then
-	                self.Fading = nil
+			self.Fading = nil
 		end
 	else
 		local f = GetMouseFocus()
@@ -742,20 +742,22 @@ local protected = {}
 -- XPerl_Options_InCombatChange
 function XPerl_Options_InCombatChange(inCombat)
 
-	for k,v in pairs(protected) do
+	for k, v in pairs(protected) do
 		if ((k.GetFrameType or k.GetObjectType)(k) == "CheckButton") then
 			local textFrame = _G[k:GetName().."Text"]
 
 			if (inCombat) then
-				k.wasChecked = k:GetChecked()
-				k.combatIcon:Show()
-				protected[k] = k:IsEnabled()
+				if not k.wasChecked then
+					k.wasChecked = k:GetChecked()
+				end
+				if not v then
+					v = k:IsEnabled()
+				end
 				k:SetChecked(false)
 				k:Disable()
-				k:EnableMouse(false)
 				textFrame:SetTextColor(GRAY_FONT_COLOR.r, GRAY_FONT_COLOR.g, GRAY_FONT_COLOR.b)
+				k.combatIcon:Show()
 			else
-				k:EnableMouse(true)
 				k.combatIcon:Hide()
 
 				if (v) then
@@ -770,11 +772,13 @@ function XPerl_Options_InCombatChange(inCombat)
 					k:SetChecked(true)
 				end
 			end
-
 		elseif ((k.GetFrameType or k.GetObjectType)(k) == "Slider") then
 			if (inCombat) then
-				k.combatIcon:Show()
+				if not v then
+					v = k:IsEnabled()
+				end
 				k:DisableSlider()
+				k.combatIcon:Show()
 			else
 				k.combatIcon:Hide()
 
@@ -784,11 +788,13 @@ function XPerl_Options_InCombatChange(inCombat)
 					k:DisableSlider()
 				end
 			end
-
 		elseif ((k.GetFrameType or k.GetObjectType)(k) == "Button") then
 			if (inCombat) then
-				k.combatIcon:Show()
+				if not v then
+					v = k:IsEnabled()
+				end
 				k:Disable()
+				k.combatIcon:Show()
 			else
 				k.combatIcon:Hide()
 
@@ -798,11 +804,13 @@ function XPerl_Options_InCombatChange(inCombat)
 					k:Disable()
 				end
 			end
-
 		elseif ((k.GetFrameType or k.GetObjectType)(k) == "EditBox") then
 			if (inCombat) then
-				k.combatIcon:Show()
+				if not v then
+					v = k:IsEnabled()
+				end
 				k:Disable()
+				k.combatIcon:Show()
 			else
 				k.combatIcon:Hide()
 
@@ -812,7 +820,6 @@ function XPerl_Options_InCombatChange(inCombat)
 					k:Disable()
 				end
 			end
-
 		end
 	end
 end
@@ -832,7 +839,7 @@ function XPerl_Options_RegisterProtected(self)
 	self.combatIcon = icon
 
 	icon:SetTexture("Interface\\CharacterFrame\\UI-StateIcon")
-	icon:SetTexCoord(0.5, 1.0, 0.0, 0.5)
+	icon:SetTexCoord(0.5, 1.0, 0.0, 0.49)
 
 	icon:SetWidth(32)
 	icon:SetHeight(32)
@@ -900,7 +907,7 @@ function XPerl_Options_DoRangeTooltip(self)
 		local itemName, itemLink, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, invTexture = GetItemInfo(item)
 		if (itemName) then
 			local itemId = strmatch(itemLink, "item:(%d+):");
-   			if (itemId) then
+			if (itemId) then
 				local newLink = format("item:%d:0:0:0", itemId)
 				GameTooltip:SetHyperlink(newLink)
 

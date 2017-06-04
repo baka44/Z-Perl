@@ -51,7 +51,7 @@ local XPerl_ColourHealthBar = XPerl_ColourHealthBar
 -- TODO - Watch for:	 ERR_FRIEND_OFFLINE_S = "%s has gone offline."
 
 local conf, rconf
-XPerl_RequestConfig(function(newConf) conf = newConf rconf = conf.raid end, "$Revision: 922 $")
+XPerl_RequestConfig(function(newConf) conf = newConf rconf = conf.raid end, "$Revision: 923 $")
 
 XPERL_RAIDGRP_PREFIX = "XPerl_Raid_Grp"
 
@@ -132,6 +132,12 @@ function XPerl_Raid_OnLoad(self)
 		end
 	end, "Raid")
 
+	--[[for i = 1, WoWclassCount do
+		for j = 1, 5 do
+			_G["XPerl_Raid_Grp"..i]:SetAttribute("child"..j, _G["XPerl_Raid_Grp"..i.."UnitButton"..j])
+		end
+	end]]
+
 	XPerl_Raid_OnLoad = nil
 end
 
@@ -161,11 +167,15 @@ local function Setup1RaidFrame(self)
 		--[[if (not self.statsFrame.manaBar) then
 			CreateManaBar(self)
 		end]]
-		self:SetHeight(43)
+		if not InCombatLockdown() then
+			self:SetHeight(43)
+		end
 		self.statsFrame:SetHeight(26)
 		self.statsFrame.manaBar:Show()
 	else
-		self:SetHeight(38)
+		if not InCombatLockdown() then
+			self:SetHeight(38)
+		end
 		self.statsFrame:SetHeight(21)
 		if (self.statsFrame.manaBar) then
 			self.statsFrame.manaBar:Hide()
@@ -1114,7 +1124,7 @@ function XPerl_Raid_UpdateDisplay(self)
 	XPerl_Unit_UpdateReadyState(self)
 	XPerl_Raid_RaidTargetUpdate(self)
 
-	buffUpdates[self] = true        -- UpdateBuffs(self)
+	buffUpdates[self] = true -- UpdateBuffs(self)
 
 	if (not SkipHighlightUpdate) then
 		XPerl_Highlight:SetHighlight(self)
@@ -1993,7 +2003,7 @@ local function GetCombatRezzerList()
 
 						if (myRoster) then
 							if (myRoster.Rebirth and myRoster.Rebirth - t <= 0) then
-								myRoster.Rebirth = nil   -- Check for expired cooldown
+								myRoster.Rebirth = nil -- Check for expired cooldown
 							end
 							if (myRoster.Rebirth) then
 								if (myRoster.Rebirth - t < 120) then
@@ -2167,68 +2177,68 @@ local function SetMainHeaderAttributes(self)
 	end
 end
 
+local function DefaultRaidClasses()
+	return {
+		{enable = true, name = "WARRIOR"},
+		{enable = true, name = "DEATHKNIGHT"},
+		{enable = true, name = "ROGUE"},
+		{enable = true, name = "HUNTER"},
+		{enable = true, name = "MAGE"},
+		{enable = true, name = "WARLOCK"},
+		{enable = true, name = "PRIEST"},
+		{enable = true, name = "DRUID"},
+		{enable = true, name = "SHAMAN"},
+		{enable = true, name = "PALADIN"},
+		{enable = true, name = "MONK"}
+	}
+end
+
+local function GroupFilter(n)
+	if (rconf.sortByClass) then
+		if (not rconf.class[n]) then
+			rconf.class = DefaultRaidClasses()
+		end
+		if (rconf.class[n].enable) then
+			return rconf.class[n].name
+		end
+		return ""
+	else
+		local f
+		if (rconf.group[n]) then
+			f = tostring(n)
+		end
+
+		local invalid
+		for i = 1, WoWclassCount do
+			if (not rconf.class[i]) then
+				invalid = true
+			end
+		end
+		if (invalid) then
+			rconf.class = DefaultRaidClasses()
+		end
+
+		for i = 1, WoWclassCount do
+			if (rconf.class[i].enable) then
+				if (not f) then
+					f = rconf.class[i].name
+				else
+					f = f..","..rconf.class[i].name
+				end
+			end
+		end
+		return f
+	end
+end
+
 -- XPerl_Raid_SetAttributes
 function XPerl_Raid_ChangeAttributes()
 	if (InCombatLockdown()) then
-		XPerl_OutOfCombatQueue[XPerl_Raid_ChangeAttributes] = false
+		XPerl_OutOfCombatQueue[XPerl_Raid_ChangeAttributes] = true
 		return
 	end
 
 	rconf.anchor = (rconf and rconf.anchor) or "TOP"
-
-	local function DefaultRaidClasses()
-		return {
-			{enable = true, name = "WARRIOR"},
-			{enable = true, name = "DEATHKNIGHT"},
-			{enable = true, name = "ROGUE"},
-			{enable = true, name = "HUNTER"},
-			{enable = true, name = "MAGE"},
-			{enable = true, name = "WARLOCK"},
-			{enable = true, name = "PRIEST"},
-			{enable = true, name = "DRUID"},
-			{enable = true, name = "SHAMAN"},
-			{enable = true, name = "PALADIN"},
-			{enable = true, name = "MONK"}
-		}
-	end
-
-	local function GroupFilter(n)
-		if (rconf.sortByClass) then
-			if (not rconf.class[n]) then
-				rconf.class = DefaultRaidClasses()
-			end
-			if (rconf.class[n].enable) then
-				return rconf.class[n].name
-			end
-			return ""
-		else
-			local f
-			if (rconf.group[n]) then
-				f = tostring(n)
-			end
-
-			local invalid
-			for i = 1, WoWclassCount do
-				if (not rconf.class[i]) then
-					invalid = true
-				end
-			end
-			if (invalid) then
-				rconf.class = DefaultRaidClasses()
-			end
-
-			for i = 1, WoWclassCount do
-				if (rconf.class[i].enable) then
-					if (not f) then
-						f = rconf.class[i].name
-					else
-						f = f..","..rconf.class[i].name
-					end
-				end
-			end
-			return f
-		end
-	end
 
 	for i = 1, rconf.sortByClass and WoWclassCount or 11 do
 		local groupHeader = raidHeaders[i]
@@ -2261,10 +2271,10 @@ end
 
 -- XPerl_Raid_Set_Bits
 function XPerl_Raid_Set_Bits(self)
-	--[[if (InCombatLockdown()) then
+	if (InCombatLockdown()) then
 		XPerl_OutOfCombatQueue[XPerl_Raid_Set_Bits] = self
 		return
-	end]]
+	end
 	if (raidLoaded) then
 		XPerl_ProtectedCall(XPerl_Raid_HideShowRaid)
 	end

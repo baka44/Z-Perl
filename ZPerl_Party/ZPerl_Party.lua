@@ -8,12 +8,12 @@ local PartyFrames = {}
 local startupDone
 local conf, pconf
 XPerl_RequestConfig(function(new)
-			conf = new
-			pconf = new.party
-			for k,v in pairs(PartyFrames) do
-				v.conf = pconf
-			end
-		end, "$Revision: 918 $")
+	conf = new
+	pconf = new.party
+	for k,v in pairs(PartyFrames) do
+		v.conf = pconf
+	end
+end, "$Revision: 923 $")
 
 local percD = "%d"..PERCENT_SYMBOL
 
@@ -42,22 +42,20 @@ local XPerl_Party_HighlightCallback
 ----------------------
 function XPerl_Party_Events_OnLoad(self)
 	-- Added UNIT_POWER/UNIT_MAXPOWER to events list for 4.0 (By PlayerLin)
-	local events = {"PLAYER_ENTERING_WORLD", "PARTY_MEMBER_ENABLE", "PARTY_MEMBER_DISABLE", "GROUP_ROSTER_UPDATED",
-			"UNIT_PHASE", "UNIT_COMBAT", "UNIT_SPELLMISS", "UNIT_FACTION", "UNIT_FLAGS", "UNIT_AURA", "UNIT_PORTRAIT_UPDATE",
-			"UNIT_TARGET", "UNIT_POWER", "UNIT_MAXPOWER", "UNIT_HEALTH_FREQUENT", "UNIT_MAXHEALTH", "UNIT_LEVEL", "UNIT_DISPLAYPOWER", "UNIT_NAME_UPDATE", "PLAYER_FLAGS_CHANGED",
-			"RAID_TARGET_UPDATE", "READY_CHECK", "READY_CHECK_CONFIRM", "READY_CHECK_FINISHED", "PLAYER_LOGIN", "UNIT_THREAT_LIST_UPDATE",
-			"PLAYER_TARGET_CHANGED","PARTY_LOOT_METHOD_CHANGED", "PET_BATTLE_OPENING_START","PET_BATTLE_CLOSE"}
+	local events = {
+		"PLAYER_ENTERING_WORLD", "PARTY_MEMBER_ENABLE", "PARTY_MEMBER_DISABLE", "GROUP_ROSTER_UPDATED", "UNIT_PHASE", "UNIT_COMBAT", "UNIT_SPELLMISS", "UNIT_FACTION", "UNIT_FLAGS", "UNIT_AURA", "UNIT_PORTRAIT_UPDATE", "UNIT_TARGET", "UNIT_POWER", "UNIT_MAXPOWER", "UNIT_HEALTH_FREQUENT", "UNIT_MAXHEALTH", "UNIT_LEVEL", "UNIT_DISPLAYPOWER", "UNIT_NAME_UPDATE", "PLAYER_FLAGS_CHANGED", "RAID_TARGET_UPDATE", "READY_CHECK", "READY_CHECK_CONFIRM", "READY_CHECK_FINISHED", "PLAYER_LOGIN", "UNIT_THREAT_LIST_UPDATE", "PLAYER_TARGET_CHANGED","PARTY_LOOT_METHOD_CHANGED", "PET_BATTLE_OPENING_START","PET_BATTLE_CLOSE"
+	}
 	for i,event in pairs(events) do
 		self:RegisterEvent(event)
 	end
 
-	partyHeader:UnregisterEvent("UNIT_NAME_UPDATE")			-- IMPORTANT! Fix for WoW 2.1 UNIT_NAME_UPDATE lockup issues
-	UIParent:UnregisterEvent("GROUP_ROSTER_UPDATE")			-- IMPORTANT! Stops raid framerate lagging when members join/leave/zone
+	partyHeader:UnregisterEvent("UNIT_NAME_UPDATE") -- IMPORTANT! Fix for WoW 2.1 UNIT_NAME_UPDATE lockup issues
+	UIParent:UnregisterEvent("GROUP_ROSTER_UPDATE") -- IMPORTANT! Stops raid framerate lagging when members join/leave/zone
 
 	
-	self:RegisterEvent("GROUP_ROSTER_UPDATE")--Try detecting when we switch to raid.
+	self:RegisterEvent("GROUP_ROSTER_UPDATE") --Try detecting when we switch to raid.
 	
-	for i = 1,4 do
+	for i = 1, 4 do
 		XPerl_BlizzFrameDisable(getglobal("PartyMemberFrame"..i))
 	end
 
@@ -574,7 +572,7 @@ local function XPerl_Party_UpdateLeader(self)
 	
 	local lootMethod
 	local lootMaster
-	lootMethod, lootMaster,raidLootMaster = GetLootMethod()
+	lootMethod, lootMaster, raidLootMaster = GetLootMethod()
 	
 	if (lootMethod == "master" and lootMaster) then
 		if (self.partyid == "party"..lootMaster) then
@@ -722,8 +720,7 @@ local function CheckRaid()
 		XPerl_OutOfCombatQueue[CheckRaid] = false
 	else
 		partyAnchor:StopMovingOrSizing()
-		
-		--print("called");
+
 		local singleGroup = XPerl_Party_SingleGroup()
 		
 		if (not pconf or (pconf.inRaid or (pconf.smallRaid and singleGroup)  or (GetNumGroupMembers() > 0 and not IsInRaid() ))) then -- or GetNumGroupMembers() > 0
@@ -1604,7 +1601,7 @@ function XPerl_Party_Set_Bits()
 	if (XPerlDB) then
 		conf = XPerlDB
 		pconf = XPerlDB.party
-		for k,v in pairs(PartyFrames) do
+		for k, v in pairs(PartyFrames) do
 			v.conf = pconf
 			XPerl_Party_Set_Bits1(v)
 		end

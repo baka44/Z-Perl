@@ -1,3 +1,12 @@
+**r924**
+* Wake up the repo server.
+
+**r923**
+* Added a toggle button for OmniCC support.
+* Combat lockdown button fixes, after combat fades.
+* Combat lockdown icon texture fix.
+* A lot of GUI fixes.
+
 **r922**
 * Focus can be set from raid frames taint free.
 * Raid pet frames target dropdown fix.

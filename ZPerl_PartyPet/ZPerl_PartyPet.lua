@@ -7,12 +7,12 @@ local conf, pconf, petconf
 XPerl_PartyPetFrames = {}
 local PartyPetFrames = XPerl_PartyPetFrames
 XPerl_RequestConfig(function(New) conf = New
-			pconf = New.party
-			petconf = New.partypet
-			for k,v in pairs(PartyPetFrames) do
-				v.conf = pconf
-			end
-		end, "$Revision: 852 $")
+	pconf = New.party
+	petconf = New.partypet
+	for k,v in pairs(PartyPetFrames) do
+		v.conf = pconf
+	end
+end, "$Revision: 923 $")
 
 local new, del, copy = XPerl_GetReusableTable, XPerl_FreeTable, XPerl_CopyTable
 
@@ -134,7 +134,7 @@ function XPerl_Party_Pet_OnLoad(self)
 			debuffAnchor1 = function(self, b)
 						local relation = self.buffFrame.buff and self.buffFrame.buff[1]
 						if (not relation) then
-							relation = XPerl_GetBuffButton(self, 1, 0, 1)
+							relation = XPerl_GetBuffButton(self, 1, 0, true)
 						end
 						if (relation) then
 							if (pconf.flip) then

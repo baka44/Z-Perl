@@ -3,7 +3,7 @@
 -- License: GNU GPL v3, 29 June 2007 (see LICENSE.txt)
 
 local conf, pconf
-XPerl_RequestConfig(function(new) conf = new pconf = new.player end, "$Revision: 911 $")
+XPerl_RequestConfig(function(new) conf = new pconf = new.player end, "$Revision: 923 $")
 
 --local playerClass
 
@@ -87,6 +87,10 @@ end
 -- XPerl_Player_BuffSetup
 function XPerl_Player_BuffSetup(self)
 	if (not self) then
+		return
+	end
+	if (InCombatLockdown()) then
+		XPerl_OutOfCombatQueue[XPerl_Player_BuffSetup] = self
 		return
 	end
 	if (not self.buffFrame) then
@@ -353,13 +357,19 @@ function XPerl_PlayerBuffs_Update(self)
 				self.cooldown:Hide()
 				self.endTime = nil
 			end
+			if not conf.buffs.omnicc then
+				-- OmniCC to NOT show cooldown
+				self.cooldown.noCooldownCount = true
+			else
+				self.cooldown.noCooldownCount = nil
+			end
 		end
 	end
 end
 
 function XPerl_PlayerBuffs_OnLoad(self)
 	XPerl_SetChildMembers(self)
-	self:RegisterForClicks("RightButtonUp")			-- The XML version doesn't work..
+	self:RegisterForClicks("RightButtonUp") -- The XML version doesn't work..
 	--XPerl_ProtectedCall(setupButton, self)
 end
 

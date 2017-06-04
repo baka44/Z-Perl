@@ -6,8 +6,8 @@ local conf
 local percD	= "%d"..PERCENT_SYMBOL
 local perc1F = "%.1f"..PERCENT_SYMBOL
 
-XPerl_RequestConfig(function(New) conf = New end, "$Revision: 922 $")
-XPerl_SetModuleRevision("$Revision: 922 $")
+XPerl_RequestConfig(function(New) conf = New end, "$Revision: 924 $")
+XPerl_SetModuleRevision("$Revision: 924 $")
 
 -- Upvalus
 local _G = _G
@@ -1343,7 +1343,7 @@ local ManaColours = {
 function XPerl_SetManaBarType(self)
 	local m = self.statsFrame.manaBar
 	if (m and not self.statsFrame.greyMana) then
-		local unit = self.partyid		-- SecureButton_GetUnit(self)
+		local unit = self.partyid -- SecureButton_GetUnit(self)
 		if (unit) then
 			local p = XPerl_GetDisplayedPowerType(unit)
 			if (p) then
@@ -2538,7 +2538,6 @@ function XPerl_GetBuffButton(self, buffnum, debuff, createIfAbsent, newID)
 		buffIconCount = buffIconCount + 1
 		button = CreateFrame("Button", "XPerlBuff"..buffIconCount, parent, format("XPerl_Cooldown_%sTemplate", buffType))
 		button:Hide()
-		--button.cooldown.noCooldownCount = true -- OmniCC to NOT show cooldown
 
 		if (setup.rightClickable) then
 			button:RegisterForClicks("RightButtonUp")
@@ -2585,6 +2584,12 @@ function XPerl_GetBuffButton(self, buffnum, debuff, createIfAbsent, newID)
 		else
 			button:SetPoint("TOPLEFT", buffList[buffnum - 1], "TOPRIGHT", 1 + debuff, 0)
 		end
+	end
+	if not conf.buffs.omnicc then
+		-- OmniCC to NOT show cooldown
+		button.cooldown.noCooldownCount = true
+	else
+		button.cooldown.noCooldownCount = nil
 	end
 	button:SetID(newID or buffnum)
 
@@ -2753,7 +2758,7 @@ local function XPerl_Unit_BuffPositionsType(self, list, useSmallStart, buffSizeB
 	local colPoint, curRow, rowsHeight = 0, 1, 0
 	local rowSize = (useSmallStart and self.buffSpacing.smallRowWidth) or self.buffSpacing.rowWidth
 	local maxRows = self.conf.buffs.rows or 99
-	local decrementMaxRowsIfLastIsBig			-- Descriptive variable names ftw... If only upvalues took no actual memory space for the name... :(
+	local decrementMaxRowsIfLastIsBig -- Descriptive variable names ftw... If only upvalues took no actual memory space for the name... :(
 
 	for i = 1,#list do
 		if (curRow > maxRows) then
@@ -3183,7 +3188,7 @@ function XPerl_SetBuffSize(self)
 	local sizeDebuff = (self.conf.debuffs and self.conf.debuffs.size) or (sizeBuff * (1 + self.buffSetup.debuffSizeMod))
 
 	local buff
-	for i = 1,40 do
+	for i = 1, 40 do
 		buff = self.buffFrame.buff and self.buffFrame.buff[i]
 		if (buff) then
 			buff:SetScale(sizeBuff / 32)

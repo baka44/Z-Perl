@@ -41,7 +41,7 @@ function XPerl_Player_Pet_OnLoad(self)
 		debuffParent = true,
 		debuffSizeMod = 0.3,
 		debuffAnchor1 = function(self, b)
-					local buff1 = XPerl_GetBuffButton(self, 1, 0, 1)
+					local buff1 = XPerl_GetBuffButton(self, 1, 0, true)
 					if (pconf.buffs.above) then
 						b:SetPoint("BOTTOMLEFT", buff1, "TOPLEFT", 0, 0)
 					else
