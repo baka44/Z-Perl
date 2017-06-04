@@ -1,6 +1,6 @@
 ﻿if (GetLocale() == "zhTW") then
 
-XPERL_MSG_PREFIX	= "|c00C05050X-Perl|r "
+XPERL_MSG_PREFIX	= "|c00C05050Z-Perl|r "
 
 XPERL_TOOLTIP_ASSISTING	= "正在協助的玩家："
 XPERL_TOOLTIP_HEALERS	= "以我為目標的治療者："
