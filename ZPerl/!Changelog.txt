@@ -1,3 +1,10 @@
+**r942**
+* Some smaller taint fix.
+* Party/raid fix with the "One group raid" setting.
+* Party and raid frames will only show/hide when out of combat with "One group raid" enabled.
+* Party frames are now aas wide as the player/target frames by default.
+* Some other smaller fixes.
+
 **r941**
 * zhTW update, no actual code change.
 

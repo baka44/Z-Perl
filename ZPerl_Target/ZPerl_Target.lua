@@ -1064,14 +1064,12 @@ function XPerl_Target_UpdateDisplay(self)
 		XPerl_NoFadeBars()
 
 		-- Some optimizing here to limit the amount of work done on a target change
---[[
-		local buffOptionString = tostring(self.statsFrame.manaBar:IsVisible() or 0)..tostring(self.bossFrame:IsVisible() or 0)..tostring(self.creatureTypeFrame:IsVisible() or 0)..tostring(self.statsFrame:GetWidth())
+		--[[local buffOptionString = tostring(self.statsFrame.manaBar:IsVisible() or 0)..tostring(self.bossFrame:IsVisible() or 0)..tostring(self.creatureTypeFrame:IsVisible() or 0)..tostring(self.statsFrame:GetWidth())
 		if (self.buffOptionString ~= buffOptionString) then
 			self.buffOptionString = buffOptionString
 			-- Work out where all our buffs can fit, we only do this for a fresh target
 			XPerl_Targets_BuffPositions(self)
-		end
-]]
+		end]]
 
 		XPerl_Targets_BuffUpdate(self)
 		--XPerl_Target_DebuffUpdate(self)

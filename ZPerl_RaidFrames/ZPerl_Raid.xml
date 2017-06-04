@@ -145,7 +145,7 @@
 
 			<Frame name="$parentstatsFrame">
 				<Size>
-					<AbsDimension x="80" y="30"/>
+					<AbsDimension x="80" y="26"/>
 				</Size>
 				<Anchors>
 					<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" relativeTo="$parentnameFrame">
@@ -192,7 +192,7 @@
 						<Anchors>
 							<Anchor point="TOPLEFT" relativeTo="$parenthealthBar" relativePoint="BOTTOMLEFT">
 								<Offset>
-									<AbsDimension x="0" y="-0"/>
+									<AbsDimension x="0" y="0"/>
 								</Offset>
 							</Anchor>
 							<Anchor point="BOTTOMRIGHT" relativeTo="$parenthealthBar" relativePoint="BOTTOMRIGHT">

@@ -2,7 +2,7 @@
 	<Script file="ZPerl_Party.lua"/>
 	<Button name="XPerl_Party_FrameTemplate" inherits="SecureUnitButtonTemplate" virtual="true" clampedToScreen="true" frameStrata="LOW" hidden="true">
 		<Size>
-			<AbsDimension x="160" y="60"/>
+			<AbsDimension x="220" y="62"/>
 		</Size>
 		<Scripts>
 			<OnLoad>
@@ -552,7 +552,7 @@
 	</Frame>
 	<Frame name="ZPerl_Party_SecureState" inherits="SecureHandlerStateTemplate" parent="UIParent" protected="true">
 		<Attributes>
-			<Attribute name="_onstate-partymonitor" value="if not self:GetAttribute('partyEnabled') then self:GetFrameRef('partyHeader'):Hide() return end if newstate == 'nocombat' then return elseif newstate == 'raid1' and self:GetAttribute('partyInRaid') then if not self:GetFrameRef('partyHeader'):IsShown() then self:GetFrameRef('partyHeader'):Show() end elseif newstate == 'raid1' and self:GetAttribute('partySmallRaid') then if not self:GetFrameRef('partyHeader'):IsShown() then self:GetFrameRef('partyHeader'):Show() end elseif newstate == 'party1' then if not self:GetFrameRef('partyHeader'):IsShown() then self:GetFrameRef('partyHeader'):Show() end else if self:GetFrameRef('partyHeader'):IsShown() then self:GetFrameRef('partyHeader'):Hide() end end"/>
+			<Attribute name="_onstate-partymonitor" value="if not self:GetAttribute('partyEnabled') or self:GetAttribute('partySmallRaid') then self:GetFrameRef('partyHeader'):Hide() return end if newstate == 'nocombat' then return elseif newstate == 'raid' and self:GetAttribute('partyInRaid') then if not self:GetFrameRef('partyHeader'):IsShown() then self:GetFrameRef('partyHeader'):Show() end elseif newstate == 'party' then if not self:GetFrameRef('partyHeader'):IsShown() then self:GetFrameRef('partyHeader'):Show() end else if self:GetFrameRef('partyHeader'):IsShown() then self:GetFrameRef('partyHeader'):Hide() end end"/>
 		</Attributes>
 		<Scripts>
 			<OnLoad>
@@ -561,7 +561,7 @@
 				self:SetAttribute("partyEnabled", XPerlDB.party.enable)
 				self:SetAttribute("partyInRaid", XPerlDB.party.inRaid)
 				self:SetAttribute("partySmallRaid", XPerlDB.party.smallRaid)
-				RegisterStateDriver(self, "partymonitor", "[nocombat] nocombat; [target=raid1, exists] raid1; [target=party1, exists] party1; hide")
+				RegisterStateDriver(self, "partymonitor", "[nocombat] nocombat; [group:raid] raid; [group:party] party; hide")
 			</OnLoad>
 		</Scripts>
 	</Frame>

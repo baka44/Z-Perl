@@ -12,7 +12,7 @@ XPerl_RequestConfig(function(new)
 	if (XPerl_Player) then
 		XPerl_Player.conf = conf.player
 	end
-end, "$Revision: 939 $")
+end, "$Revision: 942 $")
 
 local perc1F = "%.1f"..PERCENT_SYMBOL
 local percD = "%.0f"..PERCENT_SYMBOL
@@ -954,9 +954,9 @@ function XPerl_Player_Events:PLAYER_TALENT_UPDATE()
 	XPerl_Player_UpdateMana(self)
 	
 	if(playerClass == "PRIEST") then
-		if (self.runes) then
+		--[[if (self.runes) then
 			self.runes:Hide()
-		end
+		end]]
 		XPerl_Player_InitPriest(self)
 		if (XPerl_Player_Buffs_Position) then
 			XPerl_Player_Buffs_Position(self)

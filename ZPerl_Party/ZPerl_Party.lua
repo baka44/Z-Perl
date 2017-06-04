@@ -13,7 +13,7 @@ XPerl_RequestConfig(function(new)
 	for k, v in pairs(PartyFrames) do
 		v.conf = pconf
 	end
-end, "$Revision: 939 $")
+end, "$Revision: 942 $")
 
 local percD = "%d"..PERCENT_SYMBOL
 
@@ -1282,11 +1282,11 @@ function XPerl_Party_SetWidth(self)
 
 	pconf.size.width = max(0, pconf.size.width or 0)
 
-	local width = (36 * (pconf.percent or 0)) + 106	-- 136 enabled, 106 disabled
+	local width = (36 * (pconf.percent or 0)) + 122	-- 158 enabled, 122 disabled
 	self.statsFrame:SetWidth(width + pconf.size.width)
 	self:SetWidth(CalcWidth(self))
 
-	self.nameFrame:SetWidth(106 + (pconf.size.width / 2))
+	self.nameFrame:SetWidth(122 + (pconf.size.width / 2))
 
 	XPerl_StatsFrameSetup(self)
 end

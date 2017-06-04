@@ -21,7 +21,7 @@ local conf, rconf
 XPerl_RequestConfig(function(newConf)
 	conf = newConf
 	rconf = conf.raid
-end, "$Revision: 938 $")
+end, "$Revision: 942 $")
 
 if type(RegisterAddonMessagePrefix) == "function" then
 	RegisterAddonMessagePrefix("CTRA")
@@ -918,7 +918,9 @@ function XPerl_Raid_OnUpdate(self, elapsed)
 			LoadAddOn("ZPerl_CustomHighlight")
 		end
 		rosterUpdated = nil
-		if (not InCombatLockdown()) then
+		if InCombatLockdown() then
+			XPerl_OutOfCombatQueue[XPerl_Raid_Position] = self
+		else
 			XPerl_Raid_Position(self)
 		end
 		if (ZPerl_Custom) then
