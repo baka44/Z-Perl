@@ -22,7 +22,7 @@ local conf, rconf
 XPerl_RequestConfig(function(newConf)
 	conf = newConf
 	rconf = conf.raid
-end, "$Revision: 929 $")
+end, "$Revision: 930 $")
 
 if type(RegisterAddonMessagePrefix) == "function" then
 	RegisterAddonMessagePrefix("CTRA")
@@ -69,7 +69,7 @@ ZPerl_Roster = { }
 
 local localGroups = LOCALIZED_CLASS_NAMES_MALE
 local WoWclassCount = 0
-for i = 1, #localGroups do
+for k, v in pairs(localGroups) do
 	WoWclassCount = WoWclassCount + 1
 end
 
