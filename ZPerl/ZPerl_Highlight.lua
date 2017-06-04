@@ -4,7 +4,7 @@
 
 local playerClass, playerName, playerGUID
 local conf
-XPerl_RequestConfig(function(new) conf = new end, "$Revision: 909 $")
+XPerl_RequestConfig(function(new) conf = new end, "$Revision: 927 $")
 
 local GetNumSubgroupMembers = GetNumSubgroupMembers
 local GetNumGroupMembers = GetNumGroupMembers
@@ -913,7 +913,7 @@ function xpHigh:StartMendingAnimation(sourceFrame, targetFrame)
 	if (not icons) then
 		icons = {}
 		self.mendingAnimationIcons = icons
-		for i = 1,3 do
+		for i = 1, 3 do
 			local icon = CreateFrame("Frame", nil, UIParent)
 			icons[i] = icon
 			icon:SetFrameStrata("DIALOG")
@@ -928,7 +928,7 @@ function xpHigh:StartMendingAnimation(sourceFrame, targetFrame)
 			icon.angle = 0
 		end
 	else
-		for i = 1,3 do
+		for i = 1, 3 do
 			icons[i]:Hide()
 		end
 	end

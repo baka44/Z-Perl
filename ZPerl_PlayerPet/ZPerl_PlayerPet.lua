@@ -5,12 +5,13 @@
 local XPerl_Player_Pet_Events = {}
 local conf, pconf
 XPerl_RequestConfig(function(new)
-			conf = new
-			pconf = new.pet
-			if (XPerl_Player_Pet) then
-				XPerl_Player_Pet.conf = pconf
-			end
-		end, "$Revision: 877 $")
+	conf = new
+	pconf = new.pet
+	if (XPerl_Player_Pet) then
+		XPerl_Player_Pet.conf = pconf
+	end
+end, "$Revision: 927 $")
+
 local XPerl_Player_Pet_HighlightCallback
 
 -- XPerl_Player_Pet_OnLoad
@@ -41,22 +42,22 @@ function XPerl_Player_Pet_OnLoad(self)
 		debuffParent = true,
 		debuffSizeMod = 0.3,
 		debuffAnchor1 = function(self, b)
-					local buff1 = XPerl_GetBuffButton(self, 1, 0, true)
-					if (pconf.buffs.above) then
-						b:SetPoint("BOTTOMLEFT", buff1, "TOPLEFT", 0, 0)
-					else
-						b:SetPoint("TOPLEFT", buff1, "BOTTOMLEFT", 0, 0)
-					end
-					self.buffSetup.debuffAnchor1 = nil
-				end,
+			local buff1 = XPerl_GetBuffButton(self, 1, 0, true)
+			if (pconf.buffs.above) then
+				b:SetPoint("BOTTOMLEFT", buff1, "TOPLEFT", 0, 0)
+			else
+				b:SetPoint("TOPLEFT", buff1, "BOTTOMLEFT", 0, 0)
+			end
+			self.buffSetup.debuffAnchor1 = nil
+		end,
 		buffAnchor1 = function(self, b)
-					if (pconf.buffs.above) then
-						b:SetPoint("BOTTOMLEFT", 0, 0)
-					else
-						b:SetPoint("TOPLEFT", 0, 0)
-					end
-					self.buffSetup.buffAnchor1 = nil
-				end,
+			if (pconf.buffs.above) then
+				b:SetPoint("BOTTOMLEFT", 0, 0)
+			else
+				b:SetPoint("TOPLEFT", 0, 0)
+			end
+			self.buffSetup.buffAnchor1 = nil
+		end,
 	}
 
 	CombatFeedback_Initialize(self, self.hitIndicator.text, 30)
@@ -65,16 +66,11 @@ function XPerl_Player_Pet_OnLoad(self)
 	XPerl_SecureUnitButton_OnLoad(self.nameFrame, "pet", nil, PetFrameDropDown, XPerl_ShowGenericMenu)	--PetFrame.menu)
 
 	--RegisterUnitWatch(self)
-        --Added UNIT_POWER/UNIT_MAXPOWER shit on events list by PlayerLin
+	-- Added UNIT_POWER/UNIT_MAXPOWER shit on events list by PlayerLin
 	local events = {
-					"UNIT_HEALTH", "UNIT_MAXHEALTH", "UNIT_LEVEL", "UNIT_POWER_FREQUENT",
-					"UNIT_MAXPOWER", "UNIT_DISPLAYPOWER", "UNIT_NAME_UPDATE",
-					"UNIT_FACTION", "UNIT_PORTRAIT_UPDATE",
-					"UNIT_FLAGS", "UNIT_AURA",
-					"UNIT_PET", "PET_ATTACK_START", "UNIT_COMBAT", "UNIT_SPELLMISS", "VARIABLES_LOADED",
-					"PLAYER_REGEN_ENABLED", "PLAYER_ENTERING_WORLD", "UNIT_ENTERED_VEHICLE", "UNIT_EXITED_VEHICLE",
-					"UNIT_THREAT_LIST_UPDATE", "PLAYER_TARGET_CHANGED", "UNIT_TARGET", "PET_BATTLE_OPENING_START","PET_BATTLE_CLOSE"}
-	for i,event in pairs(events) do
+		"UNIT_HEALTH", "UNIT_MAXHEALTH", "UNIT_LEVEL", "UNIT_POWER_FREQUENT", "UNIT_MAXPOWER", "UNIT_DISPLAYPOWER", "UNIT_NAME_UPDATE", "UNIT_FACTION", "UNIT_PORTRAIT_UPDATE", "UNIT_FLAGS", "UNIT_AURA", "UNIT_PET", "PET_ATTACK_START", "UNIT_COMBAT", "UNIT_SPELLMISS", "VARIABLES_LOADED", "PLAYER_REGEN_ENABLED", "PLAYER_ENTERING_WORLD", "UNIT_ENTERED_VEHICLE", "UNIT_EXITED_VEHICLE", "UNIT_THREAT_LIST_UPDATE", "PLAYER_TARGET_CHANGED", "UNIT_TARGET", "PET_BATTLE_OPENING_START","PET_BATTLE_CLOSE"
+	}
+	for i, event in pairs(events) do
 		self:RegisterEvent(event)
 	end
 
@@ -84,11 +80,10 @@ function XPerl_Player_Pet_OnLoad(self)
 	self:SetScript("OnEvent", XPerl_Player_Pet_OnEvent)
 	self:SetScript("OnUpdate", XPerl_Player_Pet_OnUpdate)
 	if (FOM_FeedButton) then
-		self:SetScript("OnShow",
-			function(self)
-				XPerl_Unit_UpdatePortrait(self)
-				XPerl_ProtectedCall(Set_FOM_FeedButton)
-			end)
+		self:SetScript("OnShow", function(self)
+			XPerl_Unit_UpdatePortrait(self)
+			XPerl_ProtectedCall(Set_FOM_FeedButton)
+		end)
 	else
 		self:SetScript("OnShow", XPerl_Unit_UpdatePortrait)
 	end

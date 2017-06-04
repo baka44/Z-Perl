@@ -2,13 +2,13 @@
 -- Author: Zek <Boodhoof-EU>
 -- License: GNU GPL v3, 29 June 2007 (see LICENSE.txt)
 
-local XPerl_Raid_Events = {}
-local RaidGroupCounts = {0,0,0,0,0,0,0,0,0,0,0}
+local XPerl_Raid_Events = { }
+local RaidGroupCounts = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 local myGroup = 0
-local FrameArray = {}		-- List of raid frames indexed by raid ID
-local RaidPositions = {}	-- Back-matching of unit names to raid ID
-local ResArray = {}		-- List of currently active resserections in progress
-local buffUpdates = {}		-- Queue for buff updates after a roster change
+local FrameArray = { }		-- List of raid frames indexed by raid ID
+local RaidPositions = { }	-- Back-matching of unit names to raid ID
+local ResArray = { }		-- List of currently active resserections in progress
+local buffUpdates = { }		-- Queue for buff updates after a roster change
 local raidLoaded
 local rosterUpdated
 local percF = "%.1f"..PERCENT_SYMBOL
@@ -16,7 +16,7 @@ local percD = "%d"..PERCENT_SYMBOL
 local lastNamesList, lastName, lastWith, lastNamesCount -- Stores with/without buff list (OnUpdate optimization)
 local fullyInitiallized
 
-local taintFrames = {}
+local taintFrames = { }
 
 if type(RegisterAddonMessagePrefix) == "function" then
 	RegisterAddonMessagePrefix("CTRA")
@@ -51,13 +51,16 @@ local XPerl_ColourHealthBar = XPerl_ColourHealthBar
 -- TODO - Watch for:	 ERR_FRIEND_OFFLINE_S = "%s has gone offline."
 
 local conf, rconf
-XPerl_RequestConfig(function(newConf) conf = newConf rconf = conf.raid end, "$Revision: 925 $")
+XPerl_RequestConfig(function(newConf)
+	conf = newConf
+	rconf = conf.raid
+end, "$Revision: 927 $")
 
 XPERL_RAIDGRP_PREFIX = "XPerl_Raid_Grp"
 
 -- Hold some raid roster information (AFK, DND etc.)
 -- Is also stored between sessions to maintain timers and flags
-ZPerl_Roster = {}
+ZPerl_Roster = { }
 
 -- Uses some variables from FrameXML\RaidFrame.lua:
 -- MAX_RAID_MEMBERS = 40
@@ -86,16 +89,15 @@ local hotSpells = XPERL_HIGHLIGHT_SPELLS.hotSpells
 -- Loading Function --
 ----------------------
 
-local raidHeaders = {}
+local raidHeaders = { }
 
 -- XPerl_Raid_OnLoad
 function XPerl_Raid_OnLoad(self)
 	local events = {
 		"CHAT_MSG_ADDON","PLAYER_ENTERING_WORLD", "VARIABLES_LOADED", "GROUP_ROSTER_UPDATE", "UNIT_FLAGS", "UNIT_AURA", "UNIT_POWER", "UNIT_MAXPOWER", "UNIT_HEALTH_FREQUENT", "UNIT_MAXHEALTH", "UNIT_NAME_UPDATE", "PLAYER_FLAGS_CHANGED", "UNIT_COMBAT", "UNIT_SPELLCAST_START", "UNIT_SPELLCAST_STOP", "UNIT_SPELLCAST_FAILED", "UNIT_SPELLCAST_INTERRUPTED", "READY_CHECK", "READY_CHECK_CONFIRM", "READY_CHECK_FINISHED", "RAID_TARGET_UPDATE", "PLAYER_LOGIN", "ROLE_CHANGED_INFORM", "PET_BATTLE_OPENING_START", "PET_BATTLE_CLOSE", "UNIT_CONNECTION", "PLAYER_REGEN_ENABLED"
 	}
-	
-	--"UNIT_FACTION"
-	for i,event in pairs(events) do
+
+	for i, event in pairs(events) do
 		self:RegisterEvent(event)
 	end
 	
@@ -107,7 +109,7 @@ function XPerl_Raid_OnLoad(self)
 	end
 
 	self.time = 0
-	self.Array = {}
+	self.Array = { }
 
 
 	--Disable the creation of blizz CompactRaidFrameX, theres an issue with taint due to dropdown with more 7 items
@@ -133,7 +135,7 @@ function XPerl_Raid_OnLoad(self)
 	end, "Raid")
 
 	--[[for i = 1, WoWclassCount do
-		for j = 1, 5 do
+		for j = 1, 40 do
 			_G["XPerl_Raid_Grp"..i]:SetAttribute("child"..j, _G["XPerl_Raid_Grp"..i.."UnitButton"..j])
 		end
 	end]]
@@ -201,7 +203,7 @@ end
 
 -- XPerl_MainTankSet_OnClick
 function XPerl_MainTankSet_OnClick(self, value)
-	if (self.value[1] == "Main Tanks") and UnitInRaid("player") then -- Must be 'this'
+	if (self.value[1] == "Main Tanks") and UnitInRaid("player") then
 		if (self.value[4]) then
 			SendAddonMessage("CTRA", "R "..self.value[2], "RAID")
 		else
@@ -275,11 +277,10 @@ end
 
 -- XPerl_Raid_CheckFlags
 local function XPerl_Raid_CheckFlags(partyid)
-
 	local unitName = UnitName(partyid)
 	local resser
 
-	for i,name in pairs(ResArray) do
+	for i, name in pairs(ResArray) do
 		if (name == unitName) then
 			resser = i
 			break
@@ -380,8 +381,6 @@ local spiritOfRedemption = GetSpellInfo(27827)
 
 -- XPerl_Raid_UpdateHealth
 function XPerl_Raid_UpdateHealth(self)
-
-
 	local partyid = self.partyid
 	if (not partyid) then
 		return
@@ -462,15 +461,15 @@ function XPerl_Raid_UpdateHealth(self)
 			end
 			self.dead = nil
 
-			--Begin 4.3 division by 0 work around to ensure we don't divide if max is 0
+			-- Begin 4.3 division by 0 work around to ensure we don't divide if max is 0
 			local percentHp
-			if health > 0 and healthmax == 0 then--We have current ho but max hp failed.
-				healthmax = health--Make max hp at least equal to current health
-				percentHp = 100--And percent 100% cause a number divided by itself is 1, duh.
-			elseif health == 0 and healthmax == 0 then--Probably dead target
-				percentHp = 0--So just automatically set percent to 0 and avoid division of 0/0 all together in this situation.
+			if health > 0 and healthmax == 0 then -- We have current ho but max hp failed.
+				healthmax = health -- Make max hp at least equal to current health
+				percentHp = 100 -- And percent 100% cause a number divided by itself is 1, duh.
+			elseif health == 0 and healthmax == 0 then -- Probably dead target
+				percentHp = 0 -- So just automatically set percent to 0 and avoid division of 0/0 all together in this situation.
 			else
-				percentHp = health / healthmax--Everything is dandy, so just do it right way.
+				percentHp = health / healthmax -- Everything is dandy, so just do it right way.
 			end
 			--end division by 0 check
 			if (rconf.healerMode.enable) then
@@ -529,19 +528,19 @@ local function XPerl_Raid_UpdateMana(self)
 
 		if (rconf.manaPercent and XPerl_GetDisplayedPowerType(partyid) == 0 and not self.pet) then
 			if (rconf.values) then -- TODO rconf.manavalues
-			 	self.statsFrame.manaBar.text:SetFormattedText("%d/%d", mana, manamax)
-		 	else
+				self.statsFrame.manaBar.text:SetFormattedText("%d/%d", mana, manamax)
+			else
 				--Begin 4.3 division by 0 work around to ensure we don't divide if max is 0
 				local pmanaPct
-				if mana > 0 and manamax == 0 then--We have current mana but max mana failed.
-					manamax = mana--Make max mana at least equal to current health
-					pmanaPct = 100--And percent 100% cause a number divided by itself is 1, duh.
+				if mana > 0 and manamax == 0 then -- We have current mana but max mana failed.
+					manamax = mana -- Make max mana at least equal to current health
+					pmanaPct = 100 -- And percent 100% cause a number divided by itself is 1, duh.
 				elseif mana == 0 and manamax == 0 then--Probably doesn't use mana or is oom?
-					pmanaPct = 0--So just automatically set percent to 0 and avoid division of 0/0 all together in this situation.
+					pmanaPct = 0 -- So just automatically set percent to 0 and avoid division of 0/0 all together in this situation.
 				else
-					pmanaPct = mana / manamax--Everything is dandy, so just do it right way.
+					pmanaPct = mana / manamax -- Everything is dandy, so just do it right way.
 				end
-				--end division by 0 check
+				-- end division by 0 check
 				
 				if rconf.precisionManaPercent then
 					self.statsFrame.manaBar.text:SetFormattedText(percF, pmanaPct * 100)
@@ -598,7 +597,9 @@ end
 -- XPerl_Raid_Single_OnLoad
 function XPerl_Raid_Single_OnLoad(self)
 	XPerl_SetChildMembers(self)
-	self:RegisterForClicks("AnyUp")
+	if not InCombatLockdown() then
+		self:RegisterForClicks("AnyUp")
+	end
 
 	self.edgeFile = "Interface\\Addons\\ZPerl\\Images\\XPerl_ThinEdge"
 	self.edgeSize = 10
@@ -618,7 +619,6 @@ function XPerl_Raid_Single_OnLoad(self)
 
 	if (InCombatLockdown()) then
 		tinsert(taintFrames, self)
-		return
 	else
 		taintable(self)
 	end
@@ -680,8 +680,6 @@ local function XPerl_Raid_HighlightCallback(self, updateGUID)
 	end
 end
 
--- GetBuffButton(self, buffnum, debuff, createIfAbsent)
--- debuff must be 1 or 0, as it's used in size calc
 local buffIconCount = 0
 local function GetBuffButton(self, buffnum, createIfAbsent)
 
@@ -693,7 +691,7 @@ local function GetBuffButton(self, buffnum, createIfAbsent)
 		button:SetID(buffnum)
 
 		if (not self.buffFrame.buff) then
-			self.buffFrame.buff = {}
+			self.buffFrame.buff = { }
 		end
 		self.buffFrame.buff[buffnum] = button
 
@@ -776,7 +774,7 @@ local function UpdateBuffs(self)
 			local button = bf.buff and bf.buff[buffnum]
 			if (button) then
 				if (button:IsShown()) then
-	 				button:Hide()
+					button:Hide()
 				end
 			end
 		end
@@ -885,8 +883,7 @@ local function XPerl_Raid_UpdateCombat(self)
 end
 
 -- XPerl_Raid_UpdatePlayerFlags(self)
-local function XPerl_Raid_UpdatePlayerFlags(self, partyid,...)
-
+local function XPerl_Raid_UpdatePlayerFlags(self, partyid, ...)
 	if (not partyid) then
 		partyid = self:GetAttribute("unit")
 	end
@@ -934,15 +931,6 @@ local function XPerl_Raid_UpdatePlayerFlags(self, partyid,...)
 	end
 end
 
--- XPerl_Raid_ShowRaidGroup
---local function XPerl_Raid_ShowRaidGroup(show)
---	if (rconf.group[show] and rconf.enable and (show < 9 or rconf.sortByClass)) then
---		raidHeaders[show]:Show()
---	else
---		raidHeaders[show]:Hide()
---	end
---end
-
 -- XPerl_Raid_OnUpdate
 function XPerl_Raid_OnUpdate(self, elapsed)
 	if (rosterUpdated) then
@@ -957,9 +945,9 @@ function XPerl_Raid_OnUpdate(self, elapsed)
 			ZPerl_Custom:UpdateUnits()
 		end
 		if (not IsInRaid()) then
-			ResArray = {}
-			ZPerl_Roster = {}
-			buffUpdates = {}
+			ResArray = { }
+			ZPerl_Roster = { }
+			buffUpdates = { }
 			return
 		end
 	end
@@ -972,7 +960,7 @@ function XPerl_Raid_OnUpdate(self, elapsed)
 		someUpdate = true
 	
 
-	for i,frame in pairs(FrameArray) do
+	for i, frame in pairs(FrameArray) do
 		if (frame:IsShown()) then
 			if (frame.PlayerFlash) then
 				XPerl_Raid_CombatFlash(frame, elapsed, false)
@@ -1009,7 +997,7 @@ function XPerl_Raid_OnUpdate(self, elapsed)
 	end
 
 	local i = 1
-	for k,v in pairs(buffUpdates) do
+	for k, v in pairs(buffUpdates) do
 		UpdateBuffs(k)
 		buffUpdates[k] = nil
 		i = i + 1
@@ -1025,7 +1013,6 @@ end
 local function XPerl_Raid_RaidTargetUpdate(self)
 	local icon = self.nameFrame.raidIcon
 	local raidIcon = GetRaidTargetIndex(self.partyid)
-
 
 	if (raidIcon) then
 		if (not icon) then
@@ -1116,7 +1103,7 @@ function XPerl_Raid_UpdateDisplay(self)
 	end
 	XPerl_Raid_RoleUpdate(self, UnitGroupRolesAssigned(self.partyid))
 	XPerl_Raid_UpdatePlayerFlags(self)
-	XPerl_Raid_UpdateHealth(self)		-- <<< -- AFTER MANA -- <<< --
+	XPerl_Raid_UpdateHealth(self)
 	XPerl_Raid_UpdateName(self)
 	XPerl_Raid_UpdateCombat(self)
 	XPerl_Unit_UpdateReadyState(self)
@@ -1178,8 +1165,6 @@ function XPerl_Raid_OnEvent(self, event, unit, ...)
 		else
 			func(self, unit, ...)
 		end
-	else
-	--XPerl_ShowMessage("EXTRA EVENT")
 	end
 end
 
@@ -1188,8 +1173,8 @@ function XPerl_Raid_Events:VARIABLES_LOADED()
 	self:UnregisterEvent("VARIABLES_LOADED")
 
 	if (not IsInRaid()) then
-		ResArray = {}
-		ZPerl_Roster = {}
+		ResArray = { }
+		ZPerl_Roster = { }
 	else
 		local myRoster = ZPerl_Roster[UnitName("player")]
 		if (myRoster) then
@@ -1234,8 +1219,8 @@ function XPerl_Raid_Events:PLAYER_REGEN_ENABLED()
 	end
 	for i = 1, #taintFrames do
 		taintable(taintFrames[i])
-		taintFrames[i] = nil
 	end
+	taintFrames = { }
 	if tainted then
 		XPerl_Raid_ChangeAttributes()
 		XPerl_Raid_Position()
@@ -1371,7 +1356,7 @@ XPerl_Raid_Events.UNIT_MAXPOWER = XPerl_Raid_Events.UNIT_POWER
 -- UNIT_NAME_UPDATE
 function XPerl_Raid_Events:UNIT_NAME_UPDATE()
 	XPerl_Raid_UpdateName(self)
-	XPerl_Raid_UpdateHealth(self)			-- Added 16th May 2007 - Seems they now fire name update to indicate some change in state.
+	XPerl_Raid_UpdateHealth(self) -- Added 16th May 2007 - Seems they now fire name update to indicate some change in state.
 end
 
 -- UNIT_AURA
@@ -1394,7 +1379,7 @@ XPerl_Raid_Events.READY_CHECK_FINISHED = XPerl_Raid_Events.READY_CHECK
 
 -- RAID_TARGET_UPDATE
 function XPerl_Raid_Events:RAID_TARGET_UPDATE()
-	for i,frame in pairs(FrameArray) do
+	for i, frame in pairs(FrameArray) do
 		if (frame.partyid) then
 			XPerl_Raid_RaidTargetUpdate(frame)
 		end
@@ -1418,8 +1403,6 @@ end
 
 -- SetRes
 local function SetResStatus(resserName, resTargetName, ignoreCounter)
-
-	--frame.beingRessed = true
 	local resEnd
 
 	if (resTargetName) then
@@ -1427,7 +1410,7 @@ local function SetResStatus(resserName, resTargetName, ignoreCounter)
 	else
 		resEnd = true
 
-		for i,name in pairs(ResArray) do
+		for i, name in pairs(ResArray) do
 			if (i == resserName) then
 				resTargetName = name
 				break
@@ -1494,10 +1477,16 @@ local QuickFuncs = {
 	--UNAFK	= function(m)	m.afk = nil end,
 	--DND	= function(m)	m.dnd = GetTime() m.afk = nil end,
 	--UNDND	= function(m)	m.dnd = nil end,
-	RESNO	= function(m,n) SetResStatus(n) end,
-	RESSED	= function(m)	m.ressed = 1 end,
-	CANRES	= function(m)	m.ressed = 2 end,
-	NORESSED= function(m)
+	RESNO = function(m, n)
+		SetResStatus(n)
+	end,
+	RESSED = function(m)
+		m.ressed = 1
+	end,
+	CANRES = function(m)
+		m.ressed = 2
+	end,
+	NORESSED = function(m)
 		if (m.ressed) then
 			m.ressed = 3
 		else
@@ -1583,7 +1572,6 @@ local function ProcessCTRAMessage(unitName, msg)
 
 	local func = QuickFuncs[msg]
 	if (func) then
---ChatFrame7:AddMessage("QuickFuncs["..msg.."]")
 		func(myRoster, unitName)
 	else
 		if (strsub(msg, 1, 4) == "RES ") then
@@ -1600,21 +1588,17 @@ local function ProcessCTRAMessage(unitName, msg)
 				myRoster.Soulstone = GetTime() + tonumber(cooldown) * 60
 			end
 			update = nil
-
 		elseif (strsub(msg, 1, 2) == "V ") then
 			myRoster.version = strsub(msg, 3)
 			update = nil
-
 		elseif (msg == "DURC") then
 			if (not CT_RA_VersionNumber) then
 				XPerl_DurabilityCheck(unitName)
 			end
-
 		elseif (msg == "RSTC") then
 			if (not CT_RA_VersionNumber) then
 				XPerl_ResistsCheck(unitName)
 			end
-
 		elseif (strsub(msg, 1, 4) == "ITMC") then
 			if (not CT_RA_VersionNumber) then
 				local itemName = strmatch(msg, "^ITMC (.+)$")
@@ -1681,7 +1665,7 @@ function SetRaidRoster()
 	RaidPositions = new()
 
 	del(RaidGroupCounts)
-	RaidGroupCounts = new(0,0,0,0,0,0,0,0,0,0,0)
+	RaidGroupCounts = new(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 
 	for i = 1, GetNumGroupMembers() do
 		local name, rank, group, level, class, fileName = GetRaidRosterInfo(i)
@@ -1736,8 +1720,7 @@ end
 function XPerl_Raid_Position(self)
 	SetRaidRoster()
 	XPerl_RaidTitles()
-	--Removed the useless InCombatLockdown() shit.
-	--if (conf.party.smallRaid and fullyInitiallized) and not InCombatLockdown()) then
+	-- if (conf.party.smallRaid and fullyInitiallized) and not InCombatLockdown()) then
 	if (conf.party.smallRaid and fullyInitiallized) then
 		XPerl_Raid_HideShowRaid()
 	end
@@ -1867,7 +1850,7 @@ end
 
 -- XPerl_EnableRaidMouse()
 function XPerl_EnableRaidMouse()
-	for i = 1,WoWclassCount do
+	for i = 1, WoWclassCount do
 		local frame = _G["XPerl_Raid_Title"..i]
 		if (XPerlLocked == 0) then
 			frame:EnableMouse(true)
@@ -1963,9 +1946,14 @@ function XPerl_ToggleRaidSort(New)
 end
 
 -- GetCombatRezzerList()
-local normalRezzers = {PRIEST = true, SHAMAN = true, PALADIN = true, MONK = true}
-local function GetCombatRezzerList()
+local normalRezzers = {
+	PRIEST = true,
+	SHAMAN = true,
+	PALADIN = true,
+	MONK = true
+}
 
+local function GetCombatRezzerList()
 	local anyCombat = 0
 	local anyAlive = 0
 	for i = 1, GetNumGroupMembers() do
@@ -2250,6 +2238,8 @@ function XPerl_Raid_ChangeAttributes()
 			groupHeader:SetAttribute("unitsPerColumn", 5)
 			groupHeader:SetAttribute("strictFiltering", nil)
 			groupHeader:SetAttribute("groupFilter", nil)
+			groupHeader:SetAttribute("toggleForVehicle", true)
+			groupHeader:SetAttribute("allowVehicleTarget", true)
 		else
 			groupHeader:SetAttribute("strictFiltering", not rconf.sortByClass)
 			groupHeader:SetAttribute("groupFilter", GroupFilter(i))
@@ -2257,7 +2247,20 @@ function XPerl_Raid_ChangeAttributes()
 			groupHeader:SetAttribute("groupingOrder", nil)
 			groupHeader:SetAttribute("startingIndex", 1)
 			groupHeader:SetAttribute("unitsPerColumn", nil)
+			groupHeader:SetAttribute("toggleForVehicle", true)
+			groupHeader:SetAttribute("allowVehicleTarget", true)
 		end
+
+		-- Fix Secure Header taint in combat
+		local maxColumns = groupHeader:GetAttribute("maxColumns") or 1
+		local unitsPerColumn = groupHeader:GetAttribute("unitsPerColumn") or 5
+		local startingIndex = groupHeader:GetAttribute("startingIndex")
+		local maxUnits = maxColumns * unitsPerColumn
+
+		groupHeader:Show()
+		groupHeader:SetAttribute("startingIndex", - maxUnits + 1)
+		groupHeader:SetAttribute("startingIndex", startingIndex)
+
 		SetMainHeaderAttributes(groupHeader)
 	end
 

@@ -5,7 +5,11 @@
 local XPerl_RaidPets_Events = {}
 local RaidPetFrameArray = {}
 local conf, rconf, raidconf
-XPerl_RequestConfig(function(New) conf = New raidconf = New.raid rconf = New.raidpet end, "$Revision: 923 $")
+XPerl_RequestConfig(function(New)
+	conf = New
+	raidconf = New.raid
+	rconf = New.raidpet
+end, "$Revision: 927 $")
 
 local new, del, copy = XPerl_GetReusableTable, XPerl_FreeTable, XPerl_CopyTable
 
@@ -164,7 +168,10 @@ end
 -- XPerl_RaidPets_RaidTargetUpdate
 local function XPerl_RaidPets_RaidTargetUpdate(self)
 	local icon = self.raidIcon
-	local raidIcon = GetRaidTargetIndex(self.partyid)
+	local raidIcon
+	if self.partyid then
+		raidIcon = GetRaidTargetIndex(self.partyid)
+	end
 
 
 	if (raidIcon) then
@@ -381,10 +388,26 @@ end
 
 -- SetMainHeaderAttributes
 local function SetMainHeaderAttributes(self)
+	local petsPerColumn
+	if conf.raid.mana then
+		petsPerColumn = 7
+	else
+		petsPerColumn = 6
+	end
+
+	-- Fix Secure Header taint in combat
+	local maxColumns = self:GetAttribute("maxColumns") or 1
+	local unitsPerColumn = self:GetAttribute("unitsPerColumn") or petsPerColumn
+	local startingIndex = self:GetAttribute("startingIndex")
+	local maxUnits = maxColumns * unitsPerColumn
+
+	self:Show()
+	self:SetAttribute("startingIndex", - maxUnits + 1)
+	self:SetAttribute("startingIndex", startingIndex)
 	self:Hide()
 
 	self:SetAttribute("filterOnPet", true)
-	self:SetAttribute("unitsPerColumn", 6)			-- Don't grow taller than a standard raid group
+	self:SetAttribute("unitsPerColumn", petsPerColumn) -- Don't grow taller than a standard raid group
 	self:SetAttribute("maxColumns", 7)
 	self:SetAttribute("columnAnchorPoint", "LEFT")
 

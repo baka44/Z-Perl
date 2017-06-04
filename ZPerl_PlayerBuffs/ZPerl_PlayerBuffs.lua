@@ -3,7 +3,10 @@
 -- License: GNU GPL v3, 29 June 2007 (see LICENSE.txt)
 
 local conf, pconf
-XPerl_RequestConfig(function(new) conf = new pconf = new.player end, "$Revision: 923 $")
+XPerl_RequestConfig(function(new)
+	conf = new
+	pconf = new.player
+end, "$Revision: 927 $")
 
 --local playerClass
 
@@ -357,6 +360,8 @@ function XPerl_PlayerBuffs_Update(self)
 				self.cooldown:Hide()
 				self.endTime = nil
 			end
+			-- TODO: Variable this
+			self.cooldown:SetDrawEdge(false)
 			if not conf.buffs.omnicc then
 				-- OmniCC to NOT show cooldown
 				self.cooldown.noCooldownCount = true

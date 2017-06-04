@@ -1,3 +1,11 @@
+**r927**
+* Say goodbye to Secure Header taints.
+* Event fixes for target and focus frames.
+* Event tweaks for party members.
+* Raid pet frame fixes.
+* Buffs and debuffs SetDrawEdge is disabled.
+* Loads of other smaller tweaks.
+
 **r926**
 * Wake up the repo server.
 

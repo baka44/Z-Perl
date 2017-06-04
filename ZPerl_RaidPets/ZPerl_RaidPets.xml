@@ -14,7 +14,9 @@
 			</OnLeave>
 		</Scripts>
 
-		<Size><AbsDimension x="80" y="30"/></Size>
+		<Size>
+			<AbsDimension x="80" y="30.5"/>
+		</Size>
 
 		<Attributes>
 			<Attribute name="*type1" type="string" value="target"/>

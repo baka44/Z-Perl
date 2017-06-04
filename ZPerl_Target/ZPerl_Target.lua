@@ -22,7 +22,7 @@ XPerl_RequestConfig(function(new)
 	if (XPerl_PetTarget) then
 		XPerl_PetTarget.conf = conf.pettarget
 	end
-end, "$Revision: 921 $")
+end, "$Revision: 927 $")
 
 local percD = "%d"..PERCENT_SYMBOL
 local format = format
@@ -60,7 +60,7 @@ function XPerl_Target_OnLoad(self, partyid)
 	}
 	for i, event in pairs(events) do
 		if string.find(event, "UNIT_") then
-			self:RegisterUnitEvent(event, "target", "focus")
+			self:RegisterUnitEvent(event, partyid)
 		else
 			self:RegisterEvent(event)
 		end

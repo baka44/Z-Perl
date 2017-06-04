@@ -6,8 +6,8 @@ local conf
 local percD	= "%d"..PERCENT_SYMBOL
 local perc1F = "%.1f"..PERCENT_SYMBOL
 
-XPerl_RequestConfig(function(New) conf = New end, "$Revision: 926 $")
-XPerl_SetModuleRevision("$Revision: 926 $")
+XPerl_RequestConfig(function(New) conf = New end, "$Revision: 927 $")
+XPerl_SetModuleRevision("$Revision: 927 $")
 
 -- Upvalus
 local _G = _G
@@ -1903,7 +1903,7 @@ end
 function XPerl_RestoreAllPositions()
 	local table = XPerl_GetSavePositionTable()
 	if (table) then
-		for k,v in pairs(table) do
+		for k, v in pairs(table) do
 			if (k == "XPerl_Frame" or k == "XPerl_RaidMonitor_Frame" or k == "XPerl_Check" or k == "XPerl_AdminFrame" or k == "XPerl_Assists_Frame") then
 				-- Fix for a wrong name with versions 2.3.2 and 2.3.2a
 				-- It was using XPerl_Frame instead of XPerl_MTList_Anchor
@@ -2406,8 +2406,8 @@ function XPerl_SecureUnitButton_OnLoad(self, unit, menufunc, m1, m2, toggledisab
 
 	self.menu = menufunc
 	self.dropdownMenu = m1
-	self:SetAttribute("_menu", m2)
-	self:SetScript("PostClick", unitmenuOnPostClick)
+	--self:SetAttribute("_menu", m2)
+	--self:SetScript("PostClick", unitmenuOnPostClick)
 
 	XPerl_RegisterClickCastFrame(self)
 end
@@ -2585,6 +2585,8 @@ function XPerl_GetBuffButton(self, buffnum, debuff, createIfAbsent, newID)
 			button:SetPoint("TOPLEFT", buffList[buffnum - 1], "TOPRIGHT", 1 + debuff, 0)
 		end
 	end
+	-- TODO: Variable this
+	button.cooldown:SetDrawEdge(false)
 	if not conf.buffs.omnicc then
 		-- OmniCC to NOT show cooldown
 		button.cooldown.noCooldownCount = true

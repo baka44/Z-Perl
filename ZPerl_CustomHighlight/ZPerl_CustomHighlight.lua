@@ -7,7 +7,9 @@ if (not XPerl_RequestConfig) then
 end
 
 local conf
-XPerl_RequestConfig(function(new) conf = new.custom end, "$Revision: 911 $")
+XPerl_RequestConfig(function(new) 
+	conf = new.custom 
+end, "$Revision: 927 $")
 
 local ch = CreateFrame("Frame", "ZPerl_Custom")
 ch.active = {}

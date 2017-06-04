@@ -6,7 +6,14 @@ local XPerl_Player_Events = {}
 local isOutOfControl = nil
 local playerClass, playerName
 local conf, pconf
-XPerl_RequestConfig(function(new) conf = new pconf = conf.player if (XPerl_Player) then XPerl_Player.conf = conf.player end end, "$Revision: 912 $")
+XPerl_RequestConfig(function(new)
+	conf = new
+	pconf = conf.player
+	if (XPerl_Player) then
+		XPerl_Player.conf = conf.player
+	end
+end, "$Revision: 927 $")
+
 local perc1F = "%.1f"..PERCENT_SYMBOL
 local percD = "%.0f"..PERCENT_SYMBOL
 
@@ -74,18 +81,16 @@ function XPerl_Player_OnLoad(self)
 	self.time = 0
 
 	
-	self.Power = 0;
-	self.nameFrame.pvp.time = 0;
+	self.Power = 0
+	self.nameFrame.pvp.time = 0
 	
-	self.nameFrame.pvp:SetScript("OnUpdate",
-		function(self, elapsed)
-		
-			self.time = self.time + elapsed
-	if (self.time >= 0.2) then
-		self.time = 0
+	self.nameFrame.pvp:SetScript("OnUpdate", function(self, elapsed)
+		self.time = self.time + elapsed
+		if (self.time >= 0.2) then
+			self.time = 0
 			if (IsPVPTimerRunning()) then
 				local timeLeft = GetPVPTimer()
-				if (timeLeft > 0 and timeLeft < 300000) then		-- 5 * 60 * 1000
+				if (timeLeft > 0 and timeLeft < 300000) then -- 5 * 60 * 1000
 					timeLeft = floor(timeLeft / 1000)
 					self.timer:Show()
 					self.timer:SetFormattedText("%d:%02d", timeLeft / 60, timeLeft % 60)
@@ -93,38 +98,27 @@ function XPerl_Player_OnLoad(self)
 				end
 			end
 			self.timer:Hide()
-			end
-		end)
+		end
+	end)
 
 	XPerl_Player_InitDK(self)
 	XPerl_Player_SetupDK(self)
 	XPerl_Player_InitMoonkin(self)
 	XPerl_Player_InitWarlock(self)
-	
 
 	XPerl_RegisterHighlight(self.highlight, 3)
-	
-	
-	
-	
-	
+
 	local perlframes = {self.nameFrame, self.statsFrame, self.levelFrame, self.portraitFrame, self.groupFrame}
 	self.FlashFrames = {self.portraitFrame, self.nameFrame,self.levelFrame, self.statsFrame}
 		--Only Add deathknight to the flash frame list
 	--This resolves an issue with the backdrop being added constantly to the other special frames.
 	if (select(2, UnitClass("player")) == "DEATHKNIGHT") then
-		table.insert(self.FlashFrames, self.runes);
-		table.insert(perlframes, self.runes);
+		table.insert(self.FlashFrames, self.runes)
+		table.insert(perlframes, self.runes)
 	end
-	
-	
+
 	XPerl_RegisterPerlFrames(self, perlframes)--, self.runes
-
-	
-
-
-				
-				
+		
 	XPerl_RegisterOptionChanger(XPerl_Player_Set_Bits, self)
 	XPerl_Highlight:Register(XPerl_Player_HighlightCallback, self)
 	--self.IgnoreHighlightStates = {AGGRO = true}
@@ -156,9 +150,9 @@ local function UpdateAssignedRoles(self)
 		-- According to http://forums.worldofwarcraft.com/thread.html?topicId=26560499864
 		-- this is the new way to check for roles
 		role = UnitGroupRolesAssigned(unit)
-		isTank = false;
-		isHealer = false;
-		isDamage = false;
+		isTank = false
+		isHealer = false
+		isDamage = false
 		if role == "TANK" then
 			isTank = true
 		elseif role == "HEALER" then
@@ -224,9 +218,9 @@ function XPerl_Player_UpdateLeader(self)
 	
 		if (method == "master") then
 			if (rindex ~= nil) then
-				ml = UnitIsUnit("raid"..rindex, "player");
+				ml = UnitIsUnit("raid"..rindex, "player")
 			elseif (pindex and (pindex == 0)) then
-				ml = true;
+				ml = true
 			end
 		end 
 	end
@@ -533,9 +527,9 @@ end
 -- XPerl_Player_UpdateMana
 local function XPerl_Player_UpdateMana(self)
 	local mb = self.statsFrame.manaBar
-	local pType = XPerl_GetDisplayedPowerType(self.partyid);
-	local playermana = UnitPower(self.partyid, pType);
-	local playermanamax = UnitPowerMax(self.partyid, pType);
+	local pType = XPerl_GetDisplayedPowerType(self.partyid)
+	local playermana = UnitPower(self.partyid, pType)
+	local playermanamax = UnitPowerMax(self.partyid, pType)
 	
 	mb:SetMinMaxValues(0, playermanamax)
 	mb:SetValue(playermana)
@@ -595,7 +589,7 @@ function XPerl_Player_UpdateHealth(self)
 		--else
 			greyMsg = XPERL_LOC_DEAD
 		--end
-       	elseif (UnitIsGhost(partyid)) then
+		elseif (UnitIsGhost(partyid)) then
 		greyMsg = XPERL_LOC_GHOST
 
 	elseif (UnitIsAFK("player") and conf.showAFK) then
@@ -739,7 +733,7 @@ end
 -------------------
 function XPerl_Player_OnEvent(self, event, unitID, ...)
 	if (strsub(event, 1, 5) == "UNIT_") then
-	 	if (unitID == "player" or unitID == "vehicle") then
+		if (unitID == "player" or unitID == "vehicle") then
 			XPerl_Player_Events[event](self, ...)
 		end
 	else
@@ -756,7 +750,7 @@ end
 function XPerl_Player_Events:PLAYER_ENTERING_WORLD()
 	self.updateAFK = true
 	
-	--print("PLAYER_ENTERING_WORLD");
+	--print("PLAYER_ENTERING_WORLD")
 	
 	if (UnitHasVehicleUI("player")) then
 		self.partyid = "vehicle"
@@ -790,7 +784,7 @@ function XPerl_Player_Events:PLAYER_ENTERING_WORLD()
 	if self.runes and self.runes.list then
 		for i = 1,6 do
 			if self.runes.list[rune] then 
-				RuneButton_Update(self.runes.list[rune], rune, true);
+				RuneButton_Update(self.runes.list[rune], rune, true)
 			end
 		end
 	end
@@ -876,9 +870,7 @@ function XPerl_Player_Events:UNIT_HEALTH_FREQUENT()
 end
 
 XPerl_Player_Events.UNIT_MAXHEALTH = XPerl_Player_Events.UNIT_HEALTH_FREQUENT
-XPerl_Player_Events.PLAYER_DEAD    = XPerl_Player_Events.UNIT_HEALTH_FREQUENT
-
-
+XPerl_Player_Events.PLAYER_DEAD = XPerl_Player_Events.UNIT_HEALTH_FREQUENT
 
 -- UNIT_POWER
 function XPerl_Player_Events:UNIT_POWER_FREQUENT()
@@ -965,7 +957,7 @@ function XPerl_Player_Events:PLAYER_TALENT_UPDATE()
 		if (self.runes) then
 			self.runes:Hide()
 		end
-		XPerl_Player_InitPriest(self);
+		XPerl_Player_InitPriest(self)
 		if (XPerl_Player_Buffs_Position) then
 			XPerl_Player_Buffs_Position(self)
 		end
@@ -1017,7 +1009,7 @@ function XPerl_Player_Events:UNIT_AURA()
 		if XPerl_Target and XPerl_Target:IsVisible() then
 			XPerl_Target_UpdateCombo(XPerl_Target)
 		end
-		if XPerl_Focus  and XPerl_Focus:IsVisible() then
+		if XPerl_Focus and XPerl_Focus:IsVisible() then
 			XPerl_Target_UpdateCombo(XPerl_Focus)
 		end
 	end
@@ -1075,31 +1067,31 @@ end
 -- RUNE_POWER_UPDATE
 function XPerl_Player_Events:RUNE_POWER_UPDATE(event, runeIndex, isEnergize)
 	if runeIndex and runeIndex >= 1 and runeIndex <= 6 then
-		local runeButton = _G['XPerl_RuneButtonIndividual' .. runeIndex];
+		local runeButton = _G['XPerl_RuneButtonIndividual' .. runeIndex]
 		if (runeButton) then
-			local cooldown = _G['XPerl_RuneButtonIndividual' .. runeIndex .. 'Cooldown'];
+			local cooldown = _G['XPerl_RuneButtonIndividual' .. runeIndex .. 'Cooldown']
 			cooldown:SetSwipeTexture("Interface/CHARACTERFRAME/TempPortraitAlphaMaskSmall")
-    		cooldown:SetSwipeColor(0, 0, 0, 0.7)
-    		cooldown:SetHideCountdownNumbers(true)
-			local start, duration, isReady = GetRuneCooldown(runeIndex);
+			cooldown:SetSwipeColor(0, 0, 0, 0.7)
+			cooldown:SetHideCountdownNumbers(true)
+			local start, duration, isReady = GetRuneCooldown(runeIndex)
 			if not isReady then
 				if start and cooldown then
-					CooldownFrame_SetTimer(cooldown, start, duration, 1);
+					CooldownFrame_SetTimer(cooldown, start, duration, 1)
 				end
-				runeButton.energize:Stop();
+				runeButton.energize:Stop()
 			else
 				if cooldown then
-					cooldown:Hide();
+					cooldown:Hide()
 				end
-				runeButton.shine:SetVertexColor(1, 1, 1);
-				RuneButton_ShineFadeIn(runeButton.shine);
+				runeButton.shine:SetVertexColor(1, 1, 1)
+				RuneButton_ShineFadeIn(runeButton.shine)
 			end
 			if isEnergize then
-				runeButton.energize:Play();
+				runeButton.energize:Play()
 			end
 		end
 	else
-		assert(false, 'Bad rune index');
+		assert(false, 'Bad rune index')
 	end
 end
 
@@ -1108,7 +1100,7 @@ function XPerl_Player_Events:RUNE_TYPE_UPDATE(self, runeIndex)
 	
 	if runeIndex and runeIndex >= 1 and runeIndex <= 6 then
 		
-		RuneButton_Update(_G["XPerl_RuneButtonIndividual"..runeIndex], runeIndex);
+		RuneButton_Update(_G["XPerl_RuneButtonIndividual"..runeIndex], runeIndex)
 	end
 end
 
@@ -1300,9 +1292,9 @@ function XPerl_Player_Set_Bits(self)
 	
 	if (self.runes) then
 		if ( pconf.showRunes) then
-			self.runes:Show();
+			self.runes:Show()
 		else
-			self.runes:Hide();
+			self.runes:Hide()
 		end
 	end
 	
@@ -1385,7 +1377,7 @@ local MAX_HOLY_POWER = _G.MAX_HOLY_POWER
 local PALADINPOWERBAR_SHOW_LEVEL = _G.PALADINPOWERBAR_SHOW_LEVEL
 local SPELL_POWER_HOLY_POWER = _G.SPELL_POWER_HOLY_POWER
 
-local specialframe;
+local specialframe
 
 local function MakeMoveable(what)
 		--self.runes:SetMovable(true)
@@ -1417,9 +1409,8 @@ end
 
 -- XPerl_Player_InitWarlock
 function XPerl_Player_InitWarlock(self)
-	if ( select(2,UnitClass("player")) == "WARLOCK" )  then
+	if ( select(2,UnitClass("player")) == "WARLOCK" ) then
 
-	
 		if (not WarlockPowerFrame or WarlockPowerFrame:GetParent() ~= PlayerFrame or not WarlockPowerFrame:IsShown() or not pconf.showRunes ) then
 			-- Only hijack runes if not already done so by another mod
 			return
@@ -1432,10 +1423,7 @@ function XPerl_Player_InitWarlock(self)
 		self.runes.unit = "player"
 		WarlockPowerFrame:SetParent(self.runes)
 		--MakeMoveable(self)
-
-		
 	end
-	
 	--XPerl_Player_InitWarlock = nil
 end
 
@@ -1449,7 +1437,6 @@ function XPerl_Player_InitPaladin(self)
 			return
 		end
 
-		
 		self.runes = CreateFrame("Frame", "XPerl_Runes", self)
 		self.runes:SetPoint("TOPLEFT", self.portraitFrame, "BOTTOMLEFT", 0, 2)
 		self.runes:SetPoint("BOTTOMRIGHT", self.statsFrame, "BOTTOMRIGHT", 0, -30)
@@ -1457,9 +1444,9 @@ function XPerl_Player_InitPaladin(self)
 		self.runes.unit = "player"
 		PaladinPowerBar:SetParent(self.runes)--XPerl_Player)
 		--MakeMoveable(self)
-		
 	end
 end
+
 --XPerl_Player_InitPriest
 function XPerl_Player_InitPriest(self)
 	if ( select(2,UnitClass("player")) == "PRIEST") then
@@ -1512,7 +1499,7 @@ function XPerl_Player_InitMoonkin(self)
 		self.runes:SetPoint("BOTTOMRIGHT", self.statsFrame, "BOTTOMRIGHT", 0, -30)
 		EclipseBarFrame:SetPoint("TOPLEFT", self.runes, "CENTER", -60,18)
 		self.runes.unit = "player"
-		--specialframe = EclipseBarFrame;
+		--specialframe = EclipseBarFrame
 		EclipseBarFrame:SetParent(self.runes)
 		
 	end
@@ -1588,50 +1575,49 @@ end
 
 -- XPerl_Player_SetupDK
 function XPerl_Player_SetupDK(self)
-if (select(2, UnitClass("player")) == "DEATHKNIGHT") then
-	if (self.runes) then
-		if (not pconf or pconf.showRunes) then
-			self.runes:Show()
+	if (select(2, UnitClass("player")) == "DEATHKNIGHT") then
+		if (self.runes) then
+			if (not pconf or pconf.showRunes) then
+				self.runes:Show()
 
-			self.runes:ClearAllPoints()
+				self.runes:ClearAllPoints()
 
-			if (not pconf or pconf.dockRunes) then
-				self.runes:SetPoint("TOPLEFT", self.portraitFrame, "BOTTOMLEFT", 0, 2)
-				self.runes:SetPoint("BOTTOMRIGHT", self.statsFrame, "BOTTOMRIGHT", 0, -30)
-			else
-				self.runes:SetPoint("TOPLEFT", self.portraitFrame, "BOTTOMLEFT", 0, 2)
-				self.runes:SetWidth(214)
-				self.runes:SetHeight(32)
-				XPerl_RestorePosition(self.runes)
-			end
-
-			for i = 1,6 do
-				local rune = self.runes.list[i];
-				rune:ClearAllPoints()
-				rune:SetWidth(22)
-				rune:SetHeight(22)
-
-				if (self.runes:GetWidth() >= 200) then	-- pconf.portrait) then
-					if (i > 1) then
-						rune:SetPoint("LEFT", prev, "RIGHT", 4 + ((i % 2) * 16), 0)
-					else
-						rune:SetPoint("LEFT", 10, 0)
-					end
+				if (not pconf or pconf.dockRunes) then
+					self.runes:SetPoint("TOPLEFT", self.portraitFrame, "BOTTOMLEFT", 0, 2)
+					self.runes:SetPoint("BOTTOMRIGHT", self.statsFrame, "BOTTOMRIGHT", 0, -30)
 				else
-					if (i > 1) then
-						rune:SetPoint("LEFT", prev, "RIGHT", 1 + ((i % 2) * 5), 0)
-					else
-						rune:SetPoint("LEFT", 1, 0)
-					end
+					self.runes:SetPoint("TOPLEFT", self.portraitFrame, "BOTTOMLEFT", 0, 2)
+					self.runes:SetWidth(214)
+					self.runes:SetHeight(32)
+					XPerl_RestorePosition(self.runes)
 				end
-				RuneButton_Update(rune, rune:GetID(), true);
-				prev = rune
-			end
 
-		else
-			self.runes:Hide()
+				for i = 1,6 do
+					local rune = self.runes.list[i]
+					rune:ClearAllPoints()
+					rune:SetWidth(22)
+					rune:SetHeight(22)
+
+					if (self.runes:GetWidth() >= 200) then	-- pconf.portrait) then
+						if (i > 1) then
+							rune:SetPoint("LEFT", prev, "RIGHT", 4 + ((i % 2) * 16), 0)
+						else
+							rune:SetPoint("LEFT", 10, 0)
+						end
+					else
+						if (i > 1) then
+							rune:SetPoint("LEFT", prev, "RIGHT", 1 + ((i % 2) * 5), 0)
+						else
+							rune:SetPoint("LEFT", 1, 0)
+						end
+					end
+					RuneButton_Update(rune, rune:GetID(), true)
+					prev = rune
+				end
+
+			else
+				self.runes:Hide()
+			end
 		end
 	end
 end
-end
-
