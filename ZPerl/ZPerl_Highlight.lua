@@ -6,7 +6,7 @@ local playerClass, playerName, playerGUID
 local conf
 XPerl_RequestConfig(function(new)
 	conf = new
-end, "$Revision: 933 $")
+end, "$Revision: 934 $")
 
 local GetNumSubgroupMembers = GetNumSubgroupMembers
 local GetNumGroupMembers = GetNumGroupMembers
@@ -869,7 +869,6 @@ function xpHigh:TriggerMendingAnimation(sourceGUID, targetGUID)
 		if (not targetFrame and XPerl_Raid_Pet_GetUnitFrameByGUID) then
 			targetFrame = XPerl_Raid_Pet_GetUnitFrameByGUID(targetGUID)
 		end
-
 	elseif (GetNumSubgroupMembers() > 0 and XPerl_Party_GetUnitFrameByUnit) then
 		sourceFrame = sourceGUID == UnitGUID("player") and XPerl_Player or XPerl_Party_GetUnitFrameByGUID(sourceGUID)
 		targetFrame = targetGUID == UnitGUID("player") and XPerl_Player or XPerl_Party_GetUnitFrameByGUID(targetGUID)

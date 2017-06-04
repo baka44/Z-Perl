@@ -22,7 +22,7 @@ XPerl_RequestConfig(function(new)
 	if (XPerl_PetTarget) then
 		XPerl_PetTarget.conf = conf.pettarget
 	end
-end, "$Revision: 927 $")
+end, "$Revision: 934 $")
 
 local percD = "%d"..PERCENT_SYMBOL
 local format = format
@@ -95,6 +95,7 @@ function XPerl_Target_OnLoad(self, partyid)
 	self:RegisterEvent("PLAYER_REGEN_ENABLED")
 	self:RegisterEvent("PLAYER_REGEN_DISABLED")
 
+	self.nameFrame.cpMeter:SetFrameLevel(2)
 	self.nameFrame.cpMeter:SetMinMaxValues(0, 5)
 	self.nameFrame.cpMeter:GetStatusBarTexture():SetHorizTile(false)
 	self.nameFrame.cpMeter:GetStatusBarTexture():SetVertTile(false)
@@ -238,7 +239,7 @@ function XPerl_Target_UpdateCombo(self)
 	local combopoints = GetComboPoints(UnitHasVehicleUI("player") and "vehicle" or "player", self.partyid) + count
 	local r, g, b = GetComboColour(combopoints)
 	if (tconf.combo.enable) then
-		self.cpFrame:Hide()
+		--self.cpFrame:Hide()
 		if combopoints > 5 then
 			self.nameFrame.cpMeter:SetValue(count)
 		else
@@ -250,8 +251,13 @@ function XPerl_Target_UpdateCombo(self)
 		else
 			self.nameFrame.cpMeter:Hide()
 		end
-	elseif (not tconf.combo.blizzard) then
+	else
 		self.nameFrame.cpMeter:Hide()
+	end
+	if (tconf.combo.blizzard) then
+		self.cpFrame:Hide()
+	else
+		--self.nameFrame.cpMeter:Hide()
 		self.cpFrame:Show()
 		self.cpFrame.text:SetText(combopoints)
 		if (r) then
@@ -1541,6 +1547,52 @@ function XPerl_Target_Set_Bits(self)
 	end
 end
 
+function ComboFrame_Update()
+	local comboPoints = GetComboPoints(UnitHasVehicleUI("player") and "vehicle" or "player")
+	local comboPoint, comboPointHighlight, comboPointShine
+	if (comboPoints > 0) then
+		if (not ComboFrame:IsShown()) then
+			ComboFrame:Show()
+			UIFrameFadeIn(ComboFrame, COMBOFRAME_FADE_IN)
+		end
+
+		local fadeInfo = { }
+		for i = 1, MAX_COMBO_POINTS do
+			comboPointHighlight = _G["ComboPoint"..i.."Highlight"]
+			comboPointShine = _G["ComboPoint"..i.."Shine"]
+			if (i <= comboPoints) then
+				if (i > COMBO_FRAME_LAST_NUM_POINTS) then
+					-- Fade in the highlight and set a function that triggers when it is done fading
+					fadeInfo.mode = "IN"
+					fadeInfo.timeToFade = COMBOFRAME_HIGHLIGHT_FADE_IN
+					fadeInfo.finishedFunc = ComboPointShineFadeIn
+					fadeInfo.finishedArg1 = comboPointShine
+					UIFrameFade(comboPointHighlight, fadeInfo)
+				end
+			else
+				comboPointHighlight:SetAlpha(0)
+				comboPointShine:SetAlpha(0)
+			end
+		end
+	else
+		ComboPoint1Highlight:SetAlpha(0)
+		ComboPoint1Shine:SetAlpha(0)
+		ComboFrame:Hide()
+	end
+	COMBO_FRAME_LAST_NUM_POINTS = comboPoints
+end
+
+function XPerl_Target_ComboFrame_OnEvent(self, event, ...)
+	if (event == "PLAYER_TARGET_CHANGED") then
+		ComboFrame_Update()
+	elseif (event == "UNIT_COMBO_POINTS") then
+		local unit = ...
+		if (unit == "player" or unit == "vehicle") then
+			ComboFrame_Update()
+		end
+	end
+end
+
 -- Using the Blizzard Combo Point frame, but we move the buttons around a little
 function XPerl_Target_Set_BlizzCPFrame(self)
 	ComboFrame:ClearAllPoints()
@@ -1562,7 +1614,6 @@ function XPerl_Target_Set_BlizzCPFrame(self)
 			ComboPoint3:SetPoint("LEFT", ComboPoint2, "RIGHT", 0, 1)
 			ComboPoint4:SetPoint("LEFT", ComboPoint3, "RIGHT", 0, -1)
 			ComboPoint5:SetPoint("LEFT", ComboPoint4, "RIGHT", 0, -4)
-
 		elseif (tconf.combo.pos == "bottom") then
 			ComboFrame:SetPoint("BOTTOMLEFT", self.portraitFrame, "BOTTOMLEFT", -1, -4)
 			ComboPoint1:SetPoint("BOTTOMLEFT", 0, 0)
@@ -1570,7 +1621,6 @@ function XPerl_Target_Set_BlizzCPFrame(self)
 			ComboPoint3:SetPoint("LEFT", ComboPoint2, "RIGHT", 0, -1)
 			ComboPoint4:SetPoint("LEFT", ComboPoint3, "RIGHT", 0, 1)
 			ComboPoint5:SetPoint("LEFT", ComboPoint4, "RIGHT", 0, -1)
-
 		elseif (tconf.combo.pos == "left") then
 			ComboFrame:SetPoint("BOTTOMLEFT", self.portraitFrame, "BOTTOMLEFT", -1, 0)
 			ComboPoint1:SetPoint("BOTTOMLEFT", 0, 0)
@@ -1578,7 +1628,6 @@ function XPerl_Target_Set_BlizzCPFrame(self)
 			ComboPoint3:SetPoint("BOTTOM", ComboPoint2, "TOP", -1, 0)
 			ComboPoint4:SetPoint("BOTTOM", ComboPoint3, "TOP", 1, 0)
 			ComboPoint5:SetPoint("BOTTOM", ComboPoint4, "TOP", 3, -5)
-
 		elseif (tconf.combo.pos == "right") then
 			ComboFrame:SetPoint("BOTTOMRIGHT", self.portraitFrame, "BOTTOMRIGHT", 2, 0)
 			ComboPoint1:SetPoint("BOTTOMRIGHT", 0, 0)
@@ -1586,58 +1635,14 @@ function XPerl_Target_Set_BlizzCPFrame(self)
 			ComboPoint3:SetPoint("BOTTOM", ComboPoint2, "TOP", 1, 0)
 			ComboPoint4:SetPoint("BOTTOM", ComboPoint3, "TOP", -1, 0)
 			ComboPoint5:SetPoint("BOTTOM", ComboPoint4, "TOP", 0, -5)
-
-		end
-
-		function ComboFrame_OnEvent(self, event, ...)
-			if (event == "PLAYER_TARGET_CHANGED") then
-				ComboFrame_Update()
-			elseif (event == "UNIT_COMBO_POINTS") then
-				local unit = ...
-				if (unit == "player" or unit == "vehicle") then
-					ComboFrame_Update()
-				end
-			end
 		end
 
 		ComboFrame:RegisterEvent("PLAYER_TARGET_CHANGED")
 		ComboFrame:RegisterEvent("UNIT_COMBO_POINTS")
-		ComboFrame:SetScript("OnEvent", ComboFrame_OnEvent)
+		ComboFrame:SetScript("OnEvent", XPerl_Target_ComboFrame_OnEvent)
 
-		function ComboFrame_Update()
-			local comboPoints = GetComboPoints(UnitHasVehicleUI("player") and "vehicle" or "player")
-			local comboPoint, comboPointHighlight, comboPointShine
-			if ( comboPoints > 0 ) then
-				if ( not ComboFrame:IsShown() ) then
-					ComboFrame:Show()
-					UIFrameFadeIn(ComboFrame, COMBOFRAME_FADE_IN)
-				end
-
-				local fadeInfo = {}
-				for i=1, MAX_COMBO_POINTS do
-					comboPointHighlight = _G["ComboPoint"..i.."Highlight"]
-					comboPointShine = _G["ComboPoint"..i.."Shine"]
-					if ( i <= comboPoints ) then
-						if ( i > COMBO_FRAME_LAST_NUM_POINTS ) then
-							-- Fade in the highlight and set a function that triggers when it is done fading
-							fadeInfo.mode = "IN"
-							fadeInfo.timeToFade = COMBOFRAME_HIGHLIGHT_FADE_IN
-							fadeInfo.finishedFunc = ComboPointShineFadeIn
-							fadeInfo.finishedArg1 = comboPointShine
-							UIFrameFade(comboPointHighlight, fadeInfo)
-						end
-					else
-						comboPointHighlight:SetAlpha(0)
-						comboPointShine:SetAlpha(0)
-					end
-				end
-			else
-				ComboPoint1Highlight:SetAlpha(0)
-				ComboPoint1Shine:SetAlpha(0)
-				ComboFrame:Hide()
-			end
-			COMBO_FRAME_LAST_NUM_POINTS = comboPoints
-		end
+		ComboFrame:Show()
+		ComboFrame_Update()
 	else
 		ComboFrame:Hide()
 		ComboFrame:UnregisterEvent("PLAYER_TARGET_CHANGED")

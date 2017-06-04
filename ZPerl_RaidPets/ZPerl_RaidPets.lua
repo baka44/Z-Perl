@@ -9,7 +9,7 @@ XPerl_RequestConfig(function(New)
 	conf = New
 	raidconf = New.raid
 	rconf = New.raidpet
-end, "$Revision: 929 $")
+end, "$Revision: 934 $")
 
 local new, del, copy = XPerl_GetReusableTable, XPerl_FreeTable, XPerl_CopyTable
 
@@ -77,7 +77,7 @@ end
 
 -- XPerl_Raid_Pet_GetUnitFrameByUnit
 function XPerl_Raid_Pet_GetUnitFrameByUnit(unitid)
-	for k,v in pairs(RaidPetFrameArray) do
+	for k, v in pairs(RaidPetFrameArray) do
 		if (v.partyid and UnitIsUnit(v.partyid, unitid)) then
 			return v
 		end

@@ -22,7 +22,7 @@ local conf, rconf
 XPerl_RequestConfig(function(newConf)
 	conf = newConf
 	rconf = conf.raid
-end, "$Revision: 933 $")
+end, "$Revision: 934 $")
 
 if type(RegisterAddonMessagePrefix) == "function" then
 	RegisterAddonMessagePrefix("CTRA")
@@ -1298,6 +1298,7 @@ do
 		end
 	end
 
+	-- PLAYER_LOGIN
 	function XPerl_Raid_Events:PLAYER_LOGIN()
 		BuildGuidMap()
 	end
