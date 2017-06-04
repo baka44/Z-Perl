@@ -13,7 +13,7 @@ XPerl_RequestConfig(function(new)
 	for k,v in pairs(PartyFrames) do
 		v.conf = pconf
 	end
-end, "$Revision: 923 $")
+end, "$Revision: 925 $")
 
 local percD = "%d"..PERCENT_SYMBOL
 
@@ -127,7 +127,7 @@ end
 -- ZPerl_Party_OnLoad
 function ZPerl_Party_OnLoad(self)
 	XPerl_SetChildMembers(self)
-	self.targetFrame.statsFrame = self.targetFrame.healthBar	-- So the healthbar fades as part of pseudo statsFrame
+	self.targetFrame.statsFrame = self.targetFrame.healthBar -- So the healthbar fades as part of pseudo statsFrame
 
 	partyHeader = ZPerl_Party_SecureHeader
 	partyAnchor = XPerl_Party_Anchor

@@ -1,3 +1,9 @@
+**r926**
+* Wake up the repo server.
+
+**r925**
+* Fixed an abusive frame creation with the Voice module.
+
 **r924**
 * Wake up the repo server.
 

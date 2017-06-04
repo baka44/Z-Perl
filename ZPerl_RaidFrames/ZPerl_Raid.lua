@@ -51,7 +51,7 @@ local XPerl_ColourHealthBar = XPerl_ColourHealthBar
 -- TODO - Watch for:	 ERR_FRIEND_OFFLINE_S = "%s has gone offline."
 
 local conf, rconf
-XPerl_RequestConfig(function(newConf) conf = newConf rconf = conf.raid end, "$Revision: 923 $")
+XPerl_RequestConfig(function(newConf) conf = newConf rconf = conf.raid end, "$Revision: 925 $")
 
 XPERL_RAIDGRP_PREFIX = "XPerl_Raid_Grp"
 
@@ -257,8 +257,6 @@ local function XPerl_Raid_UpdateName(self)
 			return
 		end
 	end
-
-
 
 	local name = UnitName(partyid)
 	self.lastName, self.lastID = name, partyid -- These stored, so we can at least make a small effort in reducing workload on attribute changes.
@@ -751,7 +749,7 @@ local function UpdateBuffs(self)
 			end
 		end
 
-		for buffnum=1,maxBuff do
+		for buffnum = 1,maxBuff do
 			local name, rank, buff
 			if (show == "b") then
 				name, rank, buff = XPerl_UnitBuff(partyid, buffnum, cureCast, true)
@@ -1169,7 +1167,7 @@ end
 -------------------
 
 -- XPerl_Raid_OnEvent
-function XPerl_Raid_OnEvent(self, event,unit, ...)
+function XPerl_Raid_OnEvent(self, event, unit, ...)
 	local func = XPerl_Raid_Events[event]
 	if (func) then
 		if (strfind(event, "^UNIT_")) then
@@ -2144,7 +2142,6 @@ end
 
 -- SetMainHeaderAttributes
 local function SetMainHeaderAttributes(self)
-
 	self:Hide()
 
 	if (rconf.sortAlpha) then

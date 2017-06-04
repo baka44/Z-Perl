@@ -47,7 +47,7 @@
 	<Button name="XPerl_Raid_FrameTemplate" frameStrata="LOW" virtual="true" hidden="true" inherits="SecureUnitButtonTemplate">
 		<Size>
 			<!-- The size of this frame determines what can be clicked for the menu and moving, hence it is the same size as the name frame. -->
-			<AbsDimension x="80" y="40"/>
+			<AbsDimension x="80" y="43"/>
 		</Size>
 
 		<Scripts>
@@ -88,7 +88,6 @@
 				<Anchors>
 					<Anchor point="TOPLEFT"/>
 				</Anchors>
-				<!--Backdrop bgFile="Interface\AddOns\ZPerl\Images\XPerl_FrameBack" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true"-->
 				<Backdrop bgFile="Interface\AddOns\ZPerl\Images\XPerl_FrameBack" edgeFile="Interface\Addons\ZPerl\Images\XPerl_ThinEdge" tile="true">
 					<EdgeSize>
 						<AbsValue val="10"/>

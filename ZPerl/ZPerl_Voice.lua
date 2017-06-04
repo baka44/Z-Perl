@@ -6,7 +6,7 @@ CreateFrame("Frame", "XPerl_Voice")
 local voice = XPerl_Voice
 
 local conf
-XPerl_RequestConfig(function(new) conf = new voice:RepositionAll() end, "$Revision: 736 $")
+XPerl_RequestConfig(function(new) conf = new voice:RepositionAll() end, "$Revision: 925 $")
 
 voice.frames = {}
 voice.permenantUnits = {}
@@ -31,8 +31,10 @@ voice:ClearCache()
 
 -- voice:Create
 function voice:Create(frame)
-	frame.voiceButton = CreateFrame("Button", self:GetName().."Speaker", frame, "VoiceChatSpeakerTemplate")
-	frame.voiceButton:EnableMouse(false)
+	if not frame.voiceButton then
+		frame.voiceButton = CreateFrame("Button", self:GetName().."Speaker", frame, "VoiceChatSpeakerTemplate")
+		frame.voiceButton:EnableMouse(false)
+	end
 	XPerl_SetChildMembers(frame.voiceButton)
 	self:Position(frame)
 end
@@ -88,7 +90,6 @@ end
 
 -- voice:OnEvent(event, a, b, c)
 function voice:OnEvent(event, a, b, c)
---XPerl_ShowMessage("voice")
 	self[event](self, a, b, c)
 end
 
