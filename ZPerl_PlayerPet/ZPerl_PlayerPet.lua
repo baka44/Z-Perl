@@ -10,7 +10,7 @@ XPerl_RequestConfig(function(new)
 	if (XPerl_Player_Pet) then
 		XPerl_Player_Pet.conf = pconf
 	end
-end, "$Revision: 927 $")
+end, "$Revision: 936 $")
 
 local XPerl_Player_Pet_HighlightCallback
 
@@ -594,11 +594,11 @@ function XPerl_Player_Pet_Set_Bits(self)
 	pconf.buffs.size = tonumber(pconf.buffs.size) or 20
 	XPerl_SetBuffSize(self)
 
-	if (conf.highlight.enable and conf.highlight.HEAL) then
+	--if (conf.highlight.enable and conf.highlight.HEAL) then
 		self:RegisterEvent("UNIT_HEAL_PREDICTION")
-	else
-		self:UnregisterEvent("UNIT_HEAL_PREDICTION")
-	end
+	--else
+		--self:UnregisterEvent("UNIT_HEAL_PREDICTION")
+	--end
 
 	XPerl_Player_Pet_SetWidth(self)
 

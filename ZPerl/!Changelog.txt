@@ -1,3 +1,7 @@
+**r936**
+* Heal prediction fixes.
+* Some other smaller fixes.
+
 **r935**
 * Wake up the repo server.
 

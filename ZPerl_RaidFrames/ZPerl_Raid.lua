@@ -22,7 +22,7 @@ local conf, rconf
 XPerl_RequestConfig(function(newConf)
 	conf = newConf
 	rconf = conf.raid
-end, "$Revision: 934 $")
+end, "$Revision: 936 $")
 
 if type(RegisterAddonMessagePrefix) == "function" then
 	RegisterAddonMessagePrefix("CTRA")
@@ -34,7 +34,7 @@ local function d(...)
 end
 --@end-debug@]===]
 
-local new, del, copy = XPerl_GetReusableTable, XPerl_FreeTable, XPerl_CopyTable
+--local new, del, copy = XPerl_GetReusableTable, XPerl_FreeTable, XPerl_CopyTable
 
 local format = format
 local strsub = strsub
@@ -1728,7 +1728,7 @@ end
 
 -- XPerl_ScaleRaid
 function XPerl_ScaleRaid()
-	for frame = 1,WoWclassCount do
+	for frame = 1, WoWclassCount do
 		local f = _G["XPerl_Raid_Title"..frame]
 		if (f) then
 			f:SetScale(rconf.scale)
@@ -2299,11 +2299,11 @@ function XPerl_Raid_Set_Bits(self)
 	end
 	SkipHighlightUpdate = nil
 
-	if (conf.highlight.enable and conf.highlight.HEAL) then
+	--if (conf.highlight.enable and conf.highlight.HEAL) then
 		self:RegisterEvent("UNIT_HEAL_PREDICTION")
-	else
-		self:UnregisterEvent("UNIT_HEAL_PREDICTION")
-	end
+	--else
+		--self:UnregisterEvent("UNIT_HEAL_PREDICTION")
+	--end
 
 	if (IsInRaid()) then
 		XPerl_Raid_Frame:Show()

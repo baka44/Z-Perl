@@ -22,7 +22,7 @@ XPerl_RequestConfig(function(new)
 	if (XPerl_PetTarget) then
 		XPerl_PetTarget.conf = conf.pettarget
 	end
-end, "$Revision: 934 $")
+end, "$Revision: 936 $")
 
 local percD = "%d"..PERCENT_SYMBOL
 local format = format
@@ -1505,11 +1505,11 @@ function XPerl_Target_Set_Bits(self)
 	self.conf.buffs.size = tonumber(self.conf.buffs.size) or 20
 	XPerl_SetBuffSize(self)
 
-	if (conf.highlight.enable and conf.highlight.HEAL) then
+	--if (conf.highlight.enable and conf.highlight.HEAL) then
 		self:RegisterEvent("UNIT_HEAL_PREDICTION")
-	else
-		self:UnregisterEvent("UNIT_HEAL_PREDICTION")
-	end
+	--else
+		--self:UnregisterEvent("UNIT_HEAL_PREDICTION")
+	--end
 
 	XPerl_Target_SetWidth(self)
 

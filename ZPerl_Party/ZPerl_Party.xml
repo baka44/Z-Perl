@@ -304,7 +304,7 @@
 				</Scripts>
 			</Frame>
 			<!-- Party Target Frame -->
-			<Button name="$parenttargetFrame" hidden="true" inherits="SecureUnitButtonTemplate">	--frameStrata="MEDIUM"
+			<Button name="$parenttargetFrame" hidden="true" inherits="SecureUnitButtonTemplate">
 				<Scripts>
 					<OnLoad>
 						self:SetFrameLevel(self:GetParent():GetFrameLevel() + 1)
@@ -491,7 +491,7 @@
 		</Frames>
 	</Frame>
 
-	<Frame name="ZPerl_Party_SecureHeader" parent="XPerl_Party_Anchor" clampedToScreen="true" inherits="SecurePartyHeaderTemplate" hidden="true">
+	<Frame name="ZPerl_Party_SecureHeader" parent="XPerl_Party_Anchor" clampedToScreen="true" inherits="SecurePartyHeaderTemplate" frameStrata="LOW" virtual="false" hidden="true">
 		<Size>
 			<AbsDimension x="100" y="60"/>
 		</Size>

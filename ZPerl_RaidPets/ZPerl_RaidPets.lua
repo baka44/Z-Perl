@@ -9,9 +9,9 @@ XPerl_RequestConfig(function(New)
 	conf = New
 	raidconf = New.raid
 	rconf = New.raidpet
-end, "$Revision: 934 $")
+end, "$Revision: 936 $")
 
-local new, del, copy = XPerl_GetReusableTable, XPerl_FreeTable, XPerl_CopyTable
+--local new, del, copy = XPerl_GetReusableTable, XPerl_FreeTable, XPerl_CopyTable
 
 local GetNumGroupMembers = GetNumGroupMembers
 
@@ -29,8 +29,6 @@ local function XPerl_RaidPets_OnEvent(self, event, unit, ...)
 		else
 			func(self, unit, ...)
 		end
-	else
-	--XPerl_ShowMessage("EXTRA EVENT")
 	end
 end
 
@@ -51,8 +49,8 @@ do
 	local guids
 	-- XPerl_RaidPet_UpdateGUIDs
 	function XPerl_RaidPet_UpdateGUIDs()
-		del(guids)
-		guids = new()
+		--del(guids)
+		guids = { }
 		for i = 1, GetNumGroupMembers() do
 			local id = "raidpet"..i
 			if (UnitExists(id)) then
@@ -199,6 +197,13 @@ local function XPerl_RaidPets_UpdateDisplay(self)
 	local unit = SecureButton_GetUnit(self)
 	if (unit) then
 		XPerl_Highlight:SetHighlight(self, UnitGUID(unit))
+	end
+end
+
+-- UNIT_HEAL_PREDICTION
+function XPerl_RaidPets_Events:UNIT_HEAL_PREDICTION(unit)
+	if (unit == self.partyid) then
+		XPerl_SetExpectedHealth(self)
 	end
 end
 
@@ -525,6 +530,7 @@ function XPerl_RaidPets_OptionActions()
 	local events = {
 		"PLAYER_ENTERING_WORLD", "PLAYER_REGEN_ENABLED", "RAID_TARGET_UPDATE", "VARIABLES_LOADED", "GROUP_ROSTER_UPDATE", "UNIT_PET", "UNIT_ENTERED_VEHICLE", "UNIT_EXITED_VEHICLE","PET_BATTLE_OPENING_START","PET_BATTLE_CLOSE"
 	}
+
 	for i, event in pairs(events) do
 		if (rconf.enable) then
 			XPerl_RaidPets_Frame:RegisterEvent(event)
@@ -532,6 +538,12 @@ function XPerl_RaidPets_OptionActions()
 			XPerl_RaidPets_Frame:UnregisterEvent(event)
 		end
 	end
+
+	--if (conf.highlight.enable and conf.highlight.HEAL) then
+		XPerl_RaidPets_Frame:RegisterEvent("UNIT_HEAL_PREDICTION")
+	--else
+		--XPerl_RaidPets_Frame:UnregisterEvent("UNIT_HEAL_PREDICTION")
+	--end
 
 	XPerl_RaidPets_Titles()
 	XPerl_Raid_TitlePets:SetScale((conf.raid and conf.raid.scale) or 0.8)

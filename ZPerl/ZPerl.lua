@@ -6,8 +6,10 @@ local conf
 local percD	= "%d"..PERCENT_SYMBOL
 local perc1F = "%.1f"..PERCENT_SYMBOL
 
-XPerl_RequestConfig(function(New) conf = New end, "$Revision: 935 $")
-XPerl_SetModuleRevision("$Revision: 935 $")
+XPerl_RequestConfig(function(New)
+	conf = New
+end, "$Revision: 936 $")
+XPerl_SetModuleRevision("$Revision: 936 $")
 
 -- Upvalus
 local _G = _G
@@ -3738,7 +3740,7 @@ end
 function XPerl_SetExpectedHealth(self)
 	local bar = self.statsFrame.expectedHealth
 	if (bar) then
-		if (conf.highlight and conf.highlight.HEAL) then
+		--if (conf.highlight and conf.highlight.HEAL) then
 			local amount = UnitGetIncomingHeals(self.partyid)
 			if (amount and amount > 0 and not UnitIsDeadOrGhost(self.partyid)) then
 				local healthMax = UnitHealthMax(self.partyid)
@@ -3749,7 +3751,7 @@ function XPerl_SetExpectedHealth(self)
 				bar:SetValue(min(healthMax, health + amount))
 				return
 			end
-		end
+		--end
 		bar:Hide()
 	end
 end

@@ -12,7 +12,7 @@ XPerl_RequestConfig(function(new)
 	if (XPerl_Player) then
 		XPerl_Player.conf = conf.player
 	end
-end, "$Revision: 933 $")
+end, "$Revision: 936 $")
 
 local perc1F = "%.1f"..PERCENT_SYMBOL
 local percD = "%.0f"..PERCENT_SYMBOL
@@ -1043,7 +1043,8 @@ function XPerl_Player_Events:UNIT_EXITED_VEHICLE()
 end
 
 function XPerl_Player_Events:UNIT_HEAL_PREDICTION(unit)
-	if (unit == self.partyid) then
+	-- Seems like unit is nil for the player
+	if (not unit or unit == self.partyid) then
 		XPerl_SetExpectedHealth(self)
 	end
 end
@@ -1179,8 +1180,6 @@ function XPerl_Player_Set_Bits(self)
 		XPerl_ArcaneBar_RegisterFrame(self.nameFrame, UnitHasVehicleUI("player") and "vehicle" or "player")
 	end
 
-	
-	
 	if (pconf.portrait) then
 		self.portraitFrame:Show()
 		self.portraitFrame:SetWidth(60)
@@ -1247,11 +1246,11 @@ function XPerl_Player_Set_Bits(self)
 		end
 	end
 
-	if (conf.highlight.enable and conf.highlight.HEAL) then
+	--if (conf.highlight.enable and conf.highlight.HEAL) then
 		self:RegisterEvent("UNIT_HEAL_PREDICTION")
-	else
-		self:UnregisterEvent("UNIT_HEAL_PREDICTION")
-	end
+	--else
+		--self:UnregisterEvent("UNIT_HEAL_PREDICTION")
+	--end
 
 	XPerl_Player_SetWidth(self)
 

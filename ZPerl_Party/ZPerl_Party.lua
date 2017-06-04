@@ -13,7 +13,7 @@ XPerl_RequestConfig(function(new)
 	for k,v in pairs(PartyFrames) do
 		v.conf = pconf
 	end
-end, "$Revision: 928 $")
+end, "$Revision: 936 $")
 
 local percD = "%d"..PERCENT_SYMBOL
 
@@ -68,7 +68,9 @@ end
 
 -- XPerl_Party_HighlightCallback
 function XPerl_Party_HighlightCallback(self, updateGUID)
-	if not updateGUID then return end
+	if not updateGUID then
+		return
+	end
 
 	local f = XPerl_Party_GetUnitFrameByGUID(updateGUID)
 	if (f) then
@@ -134,7 +136,7 @@ function ZPerl_Party_OnLoad(self)
 
 	local id = strmatch(self:GetName(), ".+(%d)")
 	self:SetID(tonumber(id))
-	setglobal("XPerl_party"..self:GetID(), self)
+	--_G["XPerl_party"..self:GetID()] = self
 
 	if (self:GetID() > 1) then
 		self.buffSetup = XPerl_party1.buffSetup
@@ -488,9 +490,9 @@ local function UpdateAssignedRoles(self)
 		-- this is the new way to check for roles
 		-- Port this from XPerl_Player.lua by PlayerLin
 		role = UnitGroupRolesAssigned(unit)
-		isTank = false;
-		isHealer = false;
-		isDamage = false;
+		isTank = false
+		isHealer = false
+		isDamage = false
 		if role == "TANK" then
 			isTank = true
 		elseif role == "HEALER" then
@@ -551,12 +553,12 @@ end
 -- UpdatePhaseIndicators
 local function UpdatePhasingDisplays(self)
 	local unit = self.partyid
-	local inPhase = UnitInPhase(unit);
+	local inPhase = UnitInPhase(unit)
 	
 	if ( inPhase or not UnitExists(unit) or not UnitIsConnected(unit)) then
-		self.phasingIcon:Hide();
+		self.phasingIcon:Hide()
 	else
-		self.phasingIcon:Show();
+		self.phasingIcon:Show()
 	end
 end
 
@@ -636,7 +638,7 @@ local function XPerl_Party_UpdateMana(self)
 		XPerl_Party_UpdatePlayerFlags(self)
 	end
 	
-	local pType = XPerl_GetDisplayedPowerType(self.partyid);
+	local pType = XPerl_GetDisplayedPowerType(self.partyid)
 	
 	local Partymana = UnitPower(self.partyid, pType)
 	local Partymanamax = UnitPowerMax(self.partyid, pType)
@@ -705,7 +707,7 @@ function XPerl_Party_SingleGroup()
 	if (num > 5) then
 		return
 	end
-	for i = 1,num do
+	for i = 1, num do
 		local name, rank, group = GetRaidRosterInfo(i)
 		if (group > 1) then
 			return
@@ -1259,7 +1261,7 @@ function XPerl_Party_SetWidth(self)
 
 	pconf.size.width = max(0, pconf.size.width or 0)
 
-	local width = (36 * (pconf.percent or 0)) + 106;	-- 136 enabled, 106 disabled
+	local width = (36 * (pconf.percent or 0)) + 106	-- 136 enabled, 106 disabled
 	self.statsFrame:SetWidth(width + pconf.size.width)
 	self:SetWidth(CalcWidth(self))
 
@@ -1390,7 +1392,7 @@ function XPerl_Party_Set_Bits1(self)
 		self.statsFrame.manaBar.percent:Hide()
 	end
 
-	local height = ((pconf.name or 0) * 22) + 2;		-- 24 when enabled, 2 when disabled
+	local height = ((pconf.name or 0) * 22) + 2 -- 24 when enabled, 2 when disabled
 
 	self.targetFrame:ClearAllPoints()
 	self.nameFrame:SetHeight(height)
@@ -1476,10 +1478,10 @@ function XPerl_Party_Set_Bits1(self)
 
 	--XPerl_SetTextTransparencyFrame(self)
 
-	--if (conf.ShowPartyPets == 1 and XPerl_PartyPetFrames) then
-	--	if (not self.petFrame) then
-	--		self.petFrame = CreateFrame("Button", "XPerl_partypet"..self:GetID(), self, "XPerl_Party_Pet_FrameTemplate")
-	--	end
+	--[[if (conf.ShowPartyPets == 1 and XPerl_PartyPetFrames) then
+		if (not self.petFrame) then
+			self.petFrame = CreateFrame("Button", "XPerl_partypet"..self:GetID(), self, "XPerl_Party_Pet_FrameTemplate")
+	end]]
 
 	self.petFrame = getglobal("XPerl_partypet"..self:GetID())
 	if (self.petFrame) then

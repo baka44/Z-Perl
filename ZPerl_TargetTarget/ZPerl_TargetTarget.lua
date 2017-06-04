@@ -42,7 +42,7 @@ XPerl_RequestConfig(function(new)
 	if XPerl_PetTarget then
 		XPerl_PetTarget.conf = conf.pettarget
 	end
-end, "$Revision: 895 $")
+end, "$Revision: 936 $")
 
 local UnitName = UnitName
 local UnitHealth = UnitHealth
@@ -100,6 +100,12 @@ function ZPerl_TargetTarget_OnLoad(self)
 		self.partyid = "targettargettarget"
 		self:SetScript("OnUpdate", XPerl_TargetTargetTarget_OnUpdate)
 	end
+
+	--if (conf.highlight.enable and conf.highlight.HEAL) then
+		self:RegisterEvent("UNIT_HEAL_PREDICTION")
+	--else
+		--self:UnregisterEvent("UNIT_HEAL_PREDICTION")
+	--end
 
 	XPerl_SecureUnitButton_OnLoad(self, self.partyid, XPerl_ShowGenericMenu)
 	XPerl_SecureUnitButton_OnLoad(self.nameFrame, self.partyid, XPerl_ShowGenericMenu)

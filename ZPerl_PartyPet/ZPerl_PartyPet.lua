@@ -12,7 +12,7 @@ XPerl_RequestConfig(function(New) conf = New
 	for k,v in pairs(PartyPetFrames) do
 		v.conf = pconf
 	end
-end, "$Revision: 927 $")
+end, "$Revision: 936 $")
 
 local new, del, copy = XPerl_GetReusableTable, XPerl_FreeTable, XPerl_CopyTable
 
@@ -582,11 +582,11 @@ function XPerl_Party_Pet_Set_Bits1(self)
 		end
 	end
 
-	if (conf.highlight.enable and conf.highlight.HEAL) then
+	--if (conf.highlight.enable and conf.highlight.HEAL) then
 		self:RegisterEvent("UNIT_HEAL_PREDICTION")
-	else
-		self:UnregisterEvent("UNIT_HEAL_PREDICTION")
-	end
+	--else
+		--self:UnregisterEvent("UNIT_HEAL_PREDICTION")
+	--end
 
 	SetAllBuffs(self.buffFrame, self.buffFrame.debuff)
 	SetAllBuffs(self.buffFrame, self.buffFrame.buff)
