@@ -12,7 +12,7 @@ XPerl_RequestConfig(function(new)
 	if (XPerl_Player) then
 		XPerl_Player.conf = conf.player
 	end
-end, "$Revision: 938 $")
+end, "$Revision: 939 $")
 
 local perc1F = "%.1f"..PERCENT_SYMBOL
 local percD = "%.0f"..PERCENT_SYMBOL
@@ -61,6 +61,9 @@ function XPerl_Player_OnLoad(self)
 	self:SetAttribute("*type1", "target")
 	self:SetAttribute("type2", "togglemenu")
 	self:SetAttribute("unit", self.partyid)
+
+	XPerl_RegisterClickCastFrame(self.nameFrame)
+	XPerl_RegisterClickCastFrame(self)
 
 	self:RegisterEvent("VARIABLES_LOADED")
 	self:RegisterEvent("PLAYER_ENTERING_WORLD")

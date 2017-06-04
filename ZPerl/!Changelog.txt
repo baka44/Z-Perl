@@ -1,3 +1,10 @@
+**r940**
+* Wake up the repo server.
+
+**r939**
+* Fixed Clique support.
+* Some raid pet fix.
+
 **r938**
 * Party frames can be securely shown/hidden while in combat too.
 * The addon usage information for tooltips should properly work again.

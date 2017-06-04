@@ -23,7 +23,7 @@ XPerl_RequestConfig(function(new)
 	if (XPerl_PetTarget) then
 		XPerl_PetTarget.conf = conf.pettarget
 	end
-end, "$Revision: 938 $")
+end, "$Revision: 939 $")
 
 local percD = "%d"..PERCENT_SYMBOL
 local format = format
@@ -140,6 +140,9 @@ function XPerl_Target_OnLoad(self, partyid)
 	self:SetAttribute("*type1", "target")
 	self:SetAttribute("type2", "togglemenu")
 	self:SetAttribute("unit", partyid)
+
+	XPerl_RegisterClickCastFrame(self.nameFrame)
+	XPerl_RegisterClickCastFrame(self)
 
 	--RegisterUnitWatch(self)
 

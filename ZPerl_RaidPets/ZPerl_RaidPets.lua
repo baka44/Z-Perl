@@ -9,7 +9,7 @@ XPerl_RequestConfig(function(New)
 	conf = New
 	raidconf = New.raid
 	rconf = New.raidpet
-end, "$Revision: 938 $")
+end, "$Revision: 939 $")
 
 --local new, del, copy = XPerl_GetReusableTable, XPerl_FreeTable, XPerl_CopyTable
 
@@ -263,6 +263,8 @@ local function taintable(self)
 	self:SetAttribute("useparent-unit", true)
 	self:SetAttribute("*type1", "target")
 	self:SetAttribute("type2", "togglemenu")
+
+	XPerl_RegisterClickCastFrame(self)
 end
 
 -- PLAYER_REGEN_ENABLED
@@ -413,7 +415,7 @@ local function SetMainHeaderAttributes(self)
 
 	self:SetAttribute("filterOnPet", true)
 	self:SetAttribute("unitsPerColumn", petsPerColumn) -- Don't grow taller than a standard raid group
-	self:SetAttribute("maxColumns", 7)
+	self:SetAttribute("maxColumns", 8)
 	self:SetAttribute("columnAnchorPoint", "LEFT")
 
 	self:SetAttribute("point", conf.raid.anchor)

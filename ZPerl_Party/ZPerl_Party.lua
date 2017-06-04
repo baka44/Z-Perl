@@ -13,7 +13,7 @@ XPerl_RequestConfig(function(new)
 	for k, v in pairs(PartyFrames) do
 		v.conf = pconf
 	end
-end, "$Revision: 938 $")
+end, "$Revision: 939 $")
 
 local percD = "%d"..PERCENT_SYMBOL
 
@@ -190,6 +190,9 @@ function ZPerl_Party_OnLoad(self)
 	self.nameFrame:SetAttribute("type2", "togglemenu")
 	self:SetAttribute("*type1", "target")
 	self:SetAttribute("type2", "togglemenu")
+
+	XPerl_RegisterClickCastFrame(self.nameFrame)
+	XPerl_RegisterClickCastFrame(self)
 
 	self.time = 0
 	self.flagsCheck = 0
