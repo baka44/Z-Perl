@@ -552,7 +552,7 @@
 	</Frame>
 	<Frame name="ZPerl_Party_SecureState" inherits="SecureHandlerStateTemplate" parent="UIParent" protected="true">
 		<Attributes>
-			<Attribute name="_onstate-partymonitor" value="if not self:GetAttribute('partyEnabled') or self:GetAttribute('partySmallRaid') then self:GetFrameRef('partyHeader'):Hide() return end if newstate == 'nocombat' then return elseif newstate == 'raid' and self:GetAttribute('partyInRaid') then if not self:GetFrameRef('partyHeader'):IsShown() then self:GetFrameRef('partyHeader'):Show() end elseif newstate == 'party' then if not self:GetFrameRef('partyHeader'):IsShown() then self:GetFrameRef('partyHeader'):Show() end else if self:GetFrameRef('partyHeader'):IsShown() then self:GetFrameRef('partyHeader'):Hide() end end"/>
+			<Attribute name="_onstate-partymonitor" value="if not self:GetAttribute('partyEnabled') then self:GetFrameRef('partyHeader'):Hide() return end if newstate == 'nocombat' or self:GetAttribute('partySmallRaid') then return elseif newstate == 'raid' and self:GetAttribute('partyInRaid') then if not self:GetFrameRef('partyHeader'):IsShown() then self:GetFrameRef('partyHeader'):Show() end elseif newstate == 'party' then if not self:GetFrameRef('partyHeader'):IsShown() then self:GetFrameRef('partyHeader'):Show() end else if self:GetFrameRef('partyHeader'):IsShown() then self:GetFrameRef('partyHeader'):Hide() end end"/>
 		</Attributes>
 		<Scripts>
 			<OnLoad>
